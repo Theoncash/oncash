@@ -1,7 +1,7 @@
 package com.example.oncash.Component
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.oncash.Word.Offer
+import com.example.oncash.DataType.Offer
 
 class Diffutil(val oldList : ArrayList<Offer> , val newList : ArrayList<Offer>) : DiffUtil.Callback() {
     override fun getOldListSize(): Int {
