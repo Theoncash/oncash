@@ -20,8 +20,8 @@ class Instructions_RecylerViewAdapter : RecyclerView.Adapter<Instructions_Recyle
         val description :TextView
 
         init {
-            description = itemView.findViewById(R.id.stepsText)
-             serialNumber = itemView.findViewById(R.id.serialNumber)
+            description = itemView.findViewById(R.id.withdrawalTransactionAmount)
+             serialNumber = itemView.findViewById(R.id.withdrawalTransactionDate)
         }
     }
 

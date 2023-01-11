@@ -24,8 +24,6 @@ class offer_AirtableDatabase {
         val userRecordId :String = "recW4kvQ98bYzYNpJ/"
         val baseUrl = "https://api.airtable.com/v0/appK86XkkYn9dx2vu/Table%201/$userRecordId"
         val token = "keyCQq6gmGFzeqDCX"
-
-
-
     }
 }
+

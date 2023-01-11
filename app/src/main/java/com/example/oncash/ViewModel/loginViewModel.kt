@@ -8,30 +8,33 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import androidx.datastore.dataStoreFile
 import androidx.datastore.preferences.core.*
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.oncash.Component.get_UserInfo_UseCase
 import com.example.oncash.DataType.UserData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.properties.Delegates
 
 class loginViewModel:ViewModel() {
-    private var isUserLogined by Delegates.notNull<Boolean>()
-    private lateinit var userData:UserData
+    private  var userData:MutableLiveData<UserData> = MutableLiveData()
 
-    fun addUser(userNumber : Long) : Boolean{
+    fun addUser(userNumber : Long ) {
 
         viewModelScope.launch {
-             userData =  get_UserInfo_UseCase().registerUser(userNumber.toLong())
-//            Application().getSharedPreferences("UserInfo" , MODE_PRIVATE).edit( ) {
-//                putBoolean("IsUserLogin" , userData.isUserRegistered)
-//                putLong("UserNumber" , userNumber)
-//                putString("UserRowId" , userData.userRecordId)
-//                apply()
-//            }
+            withContext(Dispatchers.Main) {
+
+                userData.value = get_UserInfo_UseCase().loginManager(userNumber)
+
+            }
         }
-    return true
+    }
+
+    fun getUserData(): MutableLiveData<UserData>{
+        return userData
     }
 
 
