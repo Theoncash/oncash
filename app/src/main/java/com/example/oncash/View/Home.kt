@@ -2,6 +2,8 @@ package com.example.oncash.View
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -17,20 +19,23 @@ import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.launch
 
 class Home : AppCompatActivity() {
-    lateinit var binding: ActivityHomeBinding
+     lateinit var binding: ActivityHomeBinding
     val homeViewmodel: home_viewModel by viewModels()
-    private lateinit var userData: userData
+    private  var userData: userData = userData("",0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
         lifecycleScope.launch {
             getUserData()
         }
         FirebaseApp.initializeApp(this);
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.walletcardview.setBackgroundResource(R.drawable.walletbg)
+        val adapter = Offer_RecylerViewAdapter(userData)
 
-        val adapter = Offer_RecylerViewAdapter()
         val offerRecylerview: RecyclerView = findViewById(R.id.offer_recylerview)
         offerRecylerview.adapter = adapter
         offerRecylerview.layoutManager =
@@ -43,6 +48,16 @@ class Home : AppCompatActivity() {
         })
 
         binding.walletTextView.setOnClickListener {
+            startActivity(
+                Intent(this, Wallet::class.java).putExtra(
+                    "walletBalance",
+                    binding.walletTextView.text
+                ) .putExtra("userNumber", userData.userNumber.toString()).putExtra("userRecordId", userData.userRecordId))
+
+
+        }
+
+        binding.walletcardview.setOnClickListener {
             startActivity(
                 Intent(this, Wallet::class.java).putExtra(
                     "walletBalance",

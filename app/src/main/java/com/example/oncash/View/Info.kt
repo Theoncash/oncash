@@ -30,7 +30,12 @@ class Info : AppCompatActivity() {
         binding.offernameInfo.text = intent.getStringExtra("OfferName")
         binding.offerPrice.text = intent.getStringExtra("OfferPrice")
         Glide.with(this).load(intent.getStringExtra("OfferImage")).into(binding.offerImageInfo)
-        val offerLink :String? = intent.getStringExtra("OfferLink")
+        var offer :String? = intent.getStringExtra("OfferLink")
+        val subid :String? = intent.getStringExtra("subid")
+        val subid2 :String? = intent.getStringExtra("subid2")
+        val number :String? = intent.getStringExtra("number")
+        val recordId :String? = intent.getStringExtra("recordId")
+        val offerLink = "$offer?&$subid=$recordId&$subid2=$number/"
 
 
         //Initilizing the recylerview adapter
