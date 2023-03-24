@@ -32,6 +32,7 @@ class Wallet : AppCompatActivity() {
 
         var walletBalance = intent.getStringExtra("walletBalance")?.toInt()
         val userRecordId = intent.getStringExtra("userRecordId")
+        Toast.makeText(this , userRecordId , Toast.LENGTH_LONG).show()
         userNumber  = intent.getStringExtra("userNumber")?.toLong()!!
         binding.walletBalanceWallet.text = walletBalance.toString()
         Log.i("USERR", userNumber.toString() )

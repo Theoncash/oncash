@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.oncash.Component.UserDataStoreUseCase
+import com.example.oncash.Component.sortingComponent
 import com.example.oncash.DataType.Offer
+import com.example.oncash.DataType.OfferList
 import com.example.oncash.DataType.userData
 import com.example.oncash.Repository.Offer_FIrebase
 import com.example.oncash.Repository.UserInfo_Airtable_Repo
@@ -17,18 +19,10 @@ import kotlinx.coroutines.*
 @OptIn(DelicateCoroutinesApi::class)
 public class home_viewModel() : ViewModel() {
 
-    private val offerList : MutableLiveData<ArrayList<Offer>> = MutableLiveData()
     private val wallet : MutableLiveData<Int> = MutableLiveData(0)
     private val userData : MutableLiveData<userData> = MutableLiveData()
 
 
-    fun getOfferList() : MutableLiveData<ArrayList<Offer>>{
-        viewModelScope.launch{
-            offerList.postValue( Offer_FIrebase().getData() )
-            offer_AirtableDatabase().getData()
-        }
-        return offerList
-    }
 
   fun getWallet(userRecordId :String) {
         viewModelScope.launch {

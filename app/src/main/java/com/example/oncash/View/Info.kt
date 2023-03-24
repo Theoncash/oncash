@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.oncash.Component.Instructions_RecylerViewAdapter
+import com.example.oncash.DataType.Offer
+import com.example.oncash.DataType.userData
 import com.example.oncash.Repository.offer_AirtableDatabase
 import com.example.oncash.ViewModel.info_viewModel
 import com.example.oncash.databinding.ActivityInfoBinding
@@ -27,8 +29,10 @@ class Info : AppCompatActivity() {
 
         //Getting Data from the intent form home(Activity)
         val offerId : String? = intent.getStringExtra("OfferId")
-        binding.offernameInfo.text = intent.getStringExtra("OfferName")
-        binding.offerPrice.text = intent.getStringExtra("OfferPrice")
+        val offerName= intent.getStringExtra("OfferName")
+        binding.offernameInfo.text = offerName
+        var offerPrice= intent.getStringExtra("OfferPrice")
+        binding.offerPrice.text = offerPrice
         Glide.with(this).load(intent.getStringExtra("OfferImage")).into(binding.offerImageInfo)
         var offer :String? = intent.getStringExtra("OfferLink")
         val subid :String? = intent.getStringExtra("subid")
@@ -60,6 +64,8 @@ class Info : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(offerLink))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.setPackage("com.android.chrome")
+            Toast.makeText(this , recordId.toString() + " user id", Toast.LENGTH_LONG).show()
+            info_viewModel.updateOfferHistory(userData(recordId.toString() , number!!.toLong()), offerId!! , offerPrice.toString() , offerName = offerName!!)
             try {
                 this.startActivity(intent)
             } catch (ex: ActivityNotFoundException) {

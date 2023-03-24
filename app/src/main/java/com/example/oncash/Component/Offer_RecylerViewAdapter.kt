@@ -1,20 +1,20 @@
 package com.example.oncash.Component
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import com.example.oncash.R
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.oncash.DataType.Offer
 import com.example.oncash.DataType.userData
@@ -24,7 +24,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
-import kotlin.properties.Delegates
 
 
 class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Offer_RecylerViewAdapter.viewholder>() {
@@ -38,9 +37,9 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
         val background :ConstraintLayout
         lateinit var  offerId :String
         init {
-            name = itemView.findViewById(com.example.oncash.R.id.offer_name)
-            description = itemView.findViewById(com.example.oncash.R.id.offer_desciption)
-            price = itemView.findViewById(R.id.offer_price)
+            name = itemView.findViewById(com.example.oncash.R.id.offerHistory_name)
+            description = itemView.findViewById(com.example.oncash.R.id.offer_status)
+            price = itemView.findViewById(R.id.offerHistory_price)
             background = itemView.findViewById(R.id.offer_recylerview_background)
         }
     }
@@ -85,11 +84,13 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
 
 
         holder.itemView.setOnClickListener {
+            Toast.makeText( holder.itemView.context, userData.userRecordId , Toast.LENGTH_LONG).show()
             val offer_information : Offer = offerList.get(holder.offerId.toInt()-1)
             val intent = Intent(
                 holder.itemView.context,
                 Info::class.java
-            ).putExtra("OfferId",offer_information.OfferId )
+            )
+                .putExtra("OfferId",offer_information.OfferId )
                 .putExtra("OfferName",offer_information.Name)
                 .putExtra("OfferImage",offer_information.Image)
                 .putExtra("OfferPrice",offer_information.Price)
@@ -120,11 +121,14 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
         holder.itemView.clearAnimation()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateList(list :ArrayList<Offer>){
-        val result =  DiffUtil.calculateDiff( Diffutil(offerList , list))
+//        val result =  DiffUtil.calculateDiff( Diffutil(offerList , list))
         this.offerList.clear()
         this.offerList.addAll(list)
-        result.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
+
+//        result.dispatchUpdatesTo(this)
     }
 
     fun getDominantColor(bitmapp: Bitmap?): Int {

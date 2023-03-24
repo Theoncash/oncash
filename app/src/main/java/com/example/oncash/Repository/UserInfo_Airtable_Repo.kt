@@ -5,6 +5,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.oncash.Component.get_UserInfo_UseCase
 import com.example.oncash.DataType.*
+import com.example.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -12,6 +16,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import io.ktor.util.reflect.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -221,4 +226,76 @@ class UserInfo_Airtable_Repo {
             return@withContext withdrawalsuccess(withdrawalTransaction(  date ,  RequestedAmount.toString()   , status ,) , responseStatus)
         }
 
-}
+   suspend fun updateOfferHistory(userData: userData ,offerId: String , offerPrice:String , offerName : String) = withContext(Dispatchers.IO){
+
+       val base = "appK86XkkYn9dx2vu"
+       val tableId = "tblGyiEF9F9HpGuv2"
+       val url = "https://api.airtable.com/v0/$base/$tableId/"
+        val client = HttpClient(CIO){
+            install(ContentNegotiation){
+                Gson()
+                json(
+                    Json{
+                        isLenient = true
+                        prettyPrint = true
+                    }
+                )
+            }
+        }
+
+       val offerHistory =  OfferHistoryRecord(com.example.oncash.DataType.SerializedDataType.OfferHistory.Fields(userData.userRecordId , offerId ,  "Being Reviewed" , offerPrice ,offerName ))
+
+       Log.i("offerhistory" , "userid"+userData.userRecordId)
+       Log.i("offerhistory" , thereExists(getOfferHistory() , offerHistory).toString())
+       Log.i("offerhistory" , getOfferHistory().toString())
+
+       val status =  client.post {
+           url(url)
+           header("Authorization", "Bearer $apiKey")
+           contentType(ContentType.Application.Json)
+           setBody(offerHistory)
+       }
+       Log.i("offerhistory" , status.status.value.toString())
+   }
+
+    suspend fun getOfferHistory() : ArrayList<OfferHistoryRecord> = withContext(Dispatchers.IO){
+
+        val base = "appK86XkkYn9dx2vu"
+        val tableId = "tblGyiEF9F9HpGuv2"
+        val url = "https://api.airtable.com/v0/$base/$tableId/"
+        val client = HttpClient(CIO){
+            install(ContentNegotiation){
+                Gson()
+                json(
+                    Json{
+                        isLenient = true
+                        prettyPrint = true
+                    }
+                )
+            }
+        }
+
+        val response = client.get(url) {
+            parameter(
+                "api_key", apiKey
+            ) }
+        val type = object : TypeToken<ArrayList<OfferHistoryRecord>>(){}.type
+        val jsonObject = JSONArray(JSONObject(response.body<String>()).getString("records"))
+        return@withContext Gson().fromJson( jsonObject.toString(), type )
+    }
+
+    suspend fun thereExists( list:kotlin.collections.ArrayList<OfferHistoryRecord> , element :OfferHistoryRecord):Boolean = withContext(Dispatchers.IO){
+        var thereExisit = false
+        for (current_element in list){
+            if (current_element.fields.UserId == element.fields.UserId && current_element.fields.OfferId == element.fields.OfferId ){
+                thereExisit = true
+            }
+        }
+        return@withContext thereExisit
+    }
+
+
+
+    }
+
+
