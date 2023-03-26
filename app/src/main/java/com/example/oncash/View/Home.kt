@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,10 +52,16 @@ class Home : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener {
             if(it.itemId == R.id.home)
             {
-                navController.navigate(R.id.action_monthlyOffers_to_weeklyOffers)
+                Toast.makeText(this , navController.currentDestination!!.displayName.toString() , Toast.LENGTH_LONG).show()
+                if(navController.currentDestination!!.id==R.id.monthlyOffers){
+                    navController.navigate(R.id.action_monthlyOffers_to_weeklyOffers)
+                }else{
+                }
             }
-            if (it.itemId == R.id.history){
-                navController.navigate(R.id.action_weeklyOffers_to_monthlyOffers)
+            if (it.itemId == R.id.history) {
+                if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                    navController.navigate(R.id.action_weeklyOffers_to_monthlyOffers)
+                }
             }
             true
         }
@@ -86,6 +94,7 @@ class Home : AppCompatActivity() {
         super.onResume()
         lifecycleScope.launch {
             getUserData()
+            homeViewmodel.getOfferList()
         }
 
     }
@@ -94,7 +103,7 @@ class Home : AppCompatActivity() {
         homeViewmodel.getUserData(this)
         homeViewmodel.getuserData().observe(this, Observer { data ->
             userData = data!!
-
+            homeViewmodel.getOffersHistory(data.userRecordId)
             homeViewmodel.getWallet(userData.userRecordId)
         })
 

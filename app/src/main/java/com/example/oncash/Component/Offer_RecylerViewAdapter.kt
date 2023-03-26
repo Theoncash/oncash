@@ -58,11 +58,12 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
     }
 
     override fun onBindViewHolder(holder: viewholder, position: Int) {
-        holder.offerId = offerList.get(position).OfferId!!
-        holder.name.text= offerList.get(position).Name
-        holder.description.text = offerList.get(position).Description
-        holder.price.text ="Rs "+ offerList.get(position).Price
-        val url :URL = URL( offerList.get(position).Image )
+        holder.offerId = offerList[position].OfferId!!
+        holder.name.text= offerList[position].Name
+        holder.description.text = offerList[position].Description
+        val text = "Rs "+ offerList[position].Price
+        holder.price.text = text
+        val url :URL = URL( offerList[position].Image )
         var lastPosition = -1
 
         var colour  :String = ""
@@ -72,7 +73,7 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
             withContext(Dispatchers.Main){
                 holder.background.background = linearGradientDrawable(colour)
             }
-            }
+        }
             }
         val animation = AnimationUtils.loadAnimation(
             context, if (position > lastPosition) {com.example.oncash.R.anim.offeranimation }else {com.example.oncash.R.anim.offeranimationdown}
