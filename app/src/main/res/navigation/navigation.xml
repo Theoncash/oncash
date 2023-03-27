@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/weeklyOffers">
+
+    <fragment
+        android:id="@+id/weeklyOffers"
+        android:name="com.example.oncash.Fragment.weeklyOffers"
+        android:label="weeklyOffers" >
+        <action
+            android:id="@+id/action_weeklyOffers_to_monthlyOffers"
+            app:destination="@id/monthlyOffers"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/weeklyOffers"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/monthlyOffers"
+        android:name="com.example.oncash.Fragment.monthlyOffers"
+        android:label="monthlyOffers" >
+        <action
+            android:id="@+id/action_monthlyOffers_to_weeklyOffers"
+            app:destination="@id/weeklyOffers"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/weeklyOffers" />
+    </fragment>
+</navigation>
