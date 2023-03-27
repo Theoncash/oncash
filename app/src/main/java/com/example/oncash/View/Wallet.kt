@@ -34,7 +34,7 @@ class Wallet : AppCompatActivity() {
         val userRecordId = intent.getStringExtra("userRecordId")
         Toast.makeText(this , userRecordId , Toast.LENGTH_LONG).show()
         userNumber  = intent.getStringExtra("userNumber")?.toLong()!!
-        binding.walletBalanceWallet.text = walletBalance.toString()
+   //     binding.walletBalanceWallet.text = walletBalance.toString()
         Log.i("USERR", userNumber.toString() )
         binding.withdrawalTransaction.adapter = adapter
         binding.withdrawalTransaction.layoutManager = LinearLayoutManager(this , LinearLayoutManager.VERTICAL ,false)
@@ -61,7 +61,7 @@ class Wallet : AppCompatActivity() {
                                     //   walletBalance = wallet
                                     walletBalance =
                                         walletBalance!! - status.withdrawalTransaction.WithdrawalAmount.toInt()
-                                    binding.walletBalanceWallet.text = walletBalance.toString()
+                               //     binding.walletBalanceWallet.text = walletBalance.toString()
                                     binding.withdrawRequestedAmount.editableText.clear()
 
                                     withdrawalList.add(status.withdrawalTransaction)
