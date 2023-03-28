@@ -6,10 +6,15 @@
     tools:visibility="visible">
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview_info_detail"
@@ -27,6 +32,7 @@
             app:layout_goneMarginTop="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/offer_card_info"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -149,6 +155,29 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/cardview_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardview_info_detail"
+            tools:ignore="MissingClass">
+
+            <VideoView
+                android:id="@+id/videoView"
+                android:layout_width="329dp"
+                android:layout_height="239dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="visible"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/cardview_info"
             android:layout_width="329dp"
             android:layout_height="239dp"
@@ -187,4 +216,6 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 </layout>

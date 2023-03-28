@@ -100,6 +100,7 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
                 .putExtra("subid" , offer_information.subid)
                 .putExtra("subid2" , offer_information.payout)
                 .putExtra("recordId" , userData.userRecordId)
+                .putExtra("videoId" , offer_information.VideoId)
                 .putExtra("number" , userData.userNumber.toString())
 
 

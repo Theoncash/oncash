@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.MediaController
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -39,6 +40,7 @@ class Info : AppCompatActivity() {
         val subid2 :String? = intent.getStringExtra("subid2")
         val number :String? = intent.getStringExtra("number")
         val recordId :String? = intent.getStringExtra("recordId")
+        val viewUri : String? = intent.getStringExtra("videoId")
         val offerLink = "$offer?&$subid=$recordId&$subid2=$number/"
 
 
@@ -47,6 +49,20 @@ class Info : AppCompatActivity() {
         binding.instructionListInfo.adapter = adapter
         binding.instructionListInfo.layoutManager = LinearLayoutManager(this , LinearLayoutManager.VERTICAL , false)
 
+        //videoVIew
+        val mediaController = MediaController(this)
+        mediaController.setAnchorView(binding.videoView)
+        binding.videoView.setMediaController(mediaController)
+        binding.videoView.setVideoURI(Uri.parse(viewUri))
+        Toast.makeText(this, viewUri , Toast.LENGTH_SHORT).show()
+
+        binding.videoView.setOnClickListener {
+            if(binding.videoView.isPlaying){
+                binding.videoView.stopPlayback()
+            }else{
+                binding.videoView.start()
+            }
+        }
 
         //Observing the getInstructionList() in info_viewmodel (ie which gets the data from info_FirebaseRepo)
         val info_viewModel : info_viewModel by viewModels()
