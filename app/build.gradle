@@ -59,6 +59,9 @@ dependencies {
 
 
     //youtube
+    dependencies {
+        implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.0.0'
+    }
 
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4"

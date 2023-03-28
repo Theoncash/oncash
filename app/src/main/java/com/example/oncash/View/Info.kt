@@ -19,6 +19,9 @@ import com.example.oncash.DataType.userData
 import com.example.oncash.Repository.offer_AirtableDatabase
 import com.example.oncash.ViewModel.info_viewModel
 import com.example.oncash.databinding.ActivityInfoBinding
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 
 
 class Info : AppCompatActivity() {
@@ -50,19 +53,13 @@ class Info : AppCompatActivity() {
         binding.instructionListInfo.layoutManager = LinearLayoutManager(this , LinearLayoutManager.VERTICAL , false)
 
         //videoVIew
-        val mediaController = MediaController(this)
-        mediaController.setAnchorView(binding.videoView)
-        binding.videoView.setMediaController(mediaController)
-        binding.videoView.setVideoURI(Uri.parse(viewUri))
-        Toast.makeText(this, viewUri , Toast.LENGTH_SHORT).show()
-
-        binding.videoView.setOnClickListener {
-            if(binding.videoView.isPlaying){
-                binding.videoView.stopPlayback()
-            }else{
-                binding.videoView.start()
+        val videoview= binding.videoView
+        lifecycle.addObserver(videoview)
+        videoview.addYouTubePlayerListener(object : AbstractYouTubePlayerListener(){
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.loadVideo(viewUri!! , 0F)
             }
-        }
+        })
 
         //Observing the getInstructionList() in info_viewmodel (ie which gets the data from info_FirebaseRepo)
         val info_viewModel : info_viewModel by viewModels()
