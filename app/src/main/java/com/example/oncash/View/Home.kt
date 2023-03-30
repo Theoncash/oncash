@@ -52,7 +52,6 @@ class Home : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener {
             if(it.itemId == R.id.home)
             {
-                Toast.makeText(this , navController.currentDestination!!.displayName , Toast.LENGTH_LONG).show()
                 if(navController.currentDestination!!.id==R.id.monthlyOffers){
                     navController.navigate(R.id.action_monthlyOffers_to_weeklyOffers)
                 }else{

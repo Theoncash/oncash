@@ -16,6 +16,7 @@
             android:id="@+id/offerListButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
             app:layout_constraintBottom_toTopOf="@+id/weeklyOffer_recylerview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -24,9 +25,13 @@
 
             <Button
                 android:id="@+id/weeklyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="145dp"
+                android:layout_height="58dp"
+                android:backgroundTint="#00ACFF"
                 android:text="weekly "
+                android:textColor="#E3DBDB"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/monthlyButton"
                 app:layout_constraintStart_toStartOf="parent"
@@ -34,10 +39,15 @@
 
             <Button
                 android:id="@+id/monthlyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="143dp"
+                android:layout_height="59dp"
+
                 android:layout_marginStart="24dp"
+                android:backgroundTint="#00ACFF"
+
                 android:text="monthly "
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/weeklyButton"

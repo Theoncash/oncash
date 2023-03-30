@@ -4,8 +4,10 @@
 
     <item
         android:id="@+id/home"
+        android:icon="@android:drawable/btn_star_big_on"
         android:title="Home" />
     <item
         android:id="@+id/history"
+        android:icon="@android:drawable/ic_dialog_map"
         android:title="History" />
 </menu>
