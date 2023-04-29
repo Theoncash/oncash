@@ -12,7 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.oncash.Component.get_UserInfo_UseCase
-import com.example.oncash.DataType.UserData
+import com.example.oncash.DataType.UserData1
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
 import kotlin.properties.Delegates
 
 class loginViewModel:ViewModel() {
-    private  var userData:MutableLiveData<UserData> = MutableLiveData()
+    private  var userData:MutableLiveData<UserData1> = MutableLiveData()
 
     fun addUser(userNumber : Long ) {
 
@@ -33,7 +33,7 @@ class loginViewModel:ViewModel() {
         }
     }
 
-    fun getUserData(): MutableLiveData<UserData>{
+    fun getUserData1(): MutableLiveData<UserData1>{
         return userData
     }
 

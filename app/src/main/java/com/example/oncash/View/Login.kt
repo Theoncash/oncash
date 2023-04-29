@@ -40,7 +40,7 @@ class Login : AppCompatActivity() {
             if (phone.length == 10) {
 
                 viewModel.addUser(phone.toLong())
-                viewModel.getUserData().observe(this, Observer { userData ->
+                viewModel.getUserData1().observe(this, Observer { userData ->
 
                     if (userData.isUserRegistered) {
                         lifecycleScope.launch {

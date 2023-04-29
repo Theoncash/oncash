@@ -5,7 +5,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
-import com.example.oncash.DataType.UserData
+import com.example.oncash.DataType.UserData1
 import com.example.oncash.DataType.withdrawalTransaction
 import com.example.oncash.Repository.UserInfo_Airtable_Repo
 import kotlinx.coroutines.Dispatchers
@@ -19,17 +19,17 @@ import java.util.Date
 class get_UserInfo_UseCase {
 
 
-    suspend fun loginManager(userNumber: Long): UserData = withContext(Dispatchers.Default)
+    suspend fun loginManager(userNumber: Long): UserData1 = withContext(Dispatchers.Default)
     {
-        val userData: UserData = isUserRegistered(userNumber)
+        val userData: UserData1 = isUserRegistered(userNumber)
 
         if (!userData.isUserRegistered) {
-            return@withContext UserData(true, registerUser(userNumber))
+            return@withContext UserData1(true, registerUser(userNumber))
         }
         return@withContext userData
     }
 
-    suspend fun isUserRegistered(userNumber: Long): UserData = withContext(Dispatchers.Default) {
+    suspend fun isUserRegistered(userNumber: Long): UserData1 = withContext(Dispatchers.Default) {
 
         val users: JSONArray? = UserInfo_Airtable_Repo().getUserInfo().value!!
         var isUserRegistered: Boolean = false
@@ -42,12 +42,12 @@ class get_UserInfo_UseCase {
             val phone = JSONObject(user).getString("UserPhone")
             if (phone.toLong() == userNumber) {
                 isUserRegistered = true
-                return@withContext UserData(isUserRegistered, userRecordId)
+                return@withContext UserData1(isUserRegistered, userRecordId)
 
             }
         }
 
-        return@withContext UserData(isUserRegistered, userRecordId)
+        return@withContext UserData1(isUserRegistered, userRecordId)
     }
 
     private suspend fun registerUser(userNumber: Long): String = withContext(Dispatchers.Default) {
