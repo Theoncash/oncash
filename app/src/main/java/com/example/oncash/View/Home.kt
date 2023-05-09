@@ -2,45 +2,66 @@ package com.example.oncash.View
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.oncash.Component.Offer_RecylerViewAdapter
-import com.example.oncash.DataType.Offer
+import androidx.room.Room
 import com.example.oncash.DataType.OfferList
 import com.example.oncash.DataType.userData
 import com.example.oncash.R
+import com.example.oncash.RoomDb.User
+import com.example.oncash.RoomDb.userDb
 import com.example.oncash.ViewModel.home_viewModel
 import com.example.oncash.databinding.ActivityHomeBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Home : AppCompatActivity() {
      lateinit var binding: ActivityHomeBinding
     val homeViewmodel: home_viewModel by viewModels()
     lateinit var OfferList : OfferList
     private  var userData: userData = userData("",0)
+    lateinit var roomDb:userDb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
         lifecycleScope.launch {
-            getUserData()
+            roomDb = Room.databaseBuilder(
+                applicationContext,
+                userDb::class.java,
+                "User"
+            ).build()
+
+            withContext(Dispatchers.IO)
+            {
+                if (roomDb.userQuery().getUserId().isNullOrEmpty()) {
+                    withContext(Dispatchers.Main){
+                        getUserData()
+                    }
+
+                } else {
+                    userData.userNumber = roomDb.userQuery().getUserNumber()
+                    userData.userRecordId = roomDb.userQuery().getUserId()
+                    homeViewmodel.setUserData(userData)
+                    homeViewmodel.withdrawalTransaction(userData.userNumber)
+                    homeViewmodel.getOffersHistory(userData.userRecordId)
+                    homeViewmodel.getWallet(userData.userRecordId)
+                }
+
+            }
         }
-        FirebaseApp.initializeApp(this);
+//        lifecycleScope.launch {
+//            getUserData()
+//        }
+        FirebaseApp.initializeApp(this)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -54,12 +75,45 @@ class Home : AppCompatActivity() {
             {
                 if(navController.currentDestination!!.id==R.id.monthlyOffers){
                     navController.navigate(R.id.action_monthlyOffers_to_weeklyOffers)
-                }else{
+                }
+                if(navController.currentDestination!!.id==R.id.redeem2){
+                    navController.navigate(R.id.action_redeem2_to_weeklyOffers)
+                }
+                if(navController.currentDestination!!.id==R.id.profile){
+                    navController.navigate(R.id.action_profile_fragment_to_weeklyOffers)
                 }
             }
             if (it.itemId == R.id.history) {
                 if (navController.currentDestination!!.id == R.id.weeklyOffers) {
                     navController.navigate(R.id.action_weeklyOffers_to_monthlyOffers)
+                }
+                if (navController.currentDestination!!.id == R.id.redeem2) {
+                    navController.navigate(R.id.action_redeem2_to_monthlyOffers)
+                }
+                if(navController.currentDestination!!.id==R.id.profile){
+                    navController.navigate(R.id.action_profile_fragment_to_monthlyOffers)
+                }
+            }
+            if(it.itemId == R.id.redeem){
+                if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                    navController.navigate(R.id.action_weeklyOffers_to_redeem2)
+                }
+                if (navController.currentDestination!!.id == R.id.monthlyOffers) {
+                    navController.navigate(R.id.action_monthlyOffers_to_redeem2)
+                }
+                if(navController.currentDestination!!.id==R.id.profile){
+                    navController.navigate(R.id.action_profile_fragment_to_redeem2)
+                }
+            }
+            if(it.itemId == R.id.profile_fragment){
+                if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                    navController.navigate(R.id.action_weeklyOffers_to_profile_fragment)
+                }
+                if (navController.currentDestination!!.id == R.id.monthlyOffers) {
+                    navController.navigate(R.id.action_monthlyOffers_to_profile_fragment)
+                }
+                if (navController.currentDestination!!.id == R.id.redeem2) {
+                    navController.navigate(R.id.action_redeem2_to_profile_fragment)
                 }
             }
             true
@@ -91,26 +145,33 @@ class Home : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
         lifecycleScope.launch {
-            getUserData()
             homeViewmodel.getOfferList()
         }
 
+
     }
 
-    fun getUserData() {
+    private fun getUserData() {
         homeViewmodel.getUserData(this)
         homeViewmodel.getuserData().observe(this, Observer { data ->
             userData = data!!
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO){
+                    roomDb.userQuery().addUser(user = User(userData.userNumber , userData.userRecordId))
+                }
+            }
+            homeViewmodel.withdrawalTransaction(data.userNumber)
             homeViewmodel.getOffersHistory(data.userRecordId)
             homeViewmodel.getWallet(userData.userRecordId)
         })
 
         homeViewmodel.getWalletPrice().observe(this, Observer { wallet ->
-            binding.walletTextView.text = wallet.toString()
+            binding.walletTextView.text = wallet.currentBal.toString()
         })
     }
-    @Deprecated("Deprecated in Java")
+    @Deprecated("Deprecated in Java", ReplaceWith("this.finish()"))
     override fun onBackPressed() {
        this.finish()
     }

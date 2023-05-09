@@ -1,4 +1,32 @@
 <resources>
+
+    <!--  frame_17 strings  -->
+    <string name="ek_img_content">ExportKit Image</string>
+    <string name="__400_75_string">$400.75</string>
+    <string name="lifetime_earning_string">Lifetime earning</string>
+    <string name="__150_75_string">$150.75</string>
+    <string name="pramod_string">Pramod</string>
+    <string name="current_earnings_string">current earnings</string>
+    <string name="settings_string">Settings</string>
+    <string name="favorites_string">Favorites</string>
+    <string name="your_earnings_string">Your earnings</string>
+    <string name="payments_string">Payments</string>
+    <string name="withdraw_earnings_string">withdraw earnings</string>
+
+    <!-- profile strings -->
+        <string name="splash_message">Welcome to My App</string>
+        <string name="profile_name">John Doe</string>
+        <string name="profile_email">john.doe@example.com</string>
+        <string name="profile_phone">(123) 456-7890</string>
+        <string name="profile_location">San Francisco, CA</string>
+        <string name="profile_edit">Edit Profile</string>
+        <string name="menu_settings">Settings</string>
+        <string name="menu_help">Help &amp; Feedback</string>
+    <string name="action_search">Search</string>
+    <string name="action_notification">Notifications</string>
+    <string name="action_cart">Cart</string>
+
+
     <string name="app_name">oncash</string>
     <string name="information">Information</string>
     <string name="tata_neu">Tata Neu</string>
@@ -19,4 +47,8 @@
     <string name="please_logi">Please login to continue</string>
     <string name="get_started">Get Started</string>
     <string name="weekly">WEEKLY</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ellipse_10">ellipse_10</string>
+    <string name="pay_2">pay_2</string>
 </resources>

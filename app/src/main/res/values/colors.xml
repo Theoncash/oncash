@@ -7,4 +7,19 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--  frame_17 colors  -->
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="_bg__frame_17_color">#FFFFFF</color>
+    <color name="__400_75_color">#000000</color>
+    <color name="ellipse_11_color">#306F6F</color>
+    <color name="rectangle_11_color">#0F5858</color>
+
+    <!-- profile colors -->
+        <color name="blue">#0083D6</color>
+        <color name="gray">#EFEFEF</color>
+
+
 </resources>

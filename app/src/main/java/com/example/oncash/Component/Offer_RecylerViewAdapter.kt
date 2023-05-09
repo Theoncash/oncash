@@ -12,10 +12,12 @@ import android.view.View
 import com.example.oncash.R
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.oncash.DataType.Offer
 import com.example.oncash.DataType.userData
 import com.example.oncash.View.Info
@@ -28,19 +30,20 @@ import java.net.URL
 
 class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Offer_RecylerViewAdapter.viewholder>() {
     var offerList : ArrayList<Offer> = ArrayList<Offer>()
+    var lastPosition = -1
 
     var context : Context?=null
     class viewholder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val name : TextView
         val description :TextView
         val price :TextView
-        val background :ConstraintLayout
+        val background : ImageView
         lateinit var  offerId :String
         init {
             name = itemView.findViewById(com.example.oncash.R.id.offerHistory_name)
             description = itemView.findViewById(com.example.oncash.R.id.offer_status)
             price = itemView.findViewById(R.id.offerHistory_price)
-            background = itemView.findViewById(R.id.offer_recylerview_background)
+            background = itemView.findViewById(R.id.offer_imageview)
         }
     }
 
@@ -61,27 +64,29 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
         holder.offerId = offerList[position].OfferId!!
         holder.name.text= offerList[position].Name
         holder.description.text = offerList[position].Description
-        val text = "Rs "+ offerList[position].Price
+        val text =  offerList[position].Price
         holder.price.text = text
+        Glide.with(holder.itemView.context).load(offerList[position].Image).into(holder.background)
+
         val url :URL = URL( offerList[position].Image )
-        var lastPosition = -1
 
         var colour  :String = ""
         GlobalScope.launch { withContext(Dispatchers.IO) {
-            val background = BitmapFactory.decodeStream(url.openConnection().getInputStream())  ;
+            val background = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             colour =  Integer.toHexString( getDominantColor(background)).substring(2)
-            withContext(Dispatchers.Main){
-                holder.background.background = linearGradientDrawable(colour)
-            }
+//            withContext(Dispatchers.Main){
+//                holder.background.background = linearGradientDrawable(colour)
+//            }
         }
             }
-        val animation = AnimationUtils.loadAnimation(
-            context, if (position > lastPosition) {com.example.oncash.R.anim.offeranimation }else {com.example.oncash.R.anim.offeranimationdown}
-        )
-        holder.itemView.startAnimation(animation)
-        lastPosition = position
+//
+//        val animation = AnimationUtils.loadAnimation(
+//            context, if (position > lastPosition) {com.example.oncash.R.anim.offeranimation }else {com.example.oncash.R.anim.offeranimationdown}
+//        )
+//        holder.itemView.startAnimation(animation)
+//        lastPosition = position
 
-           // holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.offeranimation)
+//            holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.offeranimation)
 
 
         holder.itemView.setOnClickListener {

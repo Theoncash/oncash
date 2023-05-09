@@ -81,7 +81,7 @@ class weeklyOffers : Fragment() {
                 LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
         }
 
-        homeViewmodel!!.getOfferList().observe(viewLifecycleOwner, Observer { OfferList ->
+        homeViewmodel.getOfferList().observe(viewLifecycleOwner, Observer { OfferList ->
             if (OfferList.weeklyOffersList.isNotEmpty()) {
                 this.OfferList = OfferList
                 adapter.updateList(OfferList.weeklyOffersList)

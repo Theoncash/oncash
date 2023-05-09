@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     app:startDestination="@id/weeklyOffers">
 
@@ -14,6 +15,12 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/weeklyOffers"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_weeklyOffers_to_redeem2"
+            app:destination="@id/redeem2" />
+        <action
+            android:id="@+id/action_weeklyOffers_to_profile_fragment"
+            app:destination="@id/profile_fragment" />
     </fragment>
     <fragment
         android:id="@+id/monthlyOffers"
@@ -24,5 +31,41 @@
             app:destination="@id/weeklyOffers"
             app:launchSingleTop="true"
             app:popUpTo="@id/weeklyOffers" />
+        <action
+            android:id="@+id/action_monthlyOffers_to_redeem2"
+            app:destination="@id/redeem2" />
+        <action
+            android:id="@+id/action_monthlyOffers_to_profile_fragment"
+            app:destination="@id/profile_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/redeem2"
+        android:name="com.example.oncash.Fragment.redeem"
+        android:label="fragment_redeem"
+        tools:layout="@layout/fragment_redeem" >
+        <action
+            android:id="@+id/action_redeem2_to_weeklyOffers"
+            app:destination="@id/weeklyOffers" />
+        <action
+            android:id="@+id/action_redeem2_to_monthlyOffers"
+            app:destination="@id/monthlyOffers" />
+        <action
+            android:id="@+id/action_redeem2_to_profile_fragment"
+            app:destination="@id/profile_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profile_fragment"
+        android:name="com.example.oncash.Fragment.profile_fragment"
+        android:label="fragment_profile_fragment"
+        tools:layout="@layout/fragment_profile_fragment" >
+        <action
+            android:id="@+id/action_profile_fragment_to_redeem2"
+            app:destination="@id/redeem2" />
+        <action
+            android:id="@+id/action_profile_fragment_to_monthlyOffers"
+            app:destination="@id/monthlyOffers" />
+        <action
+            android:id="@+id/action_profile_fragment_to_weeklyOffers"
+            app:destination="@id/weeklyOffers" />
     </fragment>
 </navigation>

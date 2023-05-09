@@ -52,7 +52,7 @@ class get_UserInfo_UseCase {
 
     private suspend fun registerUser(userNumber: Long): String = withContext(Dispatchers.Default) {
 
-        return@withContext UserInfo_Airtable_Repo().createUser(userNumber, 0)
+        return@withContext UserInfo_Airtable_Repo().createUser(userNumber, 0 , 0)
     }
 
 
@@ -62,7 +62,6 @@ class get_UserInfo_UseCase {
         val withdrawalTransaction: JSONArray? = UserInfo_Airtable_Repo().getWithdrawTransaction().value!!
         lateinit var createdTime: String
         for (i in 0 until withdrawalTransaction!!.length()) {
-
             createdTime = JSONObject(withdrawalTransaction[i]!!.toString()).getString("createdTime").toString()
             val user = JSONObject(withdrawalTransaction[i]!!.toString()).getString("fields")
             val requestedAmount = JSONObject(user).getString("RequestedAmount")
