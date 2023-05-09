@@ -20,7 +20,7 @@ class withdraw_usecase {
     ):String  = withContext(Dispatchers.Default){
             lateinit var status :String
             val updateWallet = WalletBalance - RequestedAmount
-            val walletstatus = UserInfo_Airtable_Repo().updateWallet(phone, updateWallet, userRecordId)
+            val walletstatus = UserInfo_Airtable_Repo().updateWallet(phone, updateWallet, userRecordId , 0)
             Log.i("withdraw"  , walletstatus)
             if (walletstatus.contains("200"))
             {
@@ -31,12 +31,12 @@ class withdraw_usecase {
 
         return@withContext status
     }
-    suspend fun withdrawRequest (userNumber: Long, requestAmount: Int, walletBalance: Int , userRecordId :String):withdrawalsuccess {
+    suspend fun withdrawRequest (userNumber: Long, requestAmount: Int, walletBalance: Int , userRecordId :String ):withdrawalsuccess {
        val withdrawalTransaction :withdrawalsuccess  =   UserInfo_Airtable_Repo().withdrawRequest(
             userNumber,
             requestAmount.toInt(),
             walletBalance,
-            userRecordId!!
+           userRecordId,
         )
         val status = withdrawalTransaction.response
         if (status .contains("200"))

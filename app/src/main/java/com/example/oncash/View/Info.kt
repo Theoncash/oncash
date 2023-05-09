@@ -78,7 +78,8 @@ class Info : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.setPackage("com.android.chrome")
             Toast.makeText(this , recordId.toString() + " user id", Toast.LENGTH_LONG).show()
-            info_viewModel.updateOfferHistory(userData(recordId.toString() , number!!.toLong()), offerId!! , offerPrice.toString() , offerName = offerName!!)
+            info_viewModel.updateOfferHistory(userData(recordId.toString() , number!!.toLong()),
+                offerId, offerPrice.toString() , offerName = offerName!!)
             try {
                 this.startActivity(intent)
             } catch (ex: ActivityNotFoundException) {

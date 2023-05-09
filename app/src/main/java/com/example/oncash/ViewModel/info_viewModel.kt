@@ -14,7 +14,7 @@ import com.example.oncash.DataType.Offer_Information
 import com.example.oncash.DataType.userData
 import kotlinx.coroutines.launch
 
-class info_viewModel(): ViewModel() {
+class info_viewModel : ViewModel() {
 
     val InstructionsList : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
 

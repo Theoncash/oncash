@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
 
 
-class OfferHistory_RecylerViewAdapter() : RecyclerView.Adapter<OfferHistory_RecylerViewAdapter.viewholder>() {
+class OfferHistory_RecylerViewAdapter : RecyclerView.Adapter<OfferHistory_RecylerViewAdapter.viewholder>() {
     var offerList : ArrayList<OfferHistoryRecord> = ArrayList()
 
     var context : Context?=null

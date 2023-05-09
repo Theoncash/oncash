@@ -6,26 +6,43 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.oncash.Component.UserDataStoreUseCase
+import com.example.oncash.Component.get_UserInfo_UseCase
 import com.example.oncash.Component.offerHistory_component
 import com.example.oncash.Component.sortingComponent
-import com.example.oncash.DataType.Offer
-import com.example.oncash.DataType.OfferList
+import com.example.oncash.DataType.*
 import com.example.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
-import com.example.oncash.DataType.userData
 import com.example.oncash.Repository.Offer_FIrebase
 import com.example.oncash.Repository.UserInfo_Airtable_Repo
 import com.example.oncash.Repository.offer_AirtableDatabase
+import com.example.oncash.RoomDb.userDb
 import io.ktor.http.*
 import kotlinx.coroutines.*
 
 @OptIn(DelicateCoroutinesApi::class)
-public class home_viewModel() : ViewModel() {
+class home_viewModel : ViewModel() {
 
-    private val wallet : MutableLiveData<Int> = MutableLiveData(0)
+    private val wallet : MutableLiveData<walletDatatype> = MutableLiveData()
     private val userData : MutableLiveData<userData> = MutableLiveData()
 
+    //wallet
+    private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
 
-// weekly offer viewmodel
+
+
+    // wallet
+    fun withdrawalTransaction(userNumber :Long){
+        viewModelScope.launch {
+            withdrawalTransaction.value =   get_UserInfo_UseCase().getuserWithdrwalHistory(userNumber )
+
+        }
+
+    }
+
+    fun getWithdrawalTransaction():MutableLiveData<ArrayList<withdrawalTransaction>>{
+        return withdrawalTransaction
+    }
+
+    // weekly offer viewmodel
     private val offerList : MutableLiveData<OfferList> = MutableLiveData()
 
     fun getOfferList() : MutableLiveData<OfferList> {
@@ -58,6 +75,9 @@ private val offerhistoryList : MutableLiveData<ArrayList<OfferHistoryRecord>> = 
                 }
     }
 
+    fun setUserData(user : userData){
+        userData.postValue( user )
+    }
 
     fun getUserData(context:Context) {
         viewModelScope.launch {
@@ -69,7 +89,7 @@ private val offerhistoryList : MutableLiveData<ArrayList<OfferHistoryRecord>> = 
         return userData
     }
 
-    fun getWalletPrice():MutableLiveData<Int>{
+    fun getWalletPrice():MutableLiveData<walletDatatype>{
         return wallet
     }
 

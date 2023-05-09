@@ -24,7 +24,7 @@ class Offer_FIrebase  {
         } catch (exception: Exception) {
 
         }
-        Log.i("fbdata", response?.size.toString())
+        Log.i("fbdata", response.size.toString())
 
         return@withContext response
 

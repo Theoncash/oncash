@@ -15,12 +15,10 @@ class Diffutil(val oldList : ArrayList<Offer> , val newList : ArrayList<Offer>) 
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return if(oldList.get(oldItemPosition).Image == newList.get(newItemPosition).Image) true
-            else false
+        return oldList.get(oldItemPosition).Image == newList.get(newItemPosition).Image
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return if(oldList.get(oldItemPosition).Image == newList.get(newItemPosition).Image) true
-        else false
+        return oldList.get(oldItemPosition).Image == newList.get(newItemPosition).Image
     }
 }

@@ -10,4 +10,12 @@
         android:id="@+id/history"
         android:icon="@android:drawable/ic_dialog_map"
         android:title="History" />
+    <item
+        android:id="@+id/redeem"
+        android:icon="@drawable/ruppe_icon"
+        android:title="Redeem" />
+    <item
+        android:id="@+id/profile"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="Profile" />
 </menu>

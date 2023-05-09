@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.example.oncash.Component.get_UserInfo_UseCase
 import com.example.oncash.Component.withdraw_usecase
+import com.example.oncash.DataType.walletDatatype
 import com.example.oncash.DataType.withdrawalTransaction
 import com.example.oncash.DataType.withdrawalsuccess
 import com.example.oncash.Repository.UserInfo_Airtable_Repo
@@ -15,11 +16,11 @@ import kotlinx.coroutines.launch
 
 class wallet_viewModel:ViewModel() {
     private val withdrawalRequest :MutableLiveData<withdrawalsuccess> = MutableLiveData()
-    private val wallet : MutableLiveData<Int> = MutableLiveData(0)
+    private val wallet : MutableLiveData<walletDatatype> = MutableLiveData()
     private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
-    fun withdrawRequest(userNumber: Long, requestAmount: Int, walletBalance: Int , userRecordId :String)  {
+    fun withdrawRequest(userNumber: Long, requestAmount: Int, walletBalance: Int , userRecordId :String )  {
         viewModelScope.launch {
-            withdrawalRequest.value = withdraw_usecase().withdrawRequest(userNumber, requestAmount, walletBalance, userRecordId)
+            withdrawalRequest.value = withdraw_usecase().withdrawRequest(userNumber, requestAmount, walletBalance, userRecordId )
         }
     }
 
@@ -32,7 +33,6 @@ class wallet_viewModel:ViewModel() {
     }
     fun getWithdrawalTransaction():MutableLiveData<ArrayList<withdrawalTransaction>>{
         return withdrawalTransaction
-
     }
     fun getWithdrawalRequest(): MutableLiveData<withdrawalsuccess>{
         return withdrawalRequest
@@ -46,7 +46,7 @@ class wallet_viewModel:ViewModel() {
             )
         }
     }
-    fun getWalletPrice():MutableLiveData<Int>{
+    fun getWalletPrice():MutableLiveData<walletDatatype>{
         return wallet
     }
 

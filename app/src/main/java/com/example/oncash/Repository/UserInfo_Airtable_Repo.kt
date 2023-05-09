@@ -31,7 +31,7 @@ class UserInfo_Airtable_Repo {
     private val base = "appK86XkkYn9dx2vu"
 
 
-    suspend fun getWallet(userRecordId: String): Int = withContext(Dispatchers.IO) {
+    suspend fun getWallet(userRecordId: String): walletDatatype = withContext(Dispatchers.IO) {
 
         val client = HttpClient(CIO) {
             install(ContentNegotiation) {
@@ -51,9 +51,10 @@ class UserInfo_Airtable_Repo {
         }
 
         val fields: JSONObject = JSONObject(response.body<String>()).getJSONObject("fields")
-        val wallet = JSONObject(fields.toString()).getString("Wallet")
+        val current_bal = JSONObject(fields.toString()).getString("Wallet").toInt()
+        val total_bal = JSONObject(fields.toString()).getString("Total_Bal").toInt()
 
-        return@withContext wallet.toInt()
+        return@withContext walletDatatype(current_bal ,total_bal )
     }
 
     suspend fun getUserInfo(): MutableLiveData<JSONArray> = withContext(Dispatchers.IO) {
@@ -113,7 +114,7 @@ class UserInfo_Airtable_Repo {
 
     }
 
-    suspend fun createUser(number: Long, wallet: Int): String =
+    suspend fun createUser(number: Long, wallet: Int , total_bal :Int): String =
         withContext(Dispatchers.IO) {
             val client = HttpClient(CIO) {
                 install(ContentNegotiation) {
@@ -125,7 +126,7 @@ class UserInfo_Airtable_Repo {
             }
             val tableId = "tblOwifipGGANDJPN"
             val url = "https://api.airtable.com/v0/$base/$tableId/"
-            val userInfo = Records(Fields(number, wallet))
+            val userInfo = Records(Fields(number, wallet , total_bal))
             val userRecordId: MutableLiveData<String> = MutableLiveData()
 
 
@@ -144,11 +145,11 @@ class UserInfo_Airtable_Repo {
                 Log.i("airtable", e.toString())
             }
 
-            return@withContext userRecordId.getValue().toString()
+            return@withContext userRecordId.value.toString()
 
         }
 
-    suspend fun updateWallet(number: Long, wallet: Int, userRecordId: String): String =
+    suspend fun updateWallet(number: Long, wallet: Int, userRecordId: String , total_bal: Int): String =
         withContext(Dispatchers.IO) {
             val client = HttpClient(CIO) {
                 install(ContentNegotiation) {
@@ -162,7 +163,7 @@ class UserInfo_Airtable_Repo {
             val url = "https://api.airtable.com/v0/$base/$tableId/$userRecordId/"
 
 
-            val userInfo = Records(Fields(number, wallet))
+            val userInfo = Records(Fields(number, wallet , total_bal))
             var status by Delegates.notNull<String>()
             try {
                 val response = client.patch {
@@ -186,7 +187,7 @@ class UserInfo_Airtable_Repo {
         phone: Long,
         RequestedAmount: Int,
         WalletBalance: Int,
-        userRecordId: String
+        userRecordId: String,
     ): withdrawalsuccess =
         withContext(Dispatchers.IO) {
             val client = HttpClient(CIO) {
@@ -259,6 +260,7 @@ class UserInfo_Airtable_Repo {
    }
 
     suspend fun getOfferHistory() : ArrayList<OfferHistoryRecord> = withContext(Dispatchers.IO){
+
 
         val base = "appK86XkkYn9dx2vu"
         val tableId = "tblGyiEF9F9HpGuv2"

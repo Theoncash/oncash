@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragment.profile_fragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/group_21"
+            android:layout_width="332.9dp"
+            android:layout_height="235.73dp"
+            android:layout_marginTop="19.6dp"
+            android:background="#00000000"
+            app:circularflow_defaultRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.016">
+
+
+        </View>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="103.42dp"
+            android:layout_height="102.91dp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintEnd_toEndOf="@+id/group_21"
+            app:layout_constraintStart_toStartOf="@+id/group_21"
+            app:layout_constraintTop_toTopOf="@+id/group_21"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/current_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="40dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toStartOf="@+id/total_balance"
+            app:layout_constraintHorizontal_bias="0.157"
+            app:layout_constraintStart_toStartOf="@+id/group_21"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <TextView
+            android:id="@+id/total_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="88dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="@+id/group_21"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

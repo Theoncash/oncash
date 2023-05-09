@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".View.Home">
 
 
@@ -104,7 +105,8 @@
         android:layout_height="69dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="5dp"
-        android:backgroundTint="#94F3FF"
+        android:background="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
         app:circularflow_radiusInDP="40dp"
         app:elevation="10dp"
         app:labelVisibilityMode="selected"
