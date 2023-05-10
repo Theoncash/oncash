@@ -72,9 +72,10 @@ class redeem : Fragment() {
         }
 
         homeViewmodel.getWalletPrice().observe(viewLifecycleOwner) {
-                binding.walletBala.text = it.toString()
                 walletBalance = it.currentBal
-            }
+            binding.walletBala.text = walletBalance.toString()
+
+        }
 
             homeViewmodel.getuserData().observe(viewLifecycleOwner){
                 userRecordId = it.userRecordId

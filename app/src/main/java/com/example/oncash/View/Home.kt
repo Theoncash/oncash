@@ -1,7 +1,10 @@
 package com.example.oncash.View
 
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -120,7 +123,6 @@ class Home : AppCompatActivity() {
         }
 
 
-
         binding.walletTextView.setOnClickListener {
             startActivity(
                 Intent(this, Wallet::class.java).putExtra(
@@ -151,6 +153,16 @@ class Home : AppCompatActivity() {
         }
 
 
+    }
+    private fun setWindowFlag(bits: Int, on: Boolean) {
+        val win = window
+        val winParams = win.attributes
+        if (on) {
+            winParams.flags = winParams.flags or bits
+        } else {
+            winParams.flags = winParams.flags and bits.inv()
+        }
+        win.attributes = winParams
     }
 
     private fun getUserData() {

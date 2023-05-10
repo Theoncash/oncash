@@ -5,138 +5,82 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="148dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="357dp"
-        android:layout_height="96dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="48dp"
-        app:cardCornerRadius="37dp"
+        android:layout_width="350dp"
+        android:layout_height="113dp"
+
+        app:cardCornerRadius="6dp"
+        app:cardElevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" >
 
+        <ImageView
+            android:id="@+id/offer_imageview"
+            android:layout_width="92dp"
+            android:layout_height="89dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rectangle_1" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/offer_recylerview_background"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/rectangle_1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+        <TextView
+            android:id="@+id/offer_status"
+            android:layout_width="93dp"
+            android:layout_height="13dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="123dp"
+            android:layout_marginTop="39dp"
+            android:gravity="top"
+            android:text="description"
+            android:textSize="10dp"
+            />
 
+        <TextView
+            android:id="@+id/offerHistory_name"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="121dp"
+            android:layout_marginTop="59dp"
+            android:gravity="top"
+            android:text="Offer Name"
+            android:textColor="#171A1F"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <!--    <ImageView-->
-            <!--        android:id="@+id/offer_image"-->
-            <!--        android:layout_width="122dp"-->
-            <!--        android:layout_height="119dp"-->
-            <!--        android:layout_alignParentStart="true"-->
-            <!--        android:layout_marginLeft="121dp"-->
-            <!--        android:layout_alignParentTop="true"-->
-            <!--        android:layout_marginTop="241dp"-->
-            <!--        android:background="@drawable/offer_image"-->
-            <!--        app:layout_constraintTop_toTopOf="parent"-->
-            <!--        app:layout_constraintStart_toStartOf="parent"-->
-            <!--        app:layout_constraintEnd_toEndOf="parent"-->
-            <!--        tools:srcCompat="@tools:sample/avatars" />-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardVieww"
+            android:layout_width="69dp"
+            android:layout_height="35dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="261dp"
+            android:layout_alignParentTop="true"
+            android:backgroundTint="#81D6FF"
+            android:textAppearance="@style/withdraw"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="5dp"
+            android:layout_marginTop="42dp">
 
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="272dp"
-                android:layout_height="68dp"
-                android:layout_alignParentStart="true"
+            <TextView
+                android:id="@+id/offerHistory_price"
+                android:layout_width="60dp"
+                android:layout_height="19dp"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
+                android:layout_marginLeft="13dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="#00000000"
-                app:cardCornerRadius="37dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/offer_recylerview_background"
-                app:layout_constraintStart_toStartOf="@+id/offer_recylerview_background"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/offer_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:textColor="#555151"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/cardView"
-                        app:layout_constraintHorizontal_bias="0.474"
-                        app:layout_constraintStart_toStartOf="parent"
-                        tools:text="Install and Earn" />
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardView"
-                        android:layout_width="60dp"
-                        android:layout_height="57dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="6dp"
-                        app:cardBackgroundColor="#1E88DD"
-                        app:cardCornerRadius="37dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0">
-
-
-                        <TextView
-                            android:id="@+id/offerHistory_price"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginEnd="0dp"
-                            android:layout_marginBottom="10dp"
-                            android:textAlignment="center"
-                            android:textColor="#EDEBEB"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/offer_status"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0"
-                            tools:text="Rs 12" />
-
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:id="@+id/offerHistory_name"
-                        android:layout_width="96dp"
-                        android:layout_height="28dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="3dp"
-                        android:paddingLeft="0dp"
-                        android:textColor="#272525"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/offer_status"
-                        app:layout_constraintEnd_toStartOf="@+id/cardView"
-                        app:layout_constraintHorizontal_bias="0.409"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.272"
-                        tools:text="Tata Neu" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:gravity="top"
+                android:text="Price"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                />
+        </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

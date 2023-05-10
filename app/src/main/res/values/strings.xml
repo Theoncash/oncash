@@ -36,7 +36,7 @@
     <string name="withdrawal_">Withdrawal Limit ₹10</string>
     <string name="transaction">Transaction history</string>
     <string name="rectangle_withdraw_TextView">Withdraw</string>
-    <string name="withdrawal_limit">Withdrawal Limit ₹10</string>
+    <string name="withdrawal_limit">Withdrawal Limit ₹20</string>
     <string name="number_text">Number</string>
     <string name="amount_text">Amount</string>
     <string name="withdraw">Withdraw</string>
@@ -46,7 +46,7 @@
     <string name="login">Login</string>
     <string name="please_logi">Please login to continue</string>
     <string name="get_started">Get Started</string>
-    <string name="weekly">WEEKLY</string>
+    <string name="weekly">Weekly</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ellipse_10">ellipse_10</string>

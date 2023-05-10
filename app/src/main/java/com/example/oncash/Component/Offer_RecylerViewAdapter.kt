@@ -65,7 +65,7 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
         holder.name.text= offerList[position].Name
         holder.description.text = offerList[position].Description
         val text =  offerList[position].Price
-        holder.price.text = text
+        holder.price.text = "₹ $text "
         Glide.with(holder.itemView.context).load(offerList[position].Image).into(holder.background)
 
         val url :URL = URL( offerList[position].Image )
