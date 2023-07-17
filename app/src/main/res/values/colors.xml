@@ -6,12 +6,12 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
 
     <!--  frame_17 colors  -->
-    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimary">#FFFFFFFF</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+
     <color name="_bg__frame_17_color">#FFFFFF</color>
     <color name="__400_75_color">#000000</color>
     <color name="ellipse_11_color">#306F6F</color>
@@ -23,5 +23,11 @@
 
     <!--  -->
 
+    <color name="colorAccent">#307AD3</color>
+
+
+    <color name="colorGreenDarker">#002626</color>
+    <color name="colorAccentAlpha_10">#1A95C623</color>
+    <color name="colorGreenDarkerAlpha_10">#1A002626</color>
 
 </resources>
