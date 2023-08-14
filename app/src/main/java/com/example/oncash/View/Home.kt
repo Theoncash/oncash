@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
@@ -25,6 +26,7 @@ import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.DecimalFormat
 
 class Home : AppCompatActivity() {
      lateinit var binding: ActivityHomeBinding
@@ -143,7 +145,9 @@ class Home : AppCompatActivity() {
 
         }
 
+
     }
+
 
     override fun onResume() {
         super.onResume()

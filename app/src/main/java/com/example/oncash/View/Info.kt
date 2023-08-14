@@ -3,11 +3,16 @@ package com.example.oncash.View
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.TransitionManager
+import android.view.View
 import android.widget.MediaController
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.example.oncash.Component.Instructions_RecylerViewAdapter
 import com.example.oncash.DataType.Offer
 import com.example.oncash.DataType.userData
+import com.example.oncash.R
 import com.example.oncash.Repository.offer_AirtableDatabase
 import com.example.oncash.ViewModel.info_viewModel
 import com.example.oncash.databinding.ActivityInfoBinding
@@ -52,9 +58,14 @@ class Info : AppCompatActivity() {
         binding.instructionListInfo.adapter = adapter
         binding.instructionListInfo.layoutManager = LinearLayoutManager(this , LinearLayoutManager.VERTICAL , false)
 
+        binding.backButtonInfo.setOnClickListener{
+            val intent=Intent(this,Home::class.java)
+            startActivity(intent)
+        }
         //videoVIew
         val videoview= binding.videoView
         lifecycle.addObserver(videoview)
+
         videoview.addYouTubePlayerListener(object : AbstractYouTubePlayerListener(){
             override fun onReady(youTubePlayer: YouTubePlayer) {
                     youTubePlayer.loadVideo(viewUri!! , 0F)
@@ -91,9 +102,20 @@ class Info : AppCompatActivity() {
 
         offer_AirtableDatabase().getData()
 
+        binding.YoutubeViewExpandable.setOnClickListener {
+            val hiddenView = binding.videoView
+            val cardView =binding.YoutubeViewExpandable
+            if (hiddenView.visibility == View.VISIBLE){
 
+                hiddenView.visibility = View.GONE
 
+                TransitionManager.beginDelayedTransition(cardView, AutoTransition())
+            }else {
+                hiddenView.visibility = View.VISIBLE
 
+                TransitionManager.beginDelayedTransition(cardView, AutoTransition())
 
+            }
+        }
     }
 }

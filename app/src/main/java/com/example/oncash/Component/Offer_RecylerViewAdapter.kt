@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import com.example.oncash.R
@@ -26,12 +27,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
+import java.text.DecimalFormat
 
 
-class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Offer_RecylerViewAdapter.viewholder>() {
+class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<Offer_RecylerViewAdapter.viewholder>() {
     var offerList : ArrayList<Offer> = ArrayList<Offer>()
     var lastPosition = -1
-
+    var offer = 100
     var context : Context?=null
     class viewholder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val name : TextView
@@ -61,10 +63,16 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
     }
 
     override fun onBindViewHolder(holder: viewholder, position: Int) {
+        val price :Int = offerList[position].Price!!.toInt()
+
+
+
+
+
         holder.offerId = offerList[position].OfferId!!
         holder.name.text= offerList[position].Name
         holder.description.text = offerList[position].Description
-        val text =  offerList[position].Price
+        val text =  (offerList[position].Price!!.toInt() * offer ) /100
         holder.price.text = "₹ $text "
         Glide.with(holder.itemView.context).load(offerList[position].Image).into(holder.background)
 
@@ -129,8 +137,9 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateList(list :ArrayList<Offer>){
+    fun updateList(list :ArrayList<Offer> , offer: Int){
 //        val result =  DiffUtil.calculateDiff( Diffutil(offerList , list))
+        this.offer = offer
         this.offerList.clear()
         this.offerList.addAll(list)
         notifyDataSetChanged()
@@ -170,4 +179,5 @@ class Offer_RecylerViewAdapter(val userData :userData) : RecyclerView.Adapter<Of
            // setStroke(5,Color.parseColor("#4B5320"))
         }
     }
+
 }

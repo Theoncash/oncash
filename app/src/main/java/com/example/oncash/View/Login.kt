@@ -8,11 +8,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.example.oncash.Component.UserDataStoreUseCase
+import com.example.oncash.RoomDb.Timer
+import com.example.oncash.RoomDb.TimerDb
 import com.example.oncash.ViewModel.loginViewModel
 import com.example.oncash.databinding.ActivityLoginBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Calendar
+import java.util.Date
 
 class Login : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
@@ -27,60 +35,74 @@ class Login : AppCompatActivity() {
             isUserLogin = UserDataStoreUseCase().retrieveUser(this@Login)
             if (isUserLogin == true) {
                 startActivity(Intent(this@Login, Home::class.java))
-            }
-        }
+            } else {
+                setContentView(binding.root)
+                binding.phoneButtonInput.setOnClickListener {
+                    val phone = binding.phoneInput.text.toString()
 
-        setContentView(binding.root)
+                    if (phone.length == 10) {
+
+                        viewModel.addUser(phone.toLong())
+                        viewModel.getUserData1().observe(this@Login, Observer { userData ->
+
+                            if (userData.isUserRegistered) {
+                                lifecycleScope.launch {
+                                    Log.i("LoginData", userData.userRecordId.toString())
+                                    UserDataStoreUseCase().storeUser(
+                                        this@Login,
+                                        userData.isUserRegistered,
+                                        phone.toLong(),
+                                        userData.userRecordId
+                                    )
+
+                                    val calendar = Calendar.getInstance()
+                                    calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 2)
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        var roomDb = Room.databaseBuilder(
+                                            this@Login,
+                                            TimerDb::class.java,
+                                            "Timer"
+                                        ).build()
+
+                                        withContext(Dispatchers.IO)
+                                        {
+                                            roomDb.TimerQuery().addTimer(Timer(calendar.timeInMillis))
+                                        }
+
+                                    }
+
+                                    startActivity(Intent(this@Login, Home::class.java))
 
 
-
-        binding.phoneButtonInput.setOnClickListener {
-            val phone = binding.phoneInput.text.toString()
-
-            if (phone.length == 10) {
-
-                viewModel.addUser(phone.toLong())
-                viewModel.getUserData1().observe(this, Observer { userData ->
-
-                    if (userData.isUserRegistered) {
-                        lifecycleScope.launch {
-                            Log.i("LoginData",userData.userRecordId.toString())
-                           UserDataStoreUseCase().storeUser(
-                                this@Login,
-                                userData.isUserRegistered,
-                                phone.toLong(),
-                                userData.userRecordId
+                                }
+                            } else {
+                                Snackbar.make(
+                                    binding.root,
+                                    "Error Registering , Please try again",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            }
+                            Log.i(
+                                "login Data",
+                                userData.isUserRegistered.toString() + userData.userRecordId
                             )
-                           startActivity(Intent(this@Login, Home::class.java))
 
 
-                        }
+                        })
+
+
                     } else {
                         Snackbar.make(
                             binding.root,
-                            "Error Registering , Please try again",
+                            "Please Enter Your Correct Number",
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
-                    Log.i(
-                        "login Data",
-                        userData.isUserRegistered.toString() + userData.userRecordId
-                    )
 
-
-                })
-
-
-            } else {
-                Snackbar.make(
-                    binding.root,
-                    "Please Enter Your Correct Number",
-                    Snackbar.LENGTH_LONG
-                ).show()
+                }
             }
 
+
         }
-
-
     }
 }

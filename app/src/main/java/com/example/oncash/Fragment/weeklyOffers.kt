@@ -1,6 +1,8 @@
 package com.example.oncash.Fragment
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,21 +12,36 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.example.oncash.Component.Offer_RecylerViewAdapter
+import com.example.oncash.Component.UserDataStoreUseCase
 import com.example.oncash.DataType.OfferList
 import com.example.oncash.DataType.userData
 import com.example.oncash.R
+import com.example.oncash.RoomDb.TimerDb
+import com.example.oncash.RoomDb.userDb
 import com.example.oncash.ViewModel.home_viewModel
 import com.example.oncash.ViewModel.offer_viewmodel
 import com.example.oncash.databinding.FragmentWeeklyOffersBinding
 import com.google.android.gms.common.util.DataUtils
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.DecimalFormat
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +54,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class weeklyOffers : Fragment() {
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -44,8 +62,9 @@ class weeklyOffers : Fragment() {
     lateinit var binding : FragmentWeeklyOffersBinding
     val offerViewModel: offer_viewmodel by viewModels()
     lateinit var OfferList : OfferList
-
-
+     var endTime :Long = 0L
+    val calendar = Calendar.getInstance().timeInMillis
+    var offer = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,15 +86,56 @@ class weeklyOffers : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        CoroutineScope(Dispatchers.Main).launch {
+            var roomDb = Room.databaseBuilder(
+                view.context,
+                TimerDb::class.java,
+                "Timer"
+            ).build()
+
+            withContext(Dispatchers.IO)
+            {
+                endTime = roomDb.TimerQuery().getEndTime()
+
+                val timerTime = endTime - calendar
+
+                withContext(Dispatchers.Main) {
+
+                    object : CountDownTimer( timerTime, 1000) {
+                        override fun onTick(millisUntilFinished: Long) {
+                            // Update the UI for the current item with the remaining time
+                            val formattedTime = formatTime(millisUntilFinished)
+                            binding.countdownTextView.text = " $formattedTime"
+                        }
+
+                        override fun onFinish() {
+                            binding.countdownTextView.text = "Cashback: 30% - Offer Ended"
+                            offer = 70
+                        }
+                    }.start()
+                }
+            }
+
+        }
+
+
+
+
+
+
+
+
+
         val homeViewmodel = activity.run{
             this?.let { ViewModelProvider(it).get(home_viewModel::class.java) }
         }
         lateinit var adapter:Offer_RecylerViewAdapter
 
+
         homeViewmodel!!.getuserData().observe(viewLifecycleOwner){
             userData = it
             val offerRecylerview: RecyclerView = view.findViewById(R.id.weeklyOffer_recylerview)
-             adapter = Offer_RecylerViewAdapter(userData)
+             adapter = Offer_RecylerViewAdapter(userData )
             offerRecylerview.adapter = adapter
             offerRecylerview.layoutManager =
                 LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
@@ -84,19 +144,19 @@ class weeklyOffers : Fragment() {
         homeViewmodel.getOfferList().observe(viewLifecycleOwner, Observer { OfferList ->
             if (OfferList.weeklyOffersList.isNotEmpty()) {
                 this.OfferList = OfferList
-                adapter.updateList(OfferList.weeklyOffersList)
+                adapter.updateList(OfferList.weeklyOffersList , offer )
             }
         })
 
         view.findViewById<Button>(R.id.weeklyButton).setOnClickListener {
             if (OfferList.weeklyOffersList.isNotEmpty()) {
-                adapter.updateList(OfferList.weeklyOffersList)
+                adapter.updateList(OfferList.weeklyOffersList , offer)
             }
         }
 
         view.findViewById<Button>(R.id.monthlyButton).setOnClickListener {
             if (OfferList.monthlyOfferList.isNotEmpty()) {
-                adapter.updateList(OfferList.monthlyOfferList)
+                adapter.updateList(OfferList.monthlyOfferList , offer)
             }else{
                 Snackbar.make(view , "No Monthly Offers Available " , Snackbar.LENGTH_LONG).show()
             }
@@ -124,3 +184,14 @@ class weeklyOffers : Fragment() {
             }
     }
 }
+private fun formatTime(millis: Long): String {
+    val days = TimeUnit.MILLISECONDS.toDays(millis)
+    val hours = TimeUnit.MILLISECONDS.toHours(millis) % 24
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60
+    val seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60
+
+    return String.format("%02d Day : %02d H : %02d M : %02d S", days, hours, minutes, seconds)
+}
+
+
+
