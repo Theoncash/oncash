@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/weeklyOffers"
-        android:name="com.example.oncash.Fragment.weeklyOffers"
+        android:name="in.oncash.oncash.Fragment.weeklyOffers"
         android:label="weeklyOffers" >
         <action
             android:id="@+id/action_weeklyOffers_to_monthlyOffers"
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/monthlyOffers"
-        android:name="com.example.oncash.Fragment.monthlyOffers"
+        android:name="in.oncash.oncash.Fragment.monthlyOffers"
         android:label="monthlyOffers" >
         <action
             android:id="@+id/action_monthlyOffers_to_weeklyOffers"
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/redeem2"
-        android:name="com.example.oncash.Fragment.redeem"
+        android:name="in.oncash.oncash.Fragment.redeem"
         android:label="fragment_redeem"
         tools:layout="@layout/fragment_redeem" >
         <action
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/profile_fragment"
-        android:name="com.example.oncash.Fragment.profile_fragment"
+        android:name="in.oncash.oncash.Fragment.profile_fragment"
         android:label="fragment_profile_fragment"
         tools:layout="@layout/fragment_profile_fragment" >
         <action
