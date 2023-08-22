@@ -8,6 +8,8 @@
     tools:context=".View.Home">
 
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="393dp"
@@ -82,6 +84,20 @@
             app:layout_constraintStart_toEndOf="@+id/walletcardview"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.269" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="401dp"
+            android:layout_height="40dp"
+
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/fragmentContainerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.25"
+            tools:ignore="NotSibling" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

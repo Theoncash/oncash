@@ -64,7 +64,10 @@ class Home : AppCompatActivity() {
 
         binding.walletcardview.setBackgroundResource(R.drawable.walletbg)
 
-
+        homeViewmodel.completedOffers.observe(this){
+            binding.progressBar.max = homeViewmodel.totalOffers.value!!
+            binding.progressBar.progress = it
+        }
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigation.setOnItemSelectedListener {
@@ -76,8 +79,8 @@ class Home : AppCompatActivity() {
                 if(navController.currentDestination!!.id==R.id.redeem2){
                     navController.navigate(R.id.action_redeem2_to_weeklyOffers)
                 }
-                if(navController.currentDestination!!.id==R.id.profile){
-                    navController.navigate(R.id.action_profile_fragment_to_weeklyOffers)
+                if(navController.currentDestination!!.id==R.id.profile2){
+                    navController.navigate(R.id.action_profile2_to_weeklyOffers)
                 }
             }
             if (it.itemId == R.id.history) {
@@ -87,8 +90,8 @@ class Home : AppCompatActivity() {
                 if (navController.currentDestination!!.id == R.id.redeem2) {
                     navController.navigate(R.id.action_redeem2_to_monthlyOffers)
                 }
-                if(navController.currentDestination!!.id==R.id.profile){
-                    navController.navigate(R.id.action_profile_fragment_to_monthlyOffers)
+                if(navController.currentDestination!!.id==R.id.profile2){
+                    navController.navigate(R.id.action_profile2_to_monthlyOffers)
                 }
             }
             if(it.itemId == R.id.redeem){
@@ -98,19 +101,19 @@ class Home : AppCompatActivity() {
                 if (navController.currentDestination!!.id == R.id.monthlyOffers) {
                     navController.navigate(R.id.action_monthlyOffers_to_redeem2)
                 }
-                if(navController.currentDestination!!.id==R.id.profile){
-                    navController.navigate(R.id.action_profile_fragment_to_redeem2)
+                if(navController.currentDestination!!.id == R.id.profile2){
+                    navController.navigate(R.id.action_profile2_to_redeem2)
                 }
             }
-            if(it.itemId == R.id.profile_fragment){
+            if(it.itemId == R.id.profile){
                 if (navController.currentDestination!!.id == R.id.weeklyOffers) {
-                    navController.navigate(R.id.action_weeklyOffers_to_profile_fragment)
+                    navController.navigate(R.id.action_weeklyOffers_to_profile2)
                 }
                 if (navController.currentDestination!!.id == R.id.monthlyOffers) {
-                    navController.navigate(R.id.action_monthlyOffers_to_profile_fragment)
+                    navController.navigate(R.id.action_monthlyOffers_to_profile2)
                 }
                 if (navController.currentDestination!!.id == R.id.redeem2) {
-                    navController.navigate(R.id.action_redeem2_to_profile_fragment)
+                    navController.navigate(R.id.action_redeem2_to_profile2)
                 }
             }
             true
@@ -124,7 +127,6 @@ class Home : AppCompatActivity() {
                     binding.walletTextView.text
                 ) .putExtra("userNumber", userData.userNumber.toString()).putExtra("userRecordId", userData.userRecordId))
 
-
         }
 
         binding.walletcardview.setOnClickListener {
@@ -133,11 +135,7 @@ class Home : AppCompatActivity() {
                     "walletBalance",
                     binding.walletTextView.text
                 ) .putExtra("userNumber", userData.userNumber.toString()).putExtra("userRecordId", userData.userRecordId))
-
-
         }
-
-
     }
 
 
@@ -173,6 +171,7 @@ class Home : AppCompatActivity() {
             homeViewmodel.withdrawalTransaction(data.userNumber)
             homeViewmodel.getOffersHistory(data.userRecordId)
             homeViewmodel.getWallet(userData.userRecordId)
+
         })
 
         homeViewmodel.getWalletPrice().observe(this, Observer { wallet ->
