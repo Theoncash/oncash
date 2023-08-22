@@ -22,8 +22,9 @@ class home_viewModel : ViewModel() {
 
     private val wallet : MutableLiveData<walletDatatype> = MutableLiveData()
     private val userData : MutableLiveData<userData> = MutableLiveData()
+     val completedOffers : MutableLiveData<Int> = MutableLiveData(0)
+     val totalOffers : MutableLiveData<Int> = MutableLiveData(0)
 
-    //wallet
     private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
 
 
@@ -36,6 +37,12 @@ class home_viewModel : ViewModel() {
         }
 
     }
+
+    fun setProgressBar(completedOffer : Int, totalOffer: Int){
+        completedOffers.value = completedOffer
+        totalOffers.value = totalOffer
+    }
+
 
     fun getWithdrawalTransaction():MutableLiveData<ArrayList<withdrawalTransaction>>{
         return withdrawalTransaction

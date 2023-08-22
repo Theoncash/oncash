@@ -24,8 +24,8 @@ class profile_fragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var homeViewmodel: home_viewModel
-    lateinit var binding : FragmentProfileFragmentBinding
+     lateinit var binding : FragmentProfileFragmentBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -45,11 +45,15 @@ class profile_fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewmodel = activity.run{
-            ViewModelProvider(this!!)[homeViewmodel::class.java]
+        var homeViewmodel: home_viewModel = activity.run{
+            ViewModelProvider(this!!)[home_viewModel::class.java]
         }
-        binding.currentBalance.text = homeViewmodel.getWalletPrice().value!!.currentBal.toString()
-        binding.totalBalance.text = homeViewmodel.getWalletPrice().value!!.totalBa.toString()
+        try {
+            binding.currentBalance.text = homeViewmodel.getWalletPrice().value!!.currentBal.toString()
+            binding.totalBalance.text = homeViewmodel.getWalletPrice().value!!.totalBa.toString()
+        }catch (e: Exception){
+        }
+
     }
     companion object {
         /**

@@ -19,8 +19,8 @@
             android:id="@+id/action_weeklyOffers_to_redeem2"
             app:destination="@id/redeem2" />
         <action
-            android:id="@+id/action_weeklyOffers_to_profile_fragment"
-            app:destination="@id/profile_fragment" />
+            android:id="@+id/action_weeklyOffers_to_profile2"
+            app:destination="@id/profile2" />
     </fragment>
     <fragment
         android:id="@+id/monthlyOffers"
@@ -35,8 +35,8 @@
             android:id="@+id/action_monthlyOffers_to_redeem2"
             app:destination="@id/redeem2" />
         <action
-            android:id="@+id/action_monthlyOffers_to_profile_fragment"
-            app:destination="@id/profile_fragment" />
+            android:id="@+id/action_monthlyOffers_to_profile2"
+            app:destination="@id/profile2" />
     </fragment>
     <fragment
         android:id="@+id/redeem2"
@@ -50,22 +50,22 @@
             android:id="@+id/action_redeem2_to_monthlyOffers"
             app:destination="@id/monthlyOffers" />
         <action
-            android:id="@+id/action_redeem2_to_profile_fragment"
-            app:destination="@id/profile_fragment" />
+            android:id="@+id/action_redeem2_to_profile2"
+            app:destination="@id/profile2" />
     </fragment>
     <fragment
-        android:id="@+id/profile_fragment"
+        android:id="@+id/profile2"
         android:name="in.oncash.oncash.Fragment.profile_fragment"
         android:label="fragment_profile_fragment"
         tools:layout="@layout/fragment_profile_fragment" >
         <action
-            android:id="@+id/action_profile_fragment_to_redeem2"
+            android:id="@+id/action_profile2_to_redeem2"
             app:destination="@id/redeem2" />
         <action
-            android:id="@+id/action_profile_fragment_to_monthlyOffers"
+            android:id="@+id/action_profile2_to_monthlyOffers"
             app:destination="@id/monthlyOffers" />
         <action
-            android:id="@+id/action_profile_fragment_to_weeklyOffers"
+            android:id="@+id/action_profile2_to_weeklyOffers"
             app:destination="@id/weeklyOffers" />
     </fragment>
 </navigation>

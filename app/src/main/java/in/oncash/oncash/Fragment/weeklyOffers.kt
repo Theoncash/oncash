@@ -10,6 +10,7 @@ import android.widget.Button
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -131,6 +132,11 @@ class weeklyOffers : Fragment() {
             if (OfferList.weeklyOffersList.isNotEmpty()) {
                 this.OfferList = OfferList
                 adapter.updateList(OfferList.weeklyOffersList , offer )
+            }
+            homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner){
+               var totalOffers =  OfferList.weeklyOffersList.size+OfferList.monthlyOfferList.size
+               var completedOffers = it.size
+               homeViewmodel.setProgressBar(completedOffers , totalOffers)
             }
         })
 
