@@ -33,13 +33,11 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
     var context : Context?=null
     class viewholder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val name : TextView
-        val description :TextView
         val price :TextView
         val background : ImageView
         lateinit var  offerId :String
         init {
             name = itemView.findViewById(`in`.oncash.oncash.R.id.offerHistory_name)
-            description = itemView.findViewById(`in`.oncash.oncash.R.id.offer_status)
             price = itemView.findViewById(R.id.offerHistory_price)
             background = itemView.findViewById(R.id.offer_imageview)
         }
@@ -67,7 +65,6 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
 
         holder.offerId = offerList[position].OfferId!!
         holder.name.text= offerList[position].Name
-        holder.description.text = offerList[position].Description
         val text =  (offerList[position].Price!!.toInt() * offer ) /100
         holder.price.text = "₹ $text "
         Glide.with(holder.itemView.context).load(offerList[position].Image).into(holder.background)
@@ -104,7 +101,6 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
                 .putExtra("OfferName",offer_information.Name)
                 .putExtra("OfferImage",offer_information.Image)
                 .putExtra("OfferPrice",offer_information.Price)
-                .putExtra("OfferDescription",offer_information.Description)
                 .putExtra("OfferLink",offer_information.Link)
                 .putExtra("subid" , offer_information.subid)
                 .putExtra("subid2" , offer_information.payout)

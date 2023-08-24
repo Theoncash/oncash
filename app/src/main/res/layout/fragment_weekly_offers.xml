@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/button_border"
-            app:layout_constraintBottom_toTopOf="@+id/weeklyOffer_recylerview"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,9 +60,9 @@
 
             <Button
                 android:id="@+id/weeklyButton"
-                android:layout_width="190dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="10dp"
+                android:layout_width="150dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="17dp"
                 android:layout_marginBottom="20dp"
@@ -81,16 +81,16 @@
 
             <Button
                 android:id="@+id/monthlyButton"
-                android:layout_width="190dp"
-                android:layout_height="43dp"
+                android:layout_width="150dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="210dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="29dp"
+                android:layout_marginEnd="100dp"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="#81D6FF"
-                android:textAppearance="@style/withdraw"
-
                 android:text="Monthly Payout"
+
+                android:textAppearance="@style/withdraw"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:cornerRadius="20dp"
@@ -101,15 +101,32 @@
 
         </androidx.cardview.widget.CardView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/weeklyOffer_recylerview"
-            android:layout_width="408dp"
-            android:layout_height="512dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="5600dp"
+            android:layout_marginTop="40dp"
+            android:backgroundTint="#A1C7E0"
+            app:cardCornerRadius="38dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.89"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/offerListButtons" />
+            app:layout_constraintTop_toBottomOf="@+id/offerListButtons">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/weeklyOffer_recylerview"
+                android:layout_width="match_parent"
+                android:layout_height="580dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.89"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/offerListButtons" />
+
+        </androidx.cardview.widget.CardView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
+
+

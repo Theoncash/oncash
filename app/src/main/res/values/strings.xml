@@ -40,13 +40,13 @@
     <string name="number_text">Number</string>
     <string name="amount_text">Amount</string>
     <string name="withdraw">Withdraw</string>
-    <string name="enter_mobil">Enter Mobile Number</string>
+    <string name="enter_mobil">Phone No</string>
     <string name="some_id">+91</string>
     <string name="continue_">Sign up</string>
     <string name="login">Login</string>
 
     <string name="please_logi">Please login to continue</string>
-    <string name="get_started">Get Started</string>
+    <string name="get_started">Sign in</string>
     <string name="weekly">Weekly Payout</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -62,5 +62,7 @@
     <string name="title_on_boarding_third_slide">Get started</string>
     <string name="description_on_boarding_third_slide">Sign up for Oncash today and start earning money! It\'s easy to get started. Then, you can start completing tasks and earning money.</string>
     <string name="title_button_get_started">Sign Up</string>
+    <string name="number_for_secure_transactions">Number for Secure Transactions.</string>
+    <string name="withdrawal_history">Withdrawal History</string>
 
 </resources>

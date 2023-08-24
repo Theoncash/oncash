@@ -41,7 +41,7 @@ class Wallet : AppCompatActivity() {
         lifecycleScope.launch { getTransaction() }
 
         binding.withdrawButton.setOnClickListener {
-            val requestAmount = binding.withdrawRequestedAmount.text.toString()
+            val requestAmount = binding.walletBala.text.toString()
             if (requestAmount.isNotEmpty()) {
                 if (walletBalance!!.toInt() >= requestAmount.toInt()) {
                     if (requestAmount.toInt() > 20) {
@@ -61,7 +61,7 @@ class Wallet : AppCompatActivity() {
                                     walletBalance =
                                         walletBalance!! - status.withdrawalTransaction.WithdrawalAmount.toInt()
                                    binding.walletBala.text = walletBalance.toString()
-                                    binding.withdrawRequestedAmount.editableText.clear()
+                                    binding.walletBala.editableText.clear()
 
                                     withdrawalList.add(status.withdrawalTransaction)
                                     adapter.updateList(withdrawalList)

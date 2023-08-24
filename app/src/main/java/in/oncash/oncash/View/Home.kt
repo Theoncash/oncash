@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.room.Room
 import `in`.oncash.oncash.DataType.OfferList
@@ -22,10 +23,13 @@ import kotlinx.coroutines.withContext
 
 class Home : AppCompatActivity() {
      lateinit var binding: ActivityHomeBinding
+
     val homeViewmodel: home_viewModel by viewModels()
     lateinit var OfferList : OfferList
     private  var userData: userData = userData("",0)
     lateinit var roomDb:userDb
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +66,6 @@ class Home : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.walletcardview.setBackgroundResource(R.drawable.walletbg)
 
         homeViewmodel.completedOffers.observe(this){
             binding.progressBar.max = homeViewmodel.totalOffers.value!!
@@ -127,14 +130,6 @@ class Home : AppCompatActivity() {
                     binding.walletTextView.text
                 ) .putExtra("userNumber", userData.userNumber.toString()).putExtra("userRecordId", userData.userRecordId))
 
-        }
-
-        binding.walletcardview.setOnClickListener {
-            startActivity(
-                Intent(this, Wallet::class.java).putExtra(
-                    "walletBalance",
-                    binding.walletTextView.text
-                ) .putExtra("userNumber", userData.userNumber.toString()).putExtra("userRecordId", userData.userRecordId))
         }
     }
 

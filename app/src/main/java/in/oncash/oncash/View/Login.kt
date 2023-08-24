@@ -35,8 +35,8 @@ class Login : AppCompatActivity() {
                 startActivity(Intent(this@Login, Home::class.java))
             } else {
                 setContentView(binding.root)
-                binding.phoneButtonInput.setOnClickListener {
-                    val phone = binding.phoneInput.text.toString()
+                binding.continueBut.setOnClickListener {
+                    val phone = binding.phoneButtonInput.text.toString()
 
                     if (phone.length == 10) {
 

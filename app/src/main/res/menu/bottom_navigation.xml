@@ -4,18 +4,18 @@
 
     <item
         android:id="@+id/home"
-        android:icon="@android:drawable/btn_star_big_on"
+        android:icon="@drawable/nav_home"
         android:title="Home" />
     <item
         android:id="@+id/history"
-        android:icon="@android:drawable/ic_dialog_map"
+        android:icon="@drawable/nav_history"
         android:title="History" />
     <item
         android:id="@+id/redeem"
-        android:icon="@drawable/ruppe_icon"
+        android:icon="@drawable/nav_wallet"
         android:title="Redeem" />
     <item
         android:id="@+id/profile"
-        android:icon="@android:drawable/ic_dialog_info"
+        android:icon="@drawable/nav_profile"
         android:title="Profile" />
 </menu>

@@ -24,7 +24,7 @@ class home_viewModel : ViewModel() {
     private val userData : MutableLiveData<userData> = MutableLiveData()
      val completedOffers : MutableLiveData<Int> = MutableLiveData(0)
      val totalOffers : MutableLiveData<Int> = MutableLiveData(0)
-
+     val userNumber : MutableLiveData<Long> = MutableLiveData()
     private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
 
 
@@ -37,6 +37,9 @@ class home_viewModel : ViewModel() {
         }
 
     }
+
+
+    
 
     fun setProgressBar(completedOffer : Int, totalOffer: Int){
         completedOffers.value = completedOffer

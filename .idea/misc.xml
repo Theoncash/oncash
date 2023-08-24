@@ -1,26 +1,4 @@
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/drawable/frame1.xml" value="0.212" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/drawable/rectangle_1.xml" value="0.212" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/drawable/rectangle_wallet_1.xml" value="0.212" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/drawable/rectangle_wallet_3.xml" value="0.2155" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/activity_home.xml" value="0.22826086956521738" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/activity_info.xml" value="0.25" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/activity_wallet.xml" value="0.2" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/fragment_history.xml" value="0.17760416666666667" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/fragment_profile_fragment.xml" value="0.22826086956521738" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/fragment_redeem.xml" value="0.2" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/fragment_weekly_offers.xml" value="0.2" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/offer_history_recylerview.xml" value="0.264" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/offer_recyerview.xml" value="0.2" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/layout/offer_steps_listview.xml" value="0.1" />
-        <entry key="..\:/Users/vinuu/AndroidStudioProjects/oncash_main/app/src/main/res/menu/bottom_navigation.xml" value="0.25" />
-      </map>
-    </option>
-  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

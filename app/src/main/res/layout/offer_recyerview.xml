@@ -5,17 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="410dp"
-    android:layout_height="128dp">
+    android:layout_height="100dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="359dp"
-        android:layout_height="113dp"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="17dp"
-
+        android:layout_width="350dp"
+        android:layout_height="80dp"
         app:cardCornerRadius="6dp"
-        app:cardElevation="10dp"
+        app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,66 +19,52 @@
 
         <ImageView
             android:id="@+id/offer_imageview"
-            android:layout_width="92dp"
-            android:layout_height="89dp"
+            android:layout_width="55dp"
+            android:layout_height="52dp"
             android:layout_marginStart="17dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="17dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/rectangle_1" />
-
-        <TextView
-            android:id="@+id/offer_status"
-            android:layout_width="93dp"
-            android:layout_height="13dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="123dp"
-            android:layout_marginTop="39dp"
-            android:gravity="top"
-            android:text="description"
-            android:textSize="10dp"
-            />
+            android:background="@drawable/rectangle_1"
+            tools:ignore="ContentDescription"/>
 
         <TextView
             android:id="@+id/offerHistory_name"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="121dp"
-            android:layout_marginTop="59dp"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="15dp"
             android:gravity="top"
             android:text="Offer Name"
             android:textColor="#171A1F"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardVieww"
-            android:layout_width="69dp"
-            android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="271dp"
+
+        <ImageView
+            android:id="@+id/click"
+            android:layout_width="50dp"
+            android:layout_height="13dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="300dp"
+            android:layout_marginTop="30dp"
+            android:gravity="top"
+            android:src="@drawable/click_img" />
+
+        <TextView
+            android:id="@+id/offerHistory_price"
+            android:layout_width="60dp"
+            android:layout_height="19dp"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:backgroundTint="#81D6FF"
-
-            app:cardCornerRadius="16dp"
-            app:cardElevation="5dp"
-            android:layout_marginTop="42dp">
-
-            <TextView
-                android:id="@+id/offerHistory_price"
-                android:layout_width="60dp"
-                android:layout_height="19dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="8dp"
-                android:textColor="#ffffff"
-                android:textAppearance="@style/withdraw"
-                android:gravity="top"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </androidx.cardview.widget.CardView>
+            android:gravity="top"
+            android:text="Price"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="35dp"
+            android:textColor="#02A8B9"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
