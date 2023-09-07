@@ -59,10 +59,6 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
     override fun onBindViewHolder(holder: viewholder, position: Int) {
         val price :Int = offerList[position].Price!!.toInt()
 
-
-
-
-
         holder.offerId = offerList[position].OfferId!!
         holder.name.text= offerList[position].Name
         val text =  (offerList[position].Price!!.toInt() * offer ) /100

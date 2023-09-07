@@ -23,7 +23,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            app:cardBackgroundColor="#E1F3FF"
+            app:cardBackgroundColor="#DCF1FD"
             app:cardCornerRadius="29dp"
             app:cardElevation="14dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -104,13 +104,14 @@
 
                         <TextView
                             android:id="@+id/offer_price"
-                            android:layout_width="60dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="15dp"
+                            android:layout_marginStart="5dp"
                             android:layout_marginTop="17dp"
-                            android:layout_marginEnd="10dp"
+                            android:layout_marginEnd="5dp"
                             android:layout_marginBottom="15dp"
                             android:textColor="#E1DDDD"
+                            android:gravity="center"
                             android:textSize="16sp"
                             app:layout_constraintVertical_bias="0"
                             tools:text="Rs 12" />
@@ -122,8 +123,8 @@
 
                 <ImageView
                     android:id="@+id/backButton_Info"
-                    android:layout_width="33dp"
-                    android:layout_height="36dp"
+                    android:layout_width="24dp"
+                    android:layout_height="28dp"
                     android:layout_marginStart="10dp"
                     android:elevation="14dp"
                     android:src="@drawable/backbut"
@@ -158,6 +159,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
@@ -165,13 +168,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardview_info_detail">
+
         <TextView
-
-
             android:id="@+id/YoutubeView_ExpandableText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Video"
+            android:layout_marginTop="10dp"
             android:textSize="25sp"
             android:layout_centerVertical="true"
             android:textStyle="bold"

@@ -23,81 +23,66 @@
             android:id="@+id/back"
             android:layout_width="186dp"
             android:layout_height="187dp"
-            android:layout_marginStart="71dp"
-            android:layout_marginTop="34dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="16dp"
             android:backgroundTint="#F4F4F4"
-            android:layout_marginEnd="113dp"
             android:src="@drawable/circule_img"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/backButWallet"
+            app:layout_constraintHorizontal_bias="0.324"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
         <View
             android:id="@+id/rectangle_7"
             android:layout_width="90dp"
             android:layout_height="35dp"
-            android:layout_marginStart="10dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
             android:background="@drawable/rectangle_wallet_3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
+            app:layout_constraintHorizontal_bias="0.408"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/wallet_bala_text" />
 
         <TextView
             android:id="@+id/wallet_bala"
-            android:layout_width="99dp"
-            android:layout_height="35dp"
+            android:layout_width="65dp"
+            android:layout_height="24dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-
             android:textAppearance="@style/wallet_bala"
             app:layout_constraintBottom_toBottomOf="@+id/rectangle_7"
             app:layout_constraintEnd_toEndOf="@+id/rectangle_7"
-            app:layout_constraintHorizontal_bias="0.909"
+            app:layout_constraintHorizontal_bias="0.526"
             app:layout_constraintStart_toStartOf="@+id/rectangle_7"
             app:layout_constraintTop_toTopOf="@+id/rectangle_7"
-            app:layout_constraintVertical_bias="0.769" />
+            app:layout_constraintVertical_bias="0.473" />
 
         <TextView
             android:id="@+id/wallet_bala_text"
-            android:layout_width="138dp"
-            android:layout_height="35dp"
+            android:layout_width="164dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="60dp"
-            android:layout_marginStart="10dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="top"
+            android:fontFamily="@font/poppinsemibold"
+            android:gravity="center"
             android:text="@string/wallet_bala"
             android:textAppearance="@style/wallet_bala"
-            android:textStyle="bold"
+            android:textSize="19sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.35"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/back" />
 
-        <ImageView
-            android:id="@+id/backButWallet"
-            android:layout_width="31dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="10dp"
-            android:elevation="14dp"
-            android:src="@drawable/backbut"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.06" />
-
-
         <androidx.cardview.widget.CardView
             android:id="@+id/rectangle_8"
-            android:layout_width="420dp"
-            android:layout_height="505dp"
+            android:layout_width="412dp"
+            android:layout_height="504dp"
             android:layout_marginTop="80dp"
             app:cardCornerRadius="35dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -113,15 +98,16 @@
                 android:fontFamily="@font/poppinsemibold"
                 android:gravity="center"
                 android:text="@string/withdrawal_history"
-                android:textSize="14sp" />
+                android:textSize="20sp" />
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/withdrawalTransaction"
-                android:layout_width="363dp"
-                android:layout_height="428dp"
+                android:layout_width="374dp"
+                android:layout_height="201dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="90dp"
+                android:layout_marginTop="60dp"
                 android:layout_marginRight="20dp"
                 android:visibility="visible" />
 
@@ -129,9 +115,9 @@
                 android:id="@+id/withdrawButton"
                 android:layout_width="300dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="35dp"
                 android:layout_marginTop="300dp"
-                android:backgroundTint="#2772F7"
+                android:backgroundTint="#2479E9"
                 android:elevation="14dp"
                 android:fontFamily="@font/poppinsemibold"
                 android:gravity="center"
@@ -139,11 +125,7 @@
                 android:textAllCaps="false"
                 android:textColor="#ffff"
                 android:textSize="25sp"
-                app:cornerRadius="46dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.495"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="205dp" />
+                app:cornerRadius="46dp" />
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

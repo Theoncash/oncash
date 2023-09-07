@@ -68,7 +68,6 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="150dp"
             android:background="@drawable/default_outlined_button"
-            android:fontFamily="@font/poppinsemibold"
             android:gravity="center"
             android:hint="Phone no"
             android:inputType="phone"
@@ -82,9 +81,10 @@
         <Button
             android:id="@+id/continueBut"
             android:layout_width="300dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="50dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="360dp"
+            android:layout_marginEnd="40dp"
             android:backgroundTint="#2479E9"
             android:fontFamily="@font/poppinsextrabold"
             android:gravity="center"
@@ -92,7 +92,10 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="20sp"
-            app:cornerRadius="59dp" />
+            app:cornerRadius="59dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
 
     </androidx.cardview.widget.CardView>

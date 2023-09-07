@@ -52,9 +52,14 @@ class get_UserInfo_UseCase {
 
 
     suspend fun getuserWithdrwalHistory(userNumber: Long): ArrayList<withdrawalTransaction> = withContext(Dispatchers.Default) {
-
+        var withdrawalTransaction: JSONArray? = null
         val list : ArrayList<withdrawalTransaction> = ArrayList()
-        val withdrawalTransaction: JSONArray? = UserInfo_Airtable_Repo().getWithdrawTransaction().value!!
+        try {
+            withdrawalTransaction  =
+                UserInfo_Airtable_Repo().getWithdrawTransaction().value!!
+        }catch (e:NullPointerException){
+
+        }
         lateinit var createdTime: String
         for (i in 0 until withdrawalTransaction!!.length()) {
             createdTime = JSONObject(withdrawalTransaction[i]!!.toString()).getString("createdTime").toString()

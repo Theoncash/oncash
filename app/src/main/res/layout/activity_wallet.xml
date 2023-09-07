@@ -53,21 +53,20 @@
 
         <TextView
             android:id="@+id/wallet_bala"
-            android:layout_width="99dp"
-            android:layout_height="35dp"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-
             android:textAppearance="@style/wallet_bala"
             app:layout_constraintBottom_toBottomOf="@+id/rectangle_7"
             app:layout_constraintEnd_toEndOf="@+id/rectangle_7"
-            app:layout_constraintHorizontal_bias="0.909"
+            app:layout_constraintHorizontal_bias="0.523"
             app:layout_constraintStart_toStartOf="@+id/rectangle_7"
             app:layout_constraintTop_toTopOf="@+id/rectangle_7"
-            app:layout_constraintVertical_bias="0.769" />
+            app:layout_constraintVertical_bias="0.555" />
 
         <TextView
             android:id="@+id/wallet_bala_text"
@@ -118,7 +117,7 @@
                 android:fontFamily="@font/poppinsemibold"
                 android:gravity="center"
                 android:text="@string/withdrawal_history"
-                android:textSize="14sp" />
+                android:textSize="20sp" />
 
 
             <androidx.recyclerview.widget.RecyclerView

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/weeklyoffer_fragment"
     android:layout_width="match_parent"
@@ -10,26 +10,27 @@
     <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="649dp">
+        android:layout_height="900dp">
 
 
         <RelativeLayout
             android:id="@+id/countdownTimer"
-            android:layout_width="409dp"
+            android:layout_width="407dp"
             android:layout_height="80dp"
+            android:layout_marginBottom="10dp"
             android:background="#edf2ff"
             android:padding="16dp"
             app:layout_constraintBottom_toTopOf="@+id/offerListButtons"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintStart_toStartOf="parent">>
 
             <TextView
                 android:id="@+id/cashbackTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="370dp"
+                android:layout_height="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="-3dp"
+                android:layout_marginEnd="106dp"
                 android:text="Cashback Reduces to 30% After"
                 android:textColor="#92a5bf"
                 android:textSize="18sp" />
@@ -38,12 +39,11 @@
                 android:id="@+id/countdownTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cashbackTextView"
-                android:layout_marginTop="4dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="20dp"
                 android:text="Cashback reduces to 30% after [ 02 Day : 09 H : 38 M : 34 S ]"
                 android:textColor="#fe6b92"
                 android:textSize="14sp" />
-
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
@@ -51,18 +51,18 @@
             android:id="@+id/offerListButtons"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/button_border"
-
+            app:layout_constraintBottom_toTopOf="@+id/cardView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/countdownTimer">
+            app:layout_constraintStart_toStartOf="parent">
 
             <Button
                 android:id="@+id/weeklyButton"
                 android:layout_width="150dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="17dp"
                 android:layout_marginBottom="20dp"
@@ -71,7 +71,7 @@
                 android:elevation="4dp"
                 android:text="@string/weekly"
                 android:textAppearance="@style/withdraw"
-                android:textSize="16sp"
+                android:textSize="10sp"
                 android:textStyle="bold"
                 app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -83,15 +83,13 @@
                 android:id="@+id/monthlyButton"
                 android:layout_width="150dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="210dp"
+                android:layout_marginStart="200dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="100dp"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="#81D6FF"
                 android:text="Monthly Payout"
-
                 android:textAppearance="@style/withdraw"
-                android:textSize="16sp"
+                android:textSize="10sp"
                 android:textStyle="bold"
                 app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -101,22 +99,30 @@
 
         </androidx.cardview.widget.CardView>
 
-
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="5600dp"
-            android:layout_marginTop="40dp"
-            android:backgroundTint="#A1C7E0"
+            android:id="@+id/cardView2"
+            android:layout_width="407dp"
+            android:layout_height="632dp"
+            android:backgroundTint="#DEF3FF"
             app:cardCornerRadius="38dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/offerListButtons">
+            app:layout_constraintStart_toStartOf="parent">
+            <TextView
+                android:layout_width="234dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppinsemibold"
+                android:text="Offers"
+                android:textSize="25sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/weeklyOffer_recylerview"
                 android:layout_width="match_parent"
-                android:layout_height="580dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.89"
@@ -127,6 +133,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+</LinearLayout>
 
 
