@@ -24,14 +24,13 @@
             android:layout_width="186dp"
             android:layout_height="187dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="104dp"
             android:backgroundTint="#F4F4F4"
             android:src="@drawable/circule_img"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.324"
+            app:layout_constraintHorizontal_bias="0.312"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <View
             android:id="@+id/rectangle_7"
@@ -67,9 +66,9 @@
             android:id="@+id/wallet_bala_text"
             android:layout_width="164dp"
             android:layout_height="31dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="27dp"
             android:layout_marginTop="60dp"
-            android:fontFamily="@font/poppinsemibold"
+            android:fontFamily="@font/noto"
             android:gravity="center"
             android:text="@string/wallet_bala"
             android:textAppearance="@style/wallet_bala"
@@ -83,23 +82,22 @@
             android:id="@+id/rectangle_8"
             android:layout_width="412dp"
             android:layout_height="504dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="124dp"
             app:cardCornerRadius="35dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.333"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rectangle_7">
+
 
             <TextView
                 android:layout_width="234dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/poppinsemibold"
-                android:gravity="center"
                 android:text="@string/withdrawal_history"
-                android:textSize="20sp" />
-
+                android:textSize="16sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/withdrawalTransaction"
@@ -119,12 +117,11 @@
                 android:layout_marginTop="300dp"
                 android:backgroundTint="#2479E9"
                 android:elevation="14dp"
-                android:fontFamily="@font/poppinsemibold"
+                android:fontFamily="@font/noto"
                 android:gravity="center"
                 android:text="@string/withdraw"
-                android:textAllCaps="false"
-                android:textColor="#ffff"
-                android:textSize="25sp"
+                android:textAppearance="@style/description"
+                android:textSize="20sp"
                 app:cornerRadius="46dp" />
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

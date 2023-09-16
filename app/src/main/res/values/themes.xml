@@ -154,6 +154,9 @@
         </item>
 
     </style>
+
+
+
     <style name="withdraw">
 
         <item name="android:textSize">
@@ -179,6 +182,8 @@
         <item name="android:shadowRadius">
             14
         </item>
+
+
 
     </style>
     <style name="enter_mobil">
@@ -250,7 +255,36 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="top_offers">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#453D3D</item>
+    </style>
 
+    <style name="visa_card">
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.07</item>
+        <item name="android:textColor">#4A5050</item>
+    </style>
 
+    <style name="monthly">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.07</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <style name="offer_price">
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.07</item>
+        <item name="android:textColor">#02A8B9</item>
+    </style>
+
+    <style name="description">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#453D3D</item>
+    </style>
+
+    <style name="steps">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#453D3D</item>
+    </style>
 
 </resources>

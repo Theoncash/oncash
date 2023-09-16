@@ -45,11 +45,16 @@ class UserInfo_Airtable_Repo {
                 "api_key", apiKey
             )
         }
+         var current_bal : Int  = 0
+         var  total_bal :Int = 0
+        Log.i("userrepository" , JSONObject(response.body<String>()).toString())
+        try {
+            val fields: JSONObject = JSONObject(response.body<String>()).getJSONObject("fields")
+             current_bal = JSONObject(fields.toString()).getString("Wallet").toInt()
+             total_bal = JSONObject(fields.toString()).getString("Total_Bal").toInt()
+        }catch ( e:Exception){
 
-        val fields: JSONObject = JSONObject(response.body<String>()).getJSONObject("fields")
-        val current_bal = JSONObject(fields.toString()).getString("Wallet").toInt()
-        val total_bal = JSONObject(fields.toString()).getString("Total_Bal").toInt()
-
+        }
         return@withContext walletDatatype(current_bal ,total_bal )
     }
 

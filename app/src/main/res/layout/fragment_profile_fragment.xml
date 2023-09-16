@@ -27,7 +27,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.041" />
+            app:layout_constraintVertical_bias="0.108" />
+
 
         <ImageView
             android:id="@+id/backButWallet"
@@ -38,21 +39,20 @@
             android:src="@drawable/backbut"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.015"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.06" />
-
+            app:layout_constraintVertical_bias="0.102" />
 
         <ImageView
             android:id="@+id/piggy_icon"
             android:layout_width="234dp"
             android:layout_height="225dp"
-            android:layout_marginBottom="260dp"
+            android:layout_marginBottom="244dp"
             android:src="@drawable/piggy_img"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.389"
+            app:layout_constraintHorizontal_bias="0.401"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -101,7 +101,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="184dp"
-            android:layout_marginBottom="27dp"
+            android:layout_marginBottom="28dp"
             android:src="@drawable/sign_out"
             app:layout_constraintBottom_toTopOf="@+id/piggy_icon"
             app:layout_constraintEnd_toEndOf="parent"

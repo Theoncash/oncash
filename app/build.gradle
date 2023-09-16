@@ -15,6 +15,8 @@ plugins {
     id  'kotlin-kapt'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.21'
     id "com.google.protobuf" version "0.8.17"
+    id 'kotlin-android'
+    id 'com.google.relay' version '0.3.08'
 
 
 }
@@ -75,6 +77,9 @@ dependencies {
         kapt "androidx.room:room-compiler:$room_version"
         // To use Kotlin Symbol Processing (KSP)
 
+        //step progress bar
+
+
         // optional - RxJava2 support for Room
         //noinspection GradleDependency
         implementation "androidx.room:room-rxjava2:$room_version"
@@ -111,6 +116,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.2")
 
 
+    implementation 'com.ernestoyaquello.stepperform:vertical-stepper-form:2.7.0'
 
     implementation "io.ktor:ktor-client-okhttp:2.2.2"
     implementation "io.ktor:ktor-client-core:2.2.2"

@@ -3,7 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="in.oncash.oncash">
 
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.queries" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +22,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Oncash"
         tools:targetApi="33">
+        <receiver
+            android:name=".Component.smsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
 
 
         <activity

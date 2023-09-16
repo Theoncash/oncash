@@ -1,9 +1,14 @@
 package `in`.oncash.oncash.View
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -33,6 +38,14 @@ class Home : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val REQUEST_SMS_PERMISSION = 734973 // Use any unique integer value
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_SMS), REQUEST_SMS_PERMISSION)
+            }
+        }
 
         lifecycleScope.launch {
             roomDb = Room.databaseBuilder(
@@ -67,10 +80,6 @@ class Home : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        homeViewmodel.completedOffers.observe(this){
-            binding.progressBar.max = homeViewmodel.totalOffers.value!!
-            binding.progressBar.progress = it
-        }
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigation.setOnItemSelectedListener {

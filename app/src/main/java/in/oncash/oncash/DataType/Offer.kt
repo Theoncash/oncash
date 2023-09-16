@@ -1,3 +1,17 @@
 package `in`.oncash.oncash.DataType
 
-data class Offer(val Image : String ? = "", val Name : String ? ="", val Description : String ?="", val Price : String?="" , val OfferId :String?= "" , val Link : String? = "" , val subid:String? ="" , val payout :String?="" , val Type : String? = ""  , val VideoId : String? = "")
+public final data class Offer(
+    val Description: String? = "",
+    val Image: String? = "",
+    val Link: String? = "",
+    val Name: String? = "",
+    val OfferId: String? = "",
+    val Price: String? = "",
+    val Type: String? = "",
+    val VideoId: String? = "",
+    val appName: String? = " ",
+    val noOfSteps: Int,
+    val payout: String? = "",
+    val regSMS: String? = " ",
+    val subid: String? = "",
+)

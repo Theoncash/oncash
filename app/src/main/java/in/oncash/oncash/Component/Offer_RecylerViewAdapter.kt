@@ -87,7 +87,6 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
 
 
         holder.itemView.setOnClickListener {
-            Toast.makeText( holder.itemView.context, userData.userRecordId , Toast.LENGTH_LONG).show()
             val offer_information : Offer = offerList.get(holder.offerId.toInt()-1)
             val intent = Intent(
                 holder.itemView.context,
@@ -103,7 +102,9 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
                 .putExtra("recordId" , userData.userRecordId)
                 .putExtra("videoId" , offer_information.VideoId)
                 .putExtra("number" , userData.userNumber.toString())
-
+                .putExtra("noOfSteps" , offer_information.noOfSteps.toString())
+                .putExtra("appName" , offer_information.appName)
+                .putExtra("regSMS" , offer_information.regSMS)
 
             holder.itemView.context.startActivity(
                 intent

@@ -61,6 +61,7 @@ class get_UserInfo_UseCase {
 
         }
         lateinit var createdTime: String
+        try{
         for (i in 0 until withdrawalTransaction!!.length()) {
             createdTime = JSONObject(withdrawalTransaction[i]!!.toString()).getString("createdTime").toString()
             val user = JSONObject(withdrawalTransaction[i]!!.toString()).getString("fields")
@@ -72,6 +73,8 @@ class get_UserInfo_UseCase {
 
                 list.add( withdrawalTransaction(date , requestedAmount ,  status ))
             }
+        }}catch(e:Exception){
+
         }
 
         return@withContext list

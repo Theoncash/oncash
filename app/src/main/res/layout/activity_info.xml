@@ -1,246 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:visibility="visible"
-    tools:visibility="visible">
+    tools:visibility="visible"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="#DEF3FF">
 
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/backButton_Info"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="10dp"
+        android:elevation="14dp"
+        android:src="@drawable/backbut"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.015"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.034" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardview_info_detail"
-            android:layout_width="match_parent"
-            android:layout_height="343dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            app:cardBackgroundColor="#DCF1FD"
-            app:cardCornerRadius="29dp"
-            app:cardElevation="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_goneMarginTop="0dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/offer_card_info"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-
-                <ImageView
-                    android:id="@+id/offerImage_info"
-                    android:layout_width="147dp"
-                    android:layout_height="133dp"
-                    android:layout_marginTop="56dp"
-                    android:layout_marginBottom="46dp"
-                    android:layout_weight="1"
-                    app:layout_constraintBottom_toTopOf="@+id/cardview_offer_detial"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.502"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-                <androidx.cardview.widget.CardView
-
-                    android:id="@+id/cardview_offer_detial"
-                    android:layout_width="243dp"
-                    android:layout_height="76dp"
-                    android:layout_marginBottom="32dp"
-                    app:cardBackgroundColor="#FFF5F5"
-                    app:cardCornerRadius="28dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.503"
-                    app:layout_constraintStart_toStartOf="parent" >
-
-
-                    <TextView
-                        android:id="@+id/offer_desciption"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
-                        android:layout_marginTop="40dp"
-                        android:text="Install To Earn" />
-
-                    <TextView
-                        android:id="@+id/offername_info"
-                        android:layout_width="115dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="10dp"
-                        android:paddingLeft="20dp"
-                        android:text="Offer name"
-                        android:textColor="#101010"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/Home_weekly_Button"
-                        android:layout_width="72dp"
-                        android:layout_height="57dp"
-                        android:layout_marginStart="150dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="6dp"
-                        app:cardBackgroundColor="#0C0C0C"
-                        app:cardCornerRadius="37dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0" >
-
-
-                        <TextView
-                            android:id="@+id/offer_price"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="17dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginBottom="15dp"
-                            android:textColor="#E1DDDD"
-                            android:gravity="center"
-                            android:textSize="16sp"
-                            app:layout_constraintVertical_bias="0"
-                            tools:text="Rs 12" />
-
-                    </androidx.cardview.widget.CardView>
-
-
-                </androidx.cardview.widget.CardView>
-
-                <ImageView
-                    android:id="@+id/backButton_Info"
-                    android:layout_width="24dp"
-                    android:layout_height="28dp"
-                    android:layout_marginStart="10dp"
-                    android:elevation="14dp"
-                    android:src="@drawable/backbut"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.06" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </androidx.cardview.widget.CardView>
-
-
-        <Button
-            android:id="@+id/offerLinkButton_info"
-            android:layout_width="335dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="16dp"
-            android:text="Complete Offer"
-            app:backgroundTint="#3c4952"
-            app:cornerRadius="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    <androidx.cardview.widget.CardView
-        android:id="@+id/YoutubeView_Expandable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardview_info"
+    <ImageView
+        android:id="@+id/offerImage_info"
+        android:layout_width="127dp"
+        android:layout_height="111dp"
+        android:layout_marginTop="32dp"
+        android:layout_weight="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardview_info_detail">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item"
+        android:layout_width="167dp"
+        android:layout_height="49dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        app:cardCornerRadius="59dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/offerImage_info">
 
         <TextView
-            android:id="@+id/YoutubeView_ExpandableText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Video"
-            android:layout_marginTop="10dp"
-            android:textSize="25sp"
-            android:layout_centerVertical="true"
-            android:textStyle="bold"
-            android:layout_marginStart="24dp"
+            android:id="@+id/offername_info"
+            android:layout_width="98dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/visa_card"
+            android:textAppearance="@style/visa_card" />
 
-            />
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="29dp"
-            android:layout_marginBottom="20dp"
-            app:cardCornerRadius="20dp"
-            android:layout_marginStart="20dp"
+        <TextView
+            android:id="@+id/offer_price"
+            android:layout_width="100dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:text="@string/some_id"
+            android:textAppearance="@style/offer_price" />
 
-            tools:ignore="MissingClass">
-
-            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                android:id="@+id/videoView"
-                android:layout_width="330dp"
-                android:layout_height="240dp"
-                app:autoPlay="false"
-                android:visibility="gone"
-                />
-
-        </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardview_info"
-            android:layout_width="329dp"
-            android:layout_height="300dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="32dp"
-            app:cardBackgroundColor="#F4F4F4"
-            app:cardCornerRadius="18dp"
-            app:layout_constraintBottom_toTopOf="@+id/offerLinkButton_info"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.508"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardview_info_detail"
-            app:layout_constraintVertical_bias="0.714">
+    <RelativeLayout
+        android:id="@+id/frame_MAIN"
+        android:layout_width="425dp"
+        android:layout_height="512dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/layout_bg"
+        app:cornerRadius="38dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item">
 
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="100dp"
+            android:layout_height="21dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="286dp"
+            android:fontFamily="@font/noto"
+            android:gravity="center"
+            android:text="Description"
+            android:textAppearance="@style/description" />
+
+        <RelativeLayout
+            android:id="@+id/frame_10000"
+            android:layout_width="wrap_content"
+            android:layout_height="311dp"
+            android:layout_below="@+id/description"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="46dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="46dp"
+            android:background="@drawable/frame_10000"
+            android:clipToOutline="true">
+
+            <TextView
+                android:id="@+id/steps"
+                android:layout_width="92dp"
+                android:layout_height="23dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="232dp"
+                android:layout_marginBottom="262dp"
+                android:gravity="top"
+                android:text="@string/steps"
+                android:textAppearance="@style/steps" />
+
+            <!-- new_user_form_activity.xml -->
+            <ernestoyaquello.com.verticalstepperform.VerticalStepperFormView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/stepper_form"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:form_circle_background_color="@color/colorPrimary"
+                app:form_next_button_background_color="@color/colorPrimary"
+                app:form_next_button_pressed_background_color="@color/colorPrimaryDark"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/instructionList_info"
-                android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:layout_marginLeft="10dp"
+                android:layout_width="358dp"
+                android:layout_height="235dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="50dp"
-                android:layout_marginRight="10dp" />
+                android:layout_marginEnd="11dp"
+                android:layout_marginRight="5dp"
+                android:visibility="gone"
+                android:layout_marginBottom="21dp" />
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="315dp"
-                android:layout_height="29dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:text="@string/steps_to_ea"
-                android:textAppearance="@style/steps_to_ea" />
+        </RelativeLayout>
 
-        </androidx.cardview.widget.CardView>
+        <Button
+            android:id="@+id/offerLinkButtonInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_below="@+id/frame_10000"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="69dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="64dp"
+            android:layout_marginBottom="41dp"
+            android:backgroundTint="#2479E9"
+            android:fontFamily="@font/noto"
+            android:gravity="center"
+            android:text="Let's go"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:cornerRadius="59dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </RelativeLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
-</layout>
