@@ -1,6 +1,7 @@
 package `in`.oncash.oncash.Fragment
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,8 @@ import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.ViewModel.wallet_viewModel
 import `in`.oncash.oncash.databinding.FragmentRedeemBinding
 import com.google.android.material.snackbar.Snackbar
+import `in`.oncash.oncash.Component.customLoadingDialog
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
@@ -72,7 +75,6 @@ class redeem : Fragment() {
         }
 
             homeViewmodel.getuserData().observe(viewLifecycleOwner){
-                userRecordId = it.userRecordId
                 userNumber = it.userNumber
             }
 
@@ -86,6 +88,19 @@ class redeem : Fragment() {
                 if (requestAmount.isNotEmpty()) {
                     if (walletBalance.toInt() >= requestAmount.toInt()) {
                         if (requestAmount.toInt() > 20) {
+                                val loadingDialog = customLoadingDialog(view.context)
+
+// To show the dialog
+                                loadingDialog.show()
+                                loadingDialog.setMessage("Loading data...")
+
+// Simulate some background work (replace this with your actual work)
+                                Handler().postDelayed({
+                                    // Dismiss the dialog when the work is done
+                                    loadingDialog.dismiss()
+                                }, 3000) // Replace 3000 with the actual duration of your background work
+
+
 
                             viewModel.withdrawRequest(
                                 userNumber,

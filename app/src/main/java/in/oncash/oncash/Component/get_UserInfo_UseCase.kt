@@ -23,7 +23,6 @@ class get_UserInfo_UseCase {
 
     suspend fun isUserRegistered(userNumber: Long): UserData1 = withContext(Dispatchers.Default) {
 
-        val users: JSONArray? = UserInfo_Airtable_Repo().getUserInfo().value
         var isUserRegistered: Boolean = false
         var userRecordId: String = ""
         if(users != null){
@@ -61,10 +60,11 @@ class get_UserInfo_UseCase {
 
         }
         lateinit var createdTime: String
+        try{
         for (i in 0 until withdrawalTransaction!!.length()) {
             createdTime = JSONObject(withdrawalTransaction[i]!!.toString()).getString("createdTime").toString()
             val user = JSONObject(withdrawalTransaction[i]!!.toString()).getString("fields")
-            val requestedAmount = JSONObject(user).getString("RequestedAmount")
+            val requestedAmount = JSONObject(user).getString("WalletBalance")
             val phone = JSONObject(user).getString("UserNumber")
             val status = JSONObject(user).getString("Status")
             if (phone.toLong() == userNumber) {
@@ -72,6 +72,8 @@ class get_UserInfo_UseCase {
 
                 list.add( withdrawalTransaction(date , requestedAmount ,  status ))
             }
+        }}catch(e:Exception){
+
         }
 
         return@withContext list

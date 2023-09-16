@@ -10,6 +10,8 @@ import `in`.oncash.oncash.Component.get_UserInfo_UseCase
 import `in`.oncash.oncash.Component.offerHistory_component
 import `in`.oncash.oncash.Component.sortingComponent
 import `in`.oncash.oncash.DataType.*
+import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.Blacklist
+import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
 import `in`.oncash.oncash.Repository.Offer_FIrebase
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
@@ -62,24 +64,23 @@ class home_viewModel : ViewModel() {
         return offerList
     }
 //offer history viewmodel
-private val offerhistoryList : MutableLiveData<ArrayList<OfferHistoryRecord>> = MutableLiveData()
-    fun getOffersHistory(userId:String){
+private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveData()
+    fun getOffersHistory(userId:Long){
         viewModelScope.launch {
             offerhistoryList.postValue(offerHistory_component().getOfferHIstory(userId = userId))
         }
     }
 
-    fun getOfferHistoryList():MutableLiveData<ArrayList<OfferHistoryRecord>>{
+    fun getOfferHistoryList():MutableLiveData<ArrayList<Fields>>{
         return offerhistoryList
     }
 
 //home viewmodel
 
-    fun getWallet(userRecordId :String) {
+    fun getWallet(userNumber: Long ) {
         viewModelScope.launch {
-               Log.i("recordID" , userRecordId)
                 wallet.value = UserInfo_Airtable_Repo().getWallet(
-                        userRecordId
+                    userNumber
                     )
                 }
     }
@@ -90,7 +91,7 @@ private val offerhistoryList : MutableLiveData<ArrayList<OfferHistoryRecord>> = 
 
     fun getUserData(context:Context) {
         viewModelScope.launch {
-          userData.postValue( userData(UserDataStoreUseCase().retrieveUserRecordId(context) ,  UserDataStoreUseCase().retrieveUserNumber(context)) )
+          userData.postValue( userData(UserDataStoreUseCase().retrieveUserNumber(context)) )
         }
     }
 

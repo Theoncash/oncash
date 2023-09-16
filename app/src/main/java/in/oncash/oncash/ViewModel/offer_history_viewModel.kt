@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import `in`.oncash.oncash.Component.offerHistory_component
+import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.Blacklist
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
 import kotlinx.coroutines.launch
 

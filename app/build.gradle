@@ -1,6 +1,8 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven { url "https://jitpack.io" }
+
     }
     dependencies {
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.16'
@@ -15,10 +17,12 @@ plugins {
     id  'kotlin-kapt'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.21'
     id "com.google.protobuf" version "0.8.17"
+    id 'kotlin-android'
+    id 'com.google.relay' version '0.3.08'
 
 
 }
-  android {
+android {
     namespace 'in.oncash.oncash'
     compileSdk 33
 
@@ -56,6 +60,7 @@ plugins {
 
 dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
     def nav_version = "2.5.3"
 
 
@@ -74,6 +79,9 @@ dependencies {
         // To use Kotlin annotation processing tool (kapt)
         kapt "androidx.room:room-compiler:$room_version"
         // To use Kotlin Symbol Processing (KSP)
+
+        //step progress bar
+
 
         // optional - RxJava2 support for Room
         //noinspection GradleDependency
@@ -95,6 +103,8 @@ dependencies {
     }
 
 
+
+
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4"
 
     implementation 'com.github.bumptech.glide:glide:4.14.2'
@@ -111,6 +121,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.2")
 
 
+    implementation 'com.ernestoyaquello.stepperform:vertical-stepper-form:2.7.0'
 
     implementation "io.ktor:ktor-client-okhttp:2.2.2"
     implementation "io.ktor:ktor-client-core:2.2.2"
@@ -149,4 +160,3 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
 }
-

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.Blacklist
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
 
 
@@ -34,7 +35,7 @@ class OfferHistory_RecylerViewAdapter : RecyclerView.Adapter<OfferHistory_Recyle
     }
 
     override fun onBindViewHolder(holder: viewholder, position: Int) {
-        holder.offerName.text = offerList.get(position).fields.OfferName
+        holder.offerName.text = " "
         holder.status.text = offerList.get(position).fields.Status
         holder.price.text = offerList.get(position).fields.Payout // holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.offeranimation)
 

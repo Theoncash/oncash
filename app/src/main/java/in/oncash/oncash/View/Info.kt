@@ -1,100 +1,233 @@
 package `in`.oncash.oncash.View
 
+import android.annotation.SuppressLint
+import android.app.usage.UsageStats
+import android.app.usage.UsageStatsManager
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.opengl.Visibility
+import android.os.Build
 import android.os.Bundle
-import android.transition.AutoTransition
-import android.transition.TransitionManager
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import `in`.oncash.oncash.Component.Instructions_RecylerViewAdapter
+import `in`.oncash.oncash.Component.step_Adapter
+import `in`.oncash.oncash.DataType.Step
 import `in`.oncash.oncash.DataType.userData
+import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
 import `in`.oncash.oncash.Repository.offer_AirtableDatabase
+import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.ViewModel.info_viewModel
 import `in`.oncash.oncash.databinding.ActivityInfoBinding
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import kotlinx.coroutines.launch
+import java.util.Calendar
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 
 
 class Info : AppCompatActivity() {
      lateinit var binding : ActivityInfoBinding
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //Getting Data from the intent form home(Activity)
-        val offerId : String? = intent.getStringExtra("OfferId")
-        val offerName= intent.getStringExtra("OfferName")
+        val offerId: String? = intent.getStringExtra("OfferId")
+        val offerName = intent.getStringExtra("OfferName")
         binding.offernameInfo.text = offerName
-        var offerPrice= intent.getStringExtra("OfferPrice")
+        var offerPrice = intent.getStringExtra("OfferPrice")
         binding.offerPrice.text = offerPrice
         Glide.with(this).load(intent.getStringExtra("OfferImage")).into(binding.offerImageInfo)
-        var offer :String? = intent.getStringExtra("OfferLink")
-        val subid :String? = intent.getStringExtra("subid")
-        val subid2 :String? = intent.getStringExtra("subid2")
-        val number :String? = intent.getStringExtra("number")
-        val recordId :String? = intent.getStringExtra("recordId")
-        val viewUri : String? = intent.getStringExtra("videoId")
-        val offerLink = "$offer?&$subid=$recordId&$subid2=$number/"
-
-
+        var offer: String? = intent.getStringExtra("OfferLink")
+        val subid: String? = intent.getStringExtra("subid")
+        val subid2: String? = intent.getStringExtra("subid2")
+        val number: String? = intent.getStringExtra("number")
+        val appName: String? = intent.getStringExtra("appName")
+        val viewUri: String? = intent.getStringExtra("videoId")
+        val offerLink = "$offer?subid2=$number/"
+        val wallet : Int = intent.getIntExtra("wallet" , 0)
+        val noOfSteps: String? = intent.getStringExtra("noOfSteps")
+        val regSMS = intent.getStringExtra("regSMS")
         //Initilizing the recylerview adapter
-        val adapter = Instructions_RecylerViewAdapter()
+        val adapter = step_Adapter()
         binding.instructionListInfo.adapter = adapter
-        binding.instructionListInfo.layoutManager = LinearLayoutManager(this , LinearLayoutManager.VERTICAL , false)
+        binding.instructionListInfo.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        binding.backButtonInfo.setOnClickListener{
-            val intent=Intent(this,Home::class.java)
+        binding.backButtonInfo.setOnClickListener {
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
         }
         //videoVIew
-        val videoview= binding.videoView
+        /* val videoview= binding.videoView
         lifecycle.addObserver(videoview)
 
         videoview.addYouTubePlayerListener(object : AbstractYouTubePlayerListener(){
             override fun onReady(youTubePlayer: YouTubePlayer) {
                     youTubePlayer.loadVideo(viewUri!! , 0F)
             }
-        })
+        })*/
 
+        var list: ArrayList<Step> = ArrayList()
         //Observing the getInstructionList() in info_viewmodel (ie which gets the data from info_FirebaseRepo)
-        val info_viewModel : info_viewModel by viewModels()
+        val info_viewModel: info_viewModel by viewModels()
+        lifecycleScope.launch {
+            info_viewModel.getBlacklist( number.toString() ,  offerId!!).observe(this@Info) {
+                if (!it) {
+                    lifecycleScope.launch {
 
-        info_viewModel.getInstrutionList(offerId!!).observe(this , Observer {
-            if (it.isNotEmpty()){
-                Toast.makeText(this , it.size.toString() , Toast.LENGTH_LONG).show()
-                adapter.updateList(it)
+                        if (!isBeing(
+                                info_viewModel,
+                                number!!,
+                                appName!!,
+                                offerName!!,
+                                this@Info,
+                                number!!.toLong(),
+                                this@Info
+                            )
+                        ) {
+                            info_viewModel.isCompleted(number.toString() ,  offerId!!).observe(this@Info) {
+                                if (it == false) {
+                                    info_viewModel.getInstrutionList(offerId!!)
+                                        .observe(this@Info, Observer {
+                                            if (it.isNotEmpty()) {
+                                                for (i in 0 until noOfSteps!!.toInt()) {
+                                                    if (i == 0) {
+                                                        list.add(Step(false, "Install the App"))
+                                                    }
+                                                    if (i == 1) {
+                                                        list.add(Step(false, "Register in the App"))
+
+                                                    }
+                                                    if (i == 2) {
+                                                        list.add(
+                                                            Step(
+                                                                false,
+                                                                "Completed 1st Trade "
+                                                            )
+                                                        )
+
+                                                    }
+                                                }
+
+
+                                            }
+                                            adapter.updateList(list)
+                                            binding.offerLinkButtonInfo.visibility = View.VISIBLE
+
+                                            lifecycleScope.launch {
+                                                if (isAppInstalled(this@Info, appName!!)) {
+                                                    list[0] = Step(true, list[0].instruction)
+                                                    Toast.makeText(
+                                                        this@Info,
+                                                        list[0].instruction.toString(),
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+
+                                                    adapter.updateList(list)
+
+                                                }
+                                                if (isRegistered(this@Info, appName, regSMS!!)) {
+                                                    list[1] = Step(true, list[1].instruction)
+                                                    adapter.updateList(list)
+
+
+                                                    if (getTimeSpent(appName) >= 0) {
+                                                        binding.offerLinkButtonInfo.text =
+                                                            " Claim Reward "
+
+                                                    }
+                                                }
+                                            }
+                                        })
+                                } else {
+                                    binding.offerLinkButtonInfo.text = "Completed"
+                                    binding.offerLinkButtonInfo.visibility = View.VISIBLE
+                                }
+
+
+                            }
+                        } else {
+                            binding.offerLinkButtonInfo.text = "Not Eligible"
+                            binding.offerLinkButtonInfo.visibility = View.VISIBLE
+                        }
+                    }
+                }else{
+                    binding.offerLinkButtonInfo.text = "Not Eligible"
+                    binding.offerLinkButtonInfo.visibility = View.VISIBLE
+                }
             }
-        })
+        }
+
+
+
+
+
 
 
         //Redirecting user to chrome after the event of button accurs
         binding.offerLinkButtonInfo.setOnClickListener{
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(offerLink))
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.setPackage("com.android.chrome")
-            Toast.makeText(this , recordId.toString() + " user id", Toast.LENGTH_LONG).show()
-            info_viewModel.updateOfferHistory(userData(recordId.toString() , number!!.toLong()),
-                offerId, offerPrice.toString() , offerName = offerName!!)
-            try {
-                this.startActivity(intent)
-            } catch (ex: ActivityNotFoundException) {
-                // Chrome browser presumably not installed so allow user to choose instead
-                intent.setPackage(null)
-                this.startActivity(intent)
+
+            if(binding.offerLinkButtonInfo.text.contains( "Claim")){
+                val total_bal =  home_viewModel().totalOffers.value
+                lifecycleScope.launch {
+                    try{
+                        UserInfo_Airtable_Repo().updateCompletedOffer( number!!.toLong()  , total_bal!! ,
+                            wallet ,
+                            userData( number!!.toLong()),
+                            offerId!!.toInt(), offerPrice.toString()  , "Completed")
+                }catch(e:Exception){
+                    Toast.makeText( this@Info, "Some Error Occurred" , Toast.LENGTH_SHORT).show()
+                    }                }
+            }else {
+                if (binding.offerLinkButtonInfo.text == "Completed") {
+                    Toast.makeText(this, "Already Completed", Toast.LENGTH_LONG).show()
+                }
+                else {
+                    if(binding.offerLinkButtonInfo.text.contains( "Not")) {
+                        Toast.makeText(this, "Not Eligible for Offer", Toast.LENGTH_LONG).show()
+                    }else{
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(offerLink))
+
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.setPackage("com.android.chrome")
+                        info_viewModel.updateOfferHistory(
+                            userData(number!!.toLong()),
+                            offerId!!, offerPrice.toString(), offerName = offerName!!, "Being Reviewed"
+                        )
+                        try {
+                            this.startActivity(intent)
+                        } catch (ex: ActivityNotFoundException) {
+                            // Chrome browser presumably not installed so allow user to choose instead
+                            intent.setPackage(null)
+                            this.startActivity(intent)
+                        }
+                    }
+
+                }
             }
+
         }
 
         offer_AirtableDatabase().getData()
 
-        binding.YoutubeViewExpandable.setOnClickListener {
+       /* binding.YoutubeViewExpandable.setOnClickListener {
             val hiddenView = binding.videoView
             val cardView =binding.YoutubeViewExpandable
             if (hiddenView.visibility == View.VISIBLE){
@@ -108,6 +241,123 @@ class Info : AppCompatActivity() {
                 TransitionManager.beginDelayedTransition(cardView, AutoTransition())
 
             }
+        }*/
+    }
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
+    suspend fun getTimeSpent(targetPackageName : String):Int{
+        val targetPackageName = targetPackageName // Replace with your app's package name
+        val usageStatsManager = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        val currentTime = System.currentTimeMillis()
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.WEEK_OF_MONTH, -1) // Subtract 1 month from the current time
+        val startTime = calendar.timeInMillis
+        var timeSpentInMin = 0
+        val stats: List<UsageStats> = usageStatsManager.queryUsageStats(
+            UsageStatsManager.INTERVAL_DAILY,
+            startTime,
+            currentTime
+        )
+
+        for (usageStats in stats) {
+            if (usageStats.packageName == targetPackageName) {
+                Toast.makeText(this@Info , usageStats.packageName , Toast.LENGTH_LONG).show()
+                val timeInMilis  = usageStats.totalTimeInForeground
+                timeSpentInMin = (timeInMilis / 60000).toInt()
+                Toast.makeText(this@Info , timeSpentInMin.toString() , Toast.LENGTH_LONG).show()
+                // Convert timeSpentInMillis to hours, minutes, seconds, etc. as needed.
+                break
+            }
+        }
+        return timeSpentInMin
+    }
+
+
+}
+
+@SuppressLint("SuspiciousIndentation")
+suspend fun isBeing(
+    infoViewModel: info_viewModel,
+    userId: String,
+    appName: String,
+    offerName: String,
+    lifecycleOwner: LifecycleOwner,
+    userNumber: Long,
+    context: Context
+): Boolean {
+    var isB : Boolean = false
+
+
+    var bool =  infoViewModel.isOfferBeign(userId, offerName)
+        Log.i("blacklistt", isB.toString())
+        if (!bool) {
+            val appInstalled: Boolean = isAppInstalled(context, appName)
+            isB = appInstalled
+
+            if (appInstalled) {
+                isB = true
+                infoViewModel.addBlacklist(userData( userNumber), offerName)
+            }
+
+            Log.i("blacklistt", "returning $isB")
+        }
+
+
+    // You may need to handle the case where `isOfferBeing` is not observed or not applicable.
+    // For now, returning false as a placeholder.
+    return isB
+}
+
+ fun isAppInstalled(context: Context , appName: String): Boolean {
+    // get list of all the apps installed
+    // get list of all the apps installed
+    val pm: PackageManager = context.packageManager
+    try {
+        val packageInfo = pm.getInstalledApplications(0)
+
+        for(app in packageInfo){
+            if(app.packageName == appName){
+                return true
+            }
+        }
+
+    } catch (e: PackageManager.NameNotFoundException) {
+        // The app is not installed.
+        Toast.makeText(context , "packageInfo.applicationInfo.packageName" , Toast.LENGTH_LONG).show()
+
+        return false
+    }
+return false
+}
+
+
+suspend fun isRegistered(context: Context , appName : String , regSMS :String) : Boolean{
+    val inboxSms = ArrayList<String>()
+    val uri = Uri.parse("content://sms/inbox")
+    val cursor = context.contentResolver.query(uri, null, null, null, null)
+
+    if (cursor != null && cursor.moveToFirst()) {
+        val bodyIndex = cursor.getColumnIndex("body")
+        do {
+            val smsBody = cursor.getString(bodyIndex)
+            inboxSms.add(smsBody)
+        } while (cursor.moveToNext())
+        cursor.close()
+    }
+    // Assuming you have already retrieved SMS messages and stored them in the 'inboxSms' list
+    var messageFound = false
+
+    for (smsBody in inboxSms) {
+
+        if (smsBody.lowercase() .contains(regSMS.toString().lowercase(), ignoreCase = true)) {
+            // The message contains the search string
+            messageFound = true
+            break  // Exit the loop once a matching message is found
         }
     }
+
+  return messageFound
+
+
+// Now, 'inboxSms' contains a list of SMS message bodies from the inbox.
+
 }

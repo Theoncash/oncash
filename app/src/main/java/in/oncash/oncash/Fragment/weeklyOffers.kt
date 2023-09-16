@@ -2,18 +2,18 @@ package `in`.oncash.oncash.Fragment
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.google.android.material.snackbar.Snackbar
 import `in`.oncash.oncash.Component.Offer_RecylerViewAdapter
 import `in`.oncash.oncash.DataType.OfferList
 import `in`.oncash.oncash.DataType.userData
@@ -22,7 +22,6 @@ import `in`.oncash.oncash.RoomDb.TimerDb
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.ViewModel.offer_viewmodel
 import `in`.oncash.oncash.databinding.FragmentWeeklyOffersBinding
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -132,7 +131,10 @@ class weeklyOffers : Fragment() {
             if (OfferList.weeklyOffersList.isNotEmpty()) {
                 this.OfferList = OfferList
                 adapter.updateList(OfferList.weeklyOffersList , offer )
+
+
             }
+
             homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner){
                var totalOffers =  OfferList.weeklyOffersList.size+OfferList.monthlyOfferList.size
                var completedOffers = it.size
