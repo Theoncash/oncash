@@ -55,14 +55,14 @@ class Info : AppCompatActivity() {
             startActivity(intent)
         }
         //videoVIew
-        val videoview= binding.videoView
+       /* val videoview= binding.videoView
         lifecycle.addObserver(videoview)
 
         videoview.addYouTubePlayerListener(object : AbstractYouTubePlayerListener(){
             override fun onReady(youTubePlayer: YouTubePlayer) {
                     youTubePlayer.loadVideo(viewUri!! , 0F)
             }
-        })
+        })*/
 
         //Observing the getInstructionList() in info_viewmodel (ie which gets the data from info_FirebaseRepo)
         val info_viewModel : info_viewModel by viewModels()
@@ -94,7 +94,7 @@ class Info : AppCompatActivity() {
 
         offer_AirtableDatabase().getData()
 
-        binding.YoutubeViewExpandable.setOnClickListener {
+       /* binding.YoutubeViewExpandable.setOnClickListener {
             val hiddenView = binding.videoView
             val cardView =binding.YoutubeViewExpandable
             if (hiddenView.visibility == View.VISIBLE){
@@ -108,6 +108,6 @@ class Info : AppCompatActivity() {
                 TransitionManager.beginDelayedTransition(cardView, AutoTransition())
 
             }
-        }
+        }*/
     }
 }

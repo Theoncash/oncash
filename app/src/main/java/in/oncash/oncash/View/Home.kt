@@ -67,10 +67,6 @@ class Home : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        homeViewmodel.completedOffers.observe(this){
-            binding.progressBar.max = homeViewmodel.totalOffers.value!!
-            binding.progressBar.progress = it
-        }
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigation.setOnItemSelectedListener {
