@@ -1,11 +1,15 @@
 package `in`.oncash.oncash.Fragment
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import `in`.oncash.oncash.R
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.databinding.FragmentProfileFragmentBinding
 
@@ -43,16 +47,21 @@ class profile_fragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ResourceType")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var homeViewmodel: home_viewModel = activity.run{
             ViewModelProvider(this!!)[home_viewModel::class.java]
         }
-        try {
+
+
+
+
+     /*   try {
             binding.currentBalance.text = homeViewmodel.getWalletPrice().value!!.currentBal.toString()
             binding.totalBalance.text = homeViewmodel.getWalletPrice().value!!.totalBa.toString()
         }catch (e: Exception){
-        }
+        }*/
 
     }
     companion object {
@@ -74,4 +83,8 @@ class profile_fragment : Fragment() {
                 }
             }
     }
+
+
+
+
 }

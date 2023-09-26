@@ -11,10 +11,10 @@
         android:id="@+id/history1"
         android:layout_width="234dp"
         android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="150dp"
-        android:fontFamily="@font/noto"
+
         android:gravity="center"
         android:text="@string/withdrawal_history"
         android:textColor="#171A1F"
@@ -24,13 +24,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.687" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/history_cardView"
         android:layout_width="408dp"
         android:layout_height="729dp"
-        android:backgroundTint="#DEF3FF"
+
         app:cardCornerRadius="38dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

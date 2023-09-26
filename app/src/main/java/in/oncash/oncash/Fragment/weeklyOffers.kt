@@ -73,7 +73,7 @@ class weeklyOffers : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CoroutineScope(Dispatchers.Main).launch {
+       /* CoroutineScope(Dispatchers.Main).launch {
             var roomDb = Room.databaseBuilder(
                 view.context,
                 TimerDb::class.java,
@@ -103,7 +103,7 @@ class weeklyOffers : Fragment() {
                 }
             }
 
-        }
+        }*/
 
 
 
@@ -140,7 +140,7 @@ class weeklyOffers : Fragment() {
             }
         })
 
-        view.findViewById<Button>(R.id.weeklyButton).setOnClickListener {
+      /*  view.findViewById<Button>(R.id.weeklyButton).setOnClickListener {
             if (OfferList.weeklyOffersList.isNotEmpty()) {
                 adapter.updateList(OfferList.weeklyOffersList , offer)
             }
@@ -152,7 +152,7 @@ class weeklyOffers : Fragment() {
             }else{
                 Snackbar.make(view , "No Monthly Offers Available " , Snackbar.LENGTH_LONG).show()
             }
-        }
+        }*/
 
     }
 

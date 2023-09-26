@@ -28,6 +28,8 @@ import `in`.oncash.oncash.Step.tradeStep
 import `in`.oncash.oncash.ViewModel.info_viewModel
 import `in`.oncash.oncash.databinding.ActivityInfoBinding
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Currency
 
 
 class Info : AppCompatActivity() , StepperFormListener {
@@ -41,8 +43,20 @@ class Info : AppCompatActivity() , StepperFormListener {
         val offerId : String? = intent.getStringExtra("OfferId")
         val offerName= intent.getStringExtra("OfferName")
         binding.offernameInfo.text = offerName
-        var offerPrice= intent.getStringExtra("OfferPrice")
-        binding.offerPrice.text = offerPrice
+
+
+
+        val offerPrice = intent.getStringExtra("OfferPrice")
+        val formattedPrice = NumberFormat.getCurrencyInstance().apply {
+            currency = Currency.getInstance("INR")
+        }.format(offerPrice?.toDoubleOrNull() ?: 0.0)
+
+        binding.offerPrice.text = formattedPrice
+
+
+
+
+
         Glide.with(this).load(intent.getStringExtra("OfferImage")).into(binding.offerImageInfo)
         var offer :String? = intent.getStringExtra("OfferLink")
         val subid :String? = intent.getStringExtra("subid")

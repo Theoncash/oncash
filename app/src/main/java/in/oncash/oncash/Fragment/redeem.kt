@@ -1,11 +1,15 @@
 package `in`.oncash.oncash.Fragment
 
+import android.icu.text.NumberFormat
+import android.icu.util.Currency
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -60,6 +64,7 @@ class redeem : Fragment() {
         return  binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -68,13 +73,18 @@ class redeem : Fragment() {
             ViewModelProvider(this!!).get(home_viewModel::class.java)
         }
 
-        homeViewmodel.getWalletPrice().observe(viewLifecycleOwner) {
-                walletBalance = it.currentBal
-            binding.walletBala.text = walletBalance.toString()
+        homeViewmodel.getWalletPrice().observe(viewLifecycleOwner) { walletInfo ->
+            val walletBalance = walletInfo.currentBal
 
+            val formattedBalance = NumberFormat.getCurrencyInstance().apply {
+                currency = Currency.getInstance("INR")
+            }.format(walletBalance)
+
+            binding.walletBala.text = formattedBalance
         }
 
-            homeViewmodel.getuserData().observe(viewLifecycleOwner){
+
+        homeViewmodel.getuserData().observe(viewLifecycleOwner){
                 userRecordId = it.userRecordId
                 userNumber = it.userNumber
             }

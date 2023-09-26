@@ -10,18 +10,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F4F4F4">
+        android:background="@drawable/bacground_img_profile">
 
 
         <ImageView
-            android:id="@+id/profile_icon"
-            android:layout_width="60dp"
-            android:layout_height="78dp"
-            android:layout_marginStart="150dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="150dp"
-            android:elevation="14dp"
-            android:src="@drawable/moster_img"
+            android:id="@+id/piggy_icon"
+            android:layout_width="109dp"
+            android:layout_height="93dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/piggy_img"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -30,83 +28,149 @@
             app:layout_constraintVertical_bias="0.108" />
 
 
-        <ImageView
-            android:id="@+id/backButWallet"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="10dp"
-            android:elevation="14dp"
-            android:src="@drawable/backbut"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.015"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.102" />
-
-        <ImageView
-            android:id="@+id/piggy_icon"
-            android:layout_width="234dp"
-            android:layout_height="225dp"
-            android:layout_marginBottom="244dp"
-            android:src="@drawable/piggy_img"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.401"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <TextView
-            android:id="@+id/wallet_bala_text"
+            android:id="@+id/wallet_text"
             android:layout_width="100dp"
             android:layout_height="35dp"
             android:layout_marginStart="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="25dp"
             android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:text="@string/balance"
+            android:gravity="center_vertical"
+            android:text="@string/withdraw"
             android:textAppearance="@style/wallet_bala"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.345"
+            app:layout_constraintHorizontal_bias="0.033"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_icon" />
+            app:layout_constraintTop_toBottomOf="@+id/history_text" />
+
+        <TextView
+            android:id="@+id/My_wallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginEnd="113dp"
+            android:layout_marginBottom="17dp"
+            android:text="My Wallet"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_x_large"
+            app:layout_constraintBottom_toTopOf="@+id/current_balance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.057"
+            app:layout_constraintStart_toEndOf="@+id/piggy_icon"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/current_balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="140dp"
             android:text="TextView"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_xx_medium"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.406"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/wallet_bala_text" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/piggy_icon"
+            app:layout_constraintTop_toBottomOf="@+id/My_wallet" />
 
         <TextView
-            android:id="@+id/total_balance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/Explore_text"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="12dp"
-            android:text="TextView"
+            android:layout_marginTop="172dp"
+            android:layout_marginEnd="262dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="Explore"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_x_large"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.407"
+            app:layout_constraintHorizontal_bias="0.413"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_balance" />
+            app:layout_constraintTop_toBottomOf="@+id/piggy_icon" />
+
+        <TextView
+            android:id="@+id/Contact_Text"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="25dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="@string/contact"
+            android:textAppearance="@style/wallet_bala"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.033"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wallet_text" />
+
+
+        <TextView
+            android:id="@+id/history_text"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="49dp"
+            android:layout_marginTop="240dp"
+            android:layout_marginEnd="262dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="History"
+            android:textAppearance="@style/wallet_bala"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/piggy_icon" />
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="103dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="184dp"
-            android:layout_marginBottom="28dp"
-            android:src="@drawable/sign_out"
-            app:layout_constraintBottom_toTopOf="@+id/piggy_icon"
+            android:id="@+id/click"
+            android:layout_width="50dp"
+            android:layout_height="13dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="480dp"
+            android:layout_marginEnd="60dp"
+            android:gravity="top"
+            android:src="@drawable/click_img"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/history_text"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/click2"
+            android:layout_width="50dp"
+            android:layout_height="13dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="60dp"
+            android:gravity="top"
+            android:src="@drawable/click_img"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/wallet_text"
+            app:layout_constraintTop_toBottomOf="@+id/click"
+            app:layout_constraintVertical_bias="0.073" />
+
+        <ImageView
+            android:id="@+id/click3"
+            android:layout_width="50dp"
+            android:layout_height="13dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="60dp"
+            android:gravity="top"
+            android:src="@drawable/click_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/Contact_Text"
+            app:layout_constraintTop_toBottomOf="@+id/click2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

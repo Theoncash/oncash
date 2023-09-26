@@ -29,11 +29,11 @@
 
     <dimen name="text_medium">13sp</dimen>
     <dimen name="text_x_medium">14sp</dimen>
-    <dimen name="text_xx_medium">16sp</dimen>
+    <dimen name="text_xx_medium">20sp</dimen>
 
     <dimen name="text_large">18sp</dimen>
     <dimen name="text_x_large">20sp</dimen>
-    <dimen name="text_xx_large">24sp</dimen>
+    <dimen name="text_xx_large">30sp</dimen>
     <dimen name="text_xxx_large">28sp</dimen>
     <dimen name="text_xxxx_large">34sp</dimen>
 
