@@ -91,6 +91,10 @@ class Home : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        /*binding.referalIcon.setOnClickListener {
+            startActivity(Intent(this,ReferalActivity::class.java))
+        }*/
+
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
 
@@ -238,6 +242,7 @@ class Home : AppCompatActivity() {
         super.onDestroy()
         soundPool.release()
     }
+
 
 
 }

@@ -1,5 +1,6 @@
 package `in`.oncash.oncash.View
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,9 +18,6 @@ class ReferalActivity : AppCompatActivity() {
         val binding= ActivityReferalBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-
-
 
         class MainPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
             override fun getCount(): Int = 2
@@ -45,5 +43,11 @@ class ReferalActivity : AppCompatActivity() {
 
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
         tabLayout.setupWithViewPager(viewPager)
+
+
+
+        binding.backButtonInfo.setOnClickListener {
+            startActivity(Intent(this,Home::class.java))
+        }
     }
 }

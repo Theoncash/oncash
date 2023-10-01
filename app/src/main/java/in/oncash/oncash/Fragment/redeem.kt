@@ -95,10 +95,13 @@ class redeem : Fragment() {
             lifecycleScope.launch { getTransaction() }
 
             binding.withdrawButton.setOnClickListener {
-                val requestAmount = binding.walletBala.text.toString()
-                if (requestAmount.isNotEmpty()) {
-                    if (walletBalance.toInt() >= requestAmount.toInt()) {
-                        if (requestAmount.toInt() > 20) {
+                val walletBalanceString = binding.walletBala.text.toString()
+                val requestAmountString = binding.walletBala.text.toString()
+                if (requestAmountString.isNotEmpty() && walletBalanceString.isNotEmpty()) {
+                    val requestAmount = requestAmountString.toIntOrNull() ?: 0
+                    val walletBalance = walletBalanceString.toIntOrNull() ?: 0
+                    if (walletBalance >= requestAmount) {
+                        if (requestAmount > 20) {
                                 val loadingDialog = customLoadingDialog(view.context)
 
 // To show the dialog
@@ -125,7 +128,7 @@ class redeem : Fragment() {
                                     //viewModel.getWalletPrice().observe(this, Observer { wallet ->
 
                                     //    walletBalance = wallet
-                                    walletBalance -= status.withdrawalTransaction.WithdrawalAmount.toInt()
+                                    this@redeem.walletBalance -= status.withdrawalTransaction.WithdrawalAmount.toInt()
                                     binding.walletBala.text = walletBalance.toString()
                                     binding.walletBala.editableText.clear()
 
@@ -145,7 +148,7 @@ class redeem : Fragment() {
                         } else {
                             Snackbar.make(
                                 binding.root,
-                                "Requested Amount Should Be More Then 20 Rs",
+                                "Explore offers and boost your wallet!",
                                 Snackbar.LENGTH_SHORT
                             ).show()
                         }

@@ -45,7 +45,7 @@ class profile_fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentProfileFragmentBinding.inflate(inflater , container , false)
+        binding =FragmentProfileFragmentBinding.inflate(inflater , container , false)
         return binding.root
 
 
@@ -66,6 +66,10 @@ class profile_fragment : Fragment() {
         }
 
         binding.referalIcon.setOnClickListener {
+            startActivity(Intent(Intent(requireActivity().application, ReferalActivity::class.java)))
+        }
+
+        binding.ReferalText.setOnClickListener {
             startActivity(Intent(Intent(requireActivity().application, ReferalActivity::class.java)))
         }
 

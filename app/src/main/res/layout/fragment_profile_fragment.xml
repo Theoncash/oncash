@@ -32,8 +32,8 @@
             android:id="@+id/wallet_text"
             android:layout_width="100dp"
             android:layout_height="35dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
             android:text="@string/withdraw"
@@ -68,7 +68,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="140dp"
-            android:text="TextView"
+            android:text="Ammount"
             android:textColor="@color/white"
             android:textSize="@dimen/text_xx_medium"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +81,7 @@
             android:layout_width="100dp"
             android:layout_height="35dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="130dp"
+            android:layout_marginTop="140dp"
             android:layout_marginEnd="262dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
@@ -98,8 +98,8 @@
             android:id="@+id/Contact_Text"
             android:layout_width="100dp"
             android:layout_height="35dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
             android:text="@string/contact"
@@ -115,7 +115,7 @@
             android:id="@+id/history_text"
             android:layout_width="100dp"
             android:layout_height="35dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="196dp"
             android:layout_marginEnd="262dp"
             android:fontFamily="sans-serif-medium"
@@ -132,8 +132,8 @@
             android:id="@+id/LeaderBoard_Text"
             android:layout_width="120dp"
             android:layout_height="35dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
             android:text="@string/Leader"
@@ -144,6 +144,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Contact_Text" />
 
+
+        <TextView
+            android:id="@+id/Referal_text"
+            android:layout_width="140dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="@string/Referal"
+            android:textAppearance="@style/wallet_bala"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.075"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LeaderBoard_Text" />
 
         <ImageView
             android:id="@+id/click"
@@ -164,7 +180,7 @@
             android:layout_width="50dp"
             android:layout_height="13dp"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_marginEnd="60dp"
             android:gravity="top"
             android:src="@drawable/click_img"
@@ -180,7 +196,7 @@
             android:layout_width="50dp"
             android:layout_height="13dp"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_marginEnd="60dp"
             android:gravity="top"
             android:src="@drawable/click_img"
@@ -204,22 +220,34 @@
             app:layout_constraintTop_toBottomOf="@+id/click3" />
 
         <ImageView
+            android:id="@+id/click5"
+            android:layout_width="50dp"
+            android:layout_height="13dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="45dp"
+            android:layout_marginEnd="60dp"
+            android:gravity="top"
+            android:src="@drawable/click_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/Referal_text"
+            app:layout_constraintTop_toBottomOf="@+id/click4" />
+
+        <ImageView
             android:id="@+id/referal_icon"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="345dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginBottom="80dp"
+            android:layout_marginTop="260dp"
+            android:layout_marginEnd="80dp"
             android:gravity="top"
             android:src="@drawable/referal_img"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/click4"
-            app:layout_constraintVertical_bias="0.6" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
