@@ -1,5 +1,6 @@
 package `in`.oncash.oncash.ViewModel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -61,10 +62,13 @@ class info_viewModel : ViewModel() {
         viewModelScope.launch {
             val offerHistory =  offerHistory_component().getOfferHIstory( userId )
             for (offer in offerHistory ){
-                if( offer.OfferId == offerId && offer.Status == "Being Reviewed")
+                Log.i("blacklistt" , offer.toString())
+
+                if( offer.OfferId == offerId && offer.Status.contains( "Being Reviewed"))
                     isCompleted.postValue(  true )
             }
         }
+        Log.i("blacklistt" , isCompleted.value.toString())
         return isCompleted.value!!
     }
 }

@@ -2,17 +2,20 @@ package `in`.oncash.oncash.View
 
 import android.Manifest
 import android.app.AppOpsManager
+import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.animation.DecelerateInterpolator
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -28,8 +31,10 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 
 import `in`.oncash.oncash.DataType.OfferList
+import `in`.oncash.oncash.DataType.SerializedDataType.Version
 import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.R
+import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
 import `in`.oncash.oncash.RoomDb.User
 import `in`.oncash.oncash.RoomDb.userDb
 import `in`.oncash.oncash.ViewModel.home_viewModel
@@ -46,8 +51,7 @@ class Home : AppCompatActivity() {
     private  var userData: userData = userData(0)
     lateinit var roomDb:userDb
 
-
-
+    private val version : Double = 1.1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,122 +60,136 @@ class Home : AppCompatActivity() {
 //
 //        }else{
 //            setContentView(R.layout.activity_home) // Load the layout for no internet
+            homeViewmodel.getVersion().observe(this){
+                if(it.id > version){
+                    showCustomDialog(it)
+                }else{
 
-            val REQUEST_SMS_PERMISSION = 734973 // Use any unique integer value
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_SMS), REQUEST_SMS_PERMISSION)
-                }
-            }
-            if (!hasUsageStatsPermission()) {
-                requestUsageStatsPermission()
-            }
+                    val REQUEST_SMS_PERMISSION = 734973 // Use any unique integer value
 
 
-            lifecycleScope.launch {
-                roomDb = Room.databaseBuilder(
-                    applicationContext,
-                    userDb::class.java,
-                    "User"
-                )    .fallbackToDestructiveMigration() // Add this line for destructive migration
-
-                    .build()
-
-                withContext(Dispatchers.IO)
-                {
-
-                        userData.userNumber = roomDb.userQuery().getUserNumber()
-                        homeViewmodel.setUserData(userData)
-                        homeViewmodel.withdrawalTransaction(userData.userNumber)
-                        homeViewmodel.getOffersHistory(userData.userNumber)
-                        homeViewmodel.getWallet(userData.userNumber)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_SMS), REQUEST_SMS_PERMISSION)
+                        }
+                    }
+                    if (!hasUsageStatsPermission()) {
+                        requestUsageStatsPermission()
+                    }
 
 
-                }
-            }
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO)
+                        {
+                            roomDb = Room.databaseBuilder(
+                                applicationContext,
+                                userDb::class.java,
+                                "User"
+                            ).fallbackToDestructiveMigration() // Add this line for destructive migration
+                                .build()
+                            userData.userNumber = roomDb.userQuery().getUserNumber()
+                        }
+
+                        if(userData.userNumber.toInt() == 0){
+                            getUserData()
+                        }else{
+                            homeViewmodel.setUserData(userData)
+                            homeViewmodel.withdrawalTransaction(userData.userNumber)
+                            homeViewmodel.getOffersHistory(userData.userNumber)
+                            homeViewmodel.getWallet(userData.userNumber)
+                        }
+
+
+
+
+                    }
+                    Toast.makeText(this , userData.userNumber.toString() , Toast.LENGTH_LONG).show()
+
 //        lifecycleScope.launch {
 //            getUserData()
 //        }
-            FirebaseApp.initializeApp(this)
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
+                    FirebaseApp.initializeApp(this)
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                        if (!task.isSuccessful) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                            return@OnCompleteListener
+                        }
+
+                        // Get new FCM registration token
+                        val token = task.result
+
+                        // Log and toast
+                        Toast.makeText(baseContext, "msg", Toast.LENGTH_SHORT).show()
+                    })
+                    binding = ActivityHomeBinding.inflate(layoutInflater)
+                    setContentView(binding.root)
+
+
+
+                    val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+                    val navController = navHostFragment.navController
+                    binding.bottomNavigation.setOnItemSelectedListener {
+                        if(it.itemId == R.id.home)
+                        {
+                            if(navController.currentDestination!!.id==R.id.monthlyOffers){
+                                navController.navigate(R.id.action_monthlyOffers_to_weeklyOffers)
+                            }
+                            if(navController.currentDestination!!.id==R.id.redeem2){
+                                navController.navigate(R.id.action_redeem2_to_weeklyOffers)
+                            }
+                            if(navController.currentDestination!!.id==R.id.profile2){
+                                navController.navigate(R.id.action_profile2_to_weeklyOffers)
+                            }
+                        }
+                        if (it.itemId == R.id.history) {
+                            if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                                navController.navigate(R.id.action_weeklyOffers_to_monthlyOffers)
+                            }
+                            if (navController.currentDestination!!.id == R.id.redeem2) {
+                                navController.navigate(R.id.action_redeem2_to_monthlyOffers)
+                            }
+                            if(navController.currentDestination!!.id==R.id.profile2){
+                                navController.navigate(R.id.action_profile2_to_monthlyOffers)
+                            }
+                        }
+                        if(it.itemId == R.id.redeem){
+                            if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                                navController.navigate(R.id.action_weeklyOffers_to_redeem2)
+                            }
+                            if (navController.currentDestination!!.id == R.id.monthlyOffers) {
+                                navController.navigate(R.id.action_monthlyOffers_to_redeem2)
+                            }
+                            if(navController.currentDestination!!.id == R.id.profile2){
+                                navController.navigate(R.id.action_profile2_to_redeem2)
+                            }
+                        }
+                        if(it.itemId == R.id.profile){
+                            if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                                navController.navigate(R.id.action_weeklyOffers_to_profile2)
+                            }
+                            if (navController.currentDestination!!.id == R.id.monthlyOffers) {
+                                navController.navigate(R.id.action_monthlyOffers_to_profile2)
+                            }
+                            if (navController.currentDestination!!.id == R.id.redeem2) {
+                                navController.navigate(R.id.action_redeem2_to_profile2)
+                            }
+                        }
+                        true
+                    }
+
+
+                    binding.walletTextView.setOnClickListener {
+                        startActivity(
+                            Intent(this, Wallet::class.java).putExtra(
+                                "walletBalance",
+                                binding.walletTextView.text
+                            ) .putExtra("userNumber", userData.userNumber.toString()).putExtra("userRecordId", userData.userNumber))
+
+                    }
+                }
             }
 
-            // Get new FCM registration token
-            val token = task.result
 
-            // Log and toast
-            Toast.makeText(baseContext, "msg", Toast.LENGTH_SHORT).show()
-        })
-            binding = ActivityHomeBinding.inflate(layoutInflater)
-            setContentView(binding.root)
-
-
-
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-            val navController = navHostFragment.navController
-            binding.bottomNavigation.setOnItemSelectedListener {
-                if(it.itemId == R.id.home)
-                {
-                    if(navController.currentDestination!!.id==R.id.monthlyOffers){
-                        navController.navigate(R.id.action_monthlyOffers_to_weeklyOffers)
-                    }
-                    if(navController.currentDestination!!.id==R.id.redeem2){
-                        navController.navigate(R.id.action_redeem2_to_weeklyOffers)
-                    }
-                    if(navController.currentDestination!!.id==R.id.profile2){
-                        navController.navigate(R.id.action_profile2_to_weeklyOffers)
-                    }
-                }
-                if (it.itemId == R.id.history) {
-                    if (navController.currentDestination!!.id == R.id.weeklyOffers) {
-                        navController.navigate(R.id.action_weeklyOffers_to_monthlyOffers)
-                    }
-                    if (navController.currentDestination!!.id == R.id.redeem2) {
-                        navController.navigate(R.id.action_redeem2_to_monthlyOffers)
-                    }
-                    if(navController.currentDestination!!.id==R.id.profile2){
-                        navController.navigate(R.id.action_profile2_to_monthlyOffers)
-                    }
-                }
-                if(it.itemId == R.id.redeem){
-                    if (navController.currentDestination!!.id == R.id.weeklyOffers) {
-                        navController.navigate(R.id.action_weeklyOffers_to_redeem2)
-                    }
-                    if (navController.currentDestination!!.id == R.id.monthlyOffers) {
-                        navController.navigate(R.id.action_monthlyOffers_to_redeem2)
-                    }
-                    if(navController.currentDestination!!.id == R.id.profile2){
-                        navController.navigate(R.id.action_profile2_to_redeem2)
-                    }
-                }
-                if(it.itemId == R.id.profile){
-                    if (navController.currentDestination!!.id == R.id.weeklyOffers) {
-                        navController.navigate(R.id.action_weeklyOffers_to_profile2)
-                    }
-                    if (navController.currentDestination!!.id == R.id.monthlyOffers) {
-                        navController.navigate(R.id.action_monthlyOffers_to_profile2)
-                    }
-                    if (navController.currentDestination!!.id == R.id.redeem2) {
-                        navController.navigate(R.id.action_redeem2_to_profile2)
-                    }
-                }
-                true
-            }
-
-
-            binding.walletTextView.setOnClickListener {
-                startActivity(
-                    Intent(this, Wallet::class.java).putExtra(
-                        "walletBalance",
-                        binding.walletTextView.text
-                    ) .putExtra("userNumber", userData.userNumber.toString()).putExtra("userRecordId", userData.userNumber))
-
-            }
         }
 
 
@@ -187,6 +205,23 @@ class Home : AppCompatActivity() {
 
 
     }
+
+    private fun showCustomDialog(version :Version) {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.custom_dialog)
+        dialog.setCancelable(true) // Allow the user to dismiss the dialog by tapping outside
+
+        val downloadButton = dialog.findViewById<Button>(R.id.download_button)
+        downloadButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(version.link))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.setPackage("com.android.chrome")
+            startActivity(intent)
+        }
+
+        dialog.show()
+    }
+
     private fun setWindowFlag(bits: Int, on: Boolean) {
         val win = window
         val winParams = win.attributes
@@ -219,14 +254,11 @@ class Home : AppCompatActivity() {
         homeViewmodel.getuserData().observe(this, Observer { data ->
             userData = data!!
             lifecycleScope.launch {
-                withContext(Dispatchers.IO){
-                    roomDb.userQuery().addUser(user = User(userData.userNumber))
-                }
-            }
-            homeViewmodel.withdrawalTransaction(data.userNumber)
-            homeViewmodel.getOffersHistory(data.userNumber)
-            homeViewmodel.getWallet(userData.userNumber)
+                homeViewmodel.withdrawalTransaction(data.userNumber)
+                homeViewmodel.getOffersHistory(data.userNumber)
+                homeViewmodel.getWallet(data.userNumber)
 
+            }
         })
 
         homeViewmodel.getWalletPrice().observe(this, Observer { wallet ->

@@ -11,13 +11,13 @@ import org.json.JSONObject
 class get_UserInfo_UseCase {
 
 
-    suspend fun loginManager(userNumber: Long): Boolean = withContext(Dispatchers.Default)
+    suspend fun loginManager(userNumber: Long , referred_code: Int): Boolean = withContext(Dispatchers.Default)
     {
         val userData: Boolean = isUserRegistered(userNumber)
         if(userData){
             return@withContext true
         }else{
-            registerUser(userNumber)
+            registerUser(userNumber , referred_code)
             return@withContext true
 
         }
@@ -31,9 +31,9 @@ class get_UserInfo_UseCase {
         return@withContext isRegistered
     }
 
-    private suspend fun registerUser(userNumber: Long): Boolean = withContext(Dispatchers.Default) {
+    private suspend fun registerUser(userNumber: Long , referred_code:Int ): Boolean = withContext(Dispatchers.Default) {
 
-        return@withContext UserInfo_Airtable_Repo().createUser(userNumber, 0 , 0)
+        return@withContext UserInfo_Airtable_Repo().createUser(userNumber, 0 , 0 , referred_code)
     }
 
 
@@ -49,12 +49,11 @@ class get_UserInfo_UseCase {
         try{
         for (i in 0 until withdrawalTransaction!!.length()) {
             val user = JSONObject(withdrawalTransaction[i]!!.toString())
-            val requestedAmount = user.getString("WalletBalance")
-            val phone =user.getString("UserNumber")
+            val requestedAmount = user.getInt("WalletBalance")
+            val phone =user.getInt("UserNumber")
             val status = user.getString("Status")
-            if (phone.toLong() == userNumber) {
-                list.add( withdrawalTransaction( requestedAmount ,  status ))
-            }
+                list.add( withdrawalTransaction( requestedAmount.toString() ,  status ))
+
         }}catch(e:Exception){
 
         }

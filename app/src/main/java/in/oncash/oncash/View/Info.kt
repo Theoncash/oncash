@@ -8,9 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -22,6 +22,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import `in`.oncash.oncash.Component.customLoadingDialog
 import `in`.oncash.oncash.Component.step_Adapter
 import `in`.oncash.oncash.DataType.Step
 import `in`.oncash.oncash.DataType.userData
@@ -32,10 +33,6 @@ import `in`.oncash.oncash.ViewModel.info_viewModel
 import `in`.oncash.oncash.databinding.ActivityInfoBinding
 import kotlinx.coroutines.launch
 import java.util.Calendar
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 
 
 class Info : AppCompatActivity() {
@@ -83,6 +80,17 @@ class Info : AppCompatActivity() {
                     youTubePlayer.loadVideo(viewUri!! , 0F)
             }
         })*/
+        val loadingDialog = customLoadingDialog(this)
+
+// To show the dialog
+        loadingDialog.show()
+        loadingDialog.setMessage("Good things take time...")
+
+// Simulate some background work (replace this with your actual work)
+        Handler().postDelayed({
+            // Dismiss the dialog when the work is done
+            loadingDialog.dismiss()
+        }, 4000)
 
         var list: ArrayList<Step> = ArrayList()
         //Observing the getInstructionList() in info_viewmodel (ie which gets the data from info_FirebaseRepo)
@@ -186,6 +194,19 @@ class Info : AppCompatActivity() {
 
             if(binding.offerLinkButtonInfo.text.contains( "Claim")){
                 val total_bal =  home_viewModel().totalOffers.value
+                val loadingDialog = customLoadingDialog(this)
+
+// To show the dialog
+                loadingDialog.show()
+                loadingDialog.setMessage("Good things take time...")
+
+// Simulate some background work (replace this with your actual work)
+                Handler().postDelayed({
+                    // Dismiss the dialog when the work is done
+                    loadingDialog.dismiss()
+                    startActivity(Intent(this ,  Home::class.java))
+                }, 4000)
+
                 lifecycleScope.launch {
                     try{
                         UserInfo_Airtable_Repo().updateCompletedOffer( number!!.toLong()  , total_bal!! ,
@@ -209,8 +230,7 @@ class Info : AppCompatActivity() {
                         intent.setPackage("com.android.chrome")
                         info_viewModel.updateOfferHistory(
                             userData(number!!.toLong()),
-                            offerId!!.toInt(), offerPrice.toString(),  "Being Reviewed"
-                        )
+                            offerId!!.toInt(), offerPrice.toString(),  "Being Reviewed")
                         try {
                             this.startActivity(intent)
                         } catch (ex: ActivityNotFoundException) {
@@ -288,8 +308,8 @@ suspend fun isBeing(
 
 
     var bool =  infoViewModel.isOfferBeign(userId, offerId)
-        Log.i("blacklistt", isB.toString())
-        if (!bool) {
+        Log.i("blacklistt", bool.toString())
+        if (bool == false) {
             val regSMS = isRegistered(context , appName , appName)
             val appInstalled: Boolean = isAppInstalled(context, appName)
             isB = appInstalled

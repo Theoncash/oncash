@@ -57,43 +57,29 @@ class Login : AppCompatActivity() {
 
                     if (phone.length == 10) {
 
-                        viewModel.addUser(phone.toLong())
+// add referral code section here
+                        viewModel.addUser(phone.toLong() , 0)
                         viewModel.getUserData1().observe(this@Login, Observer { userData ->
 
                             if (userData) {
                                 lifecycleScope.launch {
-                                    UserDataStoreUseCase().storeUser(
-                                        this@Login,
-                                        true,
-                                        phone.toLong(),
-                                    )
-                                    var roomDb = Room.databaseBuilder(
-                                        this@Login,
-                                        userDb::class.java,
-                                        "Timer"
-                                    ).build()
-                                    roomDb.userQuery().addUser(User(phone.toLong()))
-                                    val calendar = Calendar.getInstance()
-                                    calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 2)
-                                    CoroutineScope(Dispatchers.Main).launch {
+                                    withContext(Dispatchers.Default){
+                                        UserDataStoreUseCase().storeUser(
+                                            this@Login,
+                                            true,
+                                            phone.toLong(),
+                                        )
                                         var roomDb = Room.databaseBuilder(
                                             this@Login,
-                                            TimerDb::class.java,
-                                            "Timer"
-                                        )    .fallbackToDestructiveMigration() // Add this line for destructive migration
-                                            .build()
-
-                                        withContext(Dispatchers.IO)
-                                        {
-                                            roomDb.TimerQuery().addTimer(Timer(calendar.timeInMillis))
-                                        }
-
+                                            userDb::class.java,
+                                            "User"
+                                        ).build()
+                                        roomDb.userQuery().addUser(User(phone.toLong()))
                                     }
 
-                                    startActivity(Intent(this@Login, Home::class.java))
-
-
                                 }
+                                startActivity(Intent(this@Login, Home::class.java))
+
                             } else {
                                 Snackbar.make(
                                     binding.root,

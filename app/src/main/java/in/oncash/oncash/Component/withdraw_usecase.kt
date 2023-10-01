@@ -14,13 +14,13 @@ class withdraw_usecase {
         phone: Long,
         RequestedAmount: Int,
         WalletBalance: Int,
-        userRecordId: String
     ):String  = withContext(Dispatchers.Default){
-            lateinit var status :String
+             var status :String = ""
             val updateWallet = WalletBalance - RequestedAmount
-            val walletstatus = UserInfo_Airtable_Repo().updateWallet(phone, updateWallet , 0)
+            val user_wallet = UserInfo_Airtable_Repo().getWallet(phone)
+            val walletstatus = UserInfo_Airtable_Repo().updateWallet(phone, 0 , user_wallet.totalBa)
             Log.i("withdraw"  , walletstatus)
-            if (walletstatus.contains("200"))
+            if (walletstatus.contains("201"))
             {
                 status = walletstatus
                 Log.i("withdraw"  , walletstatus)
@@ -29,17 +29,17 @@ class withdraw_usecase {
 
         return@withContext status
     }
-    suspend fun withdrawRequest (userNumber: Long, requestAmount: Int, walletBalance: Int , userRecordId :String ):withdrawalsuccess {
+    suspend fun withdrawRequest (userNumber: Long, requestAmount: Int, walletBalance: Int  ):withdrawalsuccess {
        val withdrawalTransaction :withdrawalsuccess  =   UserInfo_Airtable_Repo().withdrawRequest(
             userNumber,
             requestAmount.toInt(),
             walletBalance,
         )
         val status = withdrawalTransaction.response
-        if (status .contains("200"))
+        if (status .contains("201"))
         {
-           val walletStatus =  isWithdrawRequested( userNumber, requestAmount ,walletBalance, userRecordId)
-            if (walletStatus.contains("200"))
+           val walletStatus =  isWithdrawRequested( userNumber, requestAmount ,walletBalance)
+            if (walletStatus.contains("201"))
             {
                 return withdrawalTransaction
             }

@@ -44,7 +44,7 @@ class OfferHistory_RecylerViewAdapter : RecyclerView.Adapter<OfferHistory_Recyle
     override fun onBindViewHolder(holder: viewholder, position: Int) {
         holder.offerName.text = " "
         holder.status.text = offerList.get(position).Status
-        holder.price.text = offerList.get(position).Payout // holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.offeranimation)
+        holder.price.text = offerList.get(position).Payout.toString() // holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.offeranimation)
         Glide.with(holder.itemView).load(offers[offerList[position].OfferId].Image).into(holder.offerImage)
 
         var lastPosition = -1

@@ -44,6 +44,7 @@ class withdrawalTransaction_RecylerViewAdapter : RecyclerView.Adapter<withdrawal
 
         holder.amount.text = withdrawalTransactionList.get(position).WithdrawalAmount
         holder.status.text = withdrawalTransactionList.get(position).Status
+        holder.date.text = "Withdrawal"
     }
 
     override fun getItemCount(): Int {

@@ -2,6 +2,7 @@ package `in`.oncash.oncash.Fragment
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -63,24 +64,30 @@ class redeem : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lateinit var userRecordId :String
+         var userRecordId :String = ""
         homeViewmodel = activity.run{
             ViewModelProvider(this!!).get(home_viewModel::class.java)
         }
 
         homeViewmodel.getWalletPrice().observe(viewLifecycleOwner) {
+            Log.i("wallet" , it.toString())
                 walletBalance = it.currentBal
             binding.walletBala.text = walletBalance.toString()
-
         }
 
             homeViewmodel.getuserData().observe(viewLifecycleOwner){
                 userNumber = it.userNumber
+                homeViewmodel.withdrawalTransaction(userNumber)
+
             }
+
 
             binding.withdrawalTransaction.adapter = adapter
             binding.withdrawalTransaction.layoutManager = LinearLayoutManager(view.context , LinearLayoutManager.VERTICAL ,false)
+        homeViewmodel.getWithdrawalTransaction().observe(viewLifecycleOwner){
+            adapter.updateList(it)
 
+        }
             lifecycleScope.launch { getTransaction() }
 
             binding.withdrawButton.setOnClickListener {
@@ -106,17 +113,14 @@ class redeem : Fragment() {
                                 userNumber,
                                 requestAmount.toInt(),
                                 walletBalance,
-                                userRecordId  ,
                             )
                             viewModel.getWithdrawalRequest().observe(viewLifecycleOwner) { status ->
-                                if (status.response.contains("200")) {
+                                if (status.response.contains("201")) {
                                     // viewModel.getWallet(userRecordId)
                                     //viewModel.getWalletPrice().observe(this, Observer { wallet ->
 
                                     //    walletBalance = wallet
-                                    walletBalance -= status.withdrawalTransaction.WithdrawalAmount.toInt()
-                                    binding.walletBala.text = walletBalance.toString()
-                                    binding.walletBala.editableText.clear()
+                                    binding.walletBala.text = 0.toString()
 
                                     withdrawalList.add(status.withdrawalTransaction)
                                     adapter.updateList(withdrawalList)

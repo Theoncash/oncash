@@ -13,6 +13,7 @@ import `in`.oncash.oncash.DataType.*
 import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.Blacklist
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
+import `in`.oncash.oncash.DataType.SerializedDataType.Version
 import `in`.oncash.oncash.Repository.Offer_FIrebase
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
 import `in`.oncash.oncash.Repository.offer_AirtableDatabase
@@ -83,9 +84,9 @@ private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveD
 
     fun getWallet(userNumber: Long ) {
         viewModelScope.launch {
-                wallet.value = UserInfo_Airtable_Repo().getWallet(
+                wallet.postValue( UserInfo_Airtable_Repo().getWallet(
                     userNumber
-                    )
+                    ))
                 }
     }
 
@@ -97,6 +98,14 @@ private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveD
         viewModelScope.launch {
           userData.postValue( userData(UserDataStoreUseCase().retrieveUserNumber(context)) )
         }
+    }
+
+    fun getVersion():MutableLiveData<Version>{
+        val version :MutableLiveData<Version> = MutableLiveData()
+        viewModelScope.launch {
+           version.postValue( UserInfo_Airtable_Repo().getVersion() )
+        }
+        return version
     }
 
     fun getuserData():MutableLiveData<userData>{

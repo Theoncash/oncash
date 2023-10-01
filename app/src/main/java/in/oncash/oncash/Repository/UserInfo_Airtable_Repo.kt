@@ -11,6 +11,8 @@ import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.BlackList_Fields
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
 import `in`.oncash.oncash.DataType.SerializedDataType.Referral
 import `in`.oncash.oncash.DataType.SerializedDataType.ReferralFields
+import `in`.oncash.oncash.DataType.SerializedDataType.Referred
+import `in`.oncash.oncash.DataType.SerializedDataType.Version
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -27,6 +29,7 @@ import org.json.JSONObject
 import java.sql.Ref
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
+import kotlin.random.Random
 
 class UserInfo_Airtable_Repo {
     private val apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZhbWxwd2d4bXRxcHhueWt6YXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU5Njg4MTksImV4cCI6MjAxMTU0NDgxOX0.zVIW9Z1GdvEUEPZpQgxkJwIal_MkgIN-gIEhrnKPKeg"
@@ -42,11 +45,10 @@ class UserInfo_Airtable_Repo {
                 })
             }
         }
+        Log.i("userrepository" , userNumber.toString())
 
 
-
-
-        val url =  "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?id=eq.$userNumber&select=*"
+        val url =  "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?UserPhone=eq.$userNumber&select=*"
         val response = client.get(url) {
             headers {
                 append("apikey", apiKey)
@@ -56,11 +58,15 @@ class UserInfo_Airtable_Repo {
 
         var current_bal : Int  = 0
          var  total_bal :Int = 0
-        Log.i("userrepository" , JSONObject(response.body<String>()).toString())
         try {
-            val fields: JSONObject = JSONObject(response.body<String>())
-             current_bal = JSONObject(fields.toString()).getString("Wallet").toInt()
-             total_bal = JSONObject(fields.toString()).getString("Total_Bal").toInt()
+            Log.i("userrepository" ,response.body<String>())
+
+            if(response.status.value == 200 ){
+                val fields = JSONArray(response.body<String>())
+                current_bal = JSONObject(fields[0].toString()).getString("Wallet").toInt()
+                total_bal = JSONObject(fields[0].toString()).getString("Total_Bal").toInt()
+            }
+
         }catch ( e:Exception){
 
         }
@@ -78,7 +84,7 @@ class UserInfo_Airtable_Repo {
                 })
             }
         }
-        val url ="https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Withdraw Request?UserNumber=eq.$userNumber&elect=*"
+        val url ="https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/WithdrawRequest?UserNumber=eq.$userNumber&select=*"
 
         val withdrawalTransaction: MutableLiveData<JSONArray> = MutableLiveData()
         try {
@@ -88,9 +94,10 @@ class UserInfo_Airtable_Repo {
                     append("Authorization", "Bearer $apiKey")
                 }
             }
+            Log.i("withdrawt" , response.body<String>().toString())
 
 
-            withdrawalTransaction.postValue(JSONArray(JSONObject(response.body<String>())))
+            withdrawalTransaction.postValue(JSONArray(response.body<String>()))
         } catch (e: Exception) {
             withdrawalTransaction.postValue(null)
         }
@@ -98,7 +105,7 @@ class UserInfo_Airtable_Repo {
 
     }
 
-    suspend fun createUser(number: Long, wallet: Int , total_bal :Int): Boolean =
+    suspend fun createUser(number: Long, wallet: Int , total_bal :Int , referral_code: Int): Boolean =
         withContext(Dispatchers.IO) {
             val client = HttpClient(CIO) {
                 install(ContentNegotiation) {
@@ -125,7 +132,11 @@ class UserInfo_Airtable_Repo {
                     setBody(userInfo)
                 }
                if( response.status.value == 201 ){
+                   addReffered(number, referral_code)
+                   addRefferal(number )
+
                    return@withContext true
+
                }
 
 
@@ -137,6 +148,84 @@ class UserInfo_Airtable_Repo {
 
         }
 
+    suspend fun addReffered(userId:Long , referral_code: Int) = withContext(Dispatchers.IO) {
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                })
+            }
+        }
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referred"
+
+        val userInfo = Referred(userId,   referral_code )
+        try {
+            val response = client.post {
+                url(url)
+                headers {
+                    append("apikey", apiKey)
+                    append("Authorization", "Bearer $apiKey")
+                }
+                contentType(ContentType.Application.Json)
+                setBody(userInfo)
+
+            }
+            Log.i("refferral" , "r" + response.body<String>().toString())
+
+            if( response.status.value == 201 ){
+                return@withContext true
+            }
+
+
+        } catch (e: Exception) {
+            Log.i("airtable", e.toString())
+        }
+
+        return@withContext false
+
+
+    }
+    suspend fun addRefferal(userId:Long  ) { withContext(Dispatchers.IO)
+    {
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                })
+            }
+        }
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referral"
+
+        val referral_code = Random.nextInt(111111, 999999)
+        val userInfo = ReferralFields(userId, referral_code, 0)
+        try {
+            val response = client.post {
+                url(url)
+                headers {
+                    append("apikey", apiKey)
+                    append("Authorization", "Bearer $apiKey")
+                }
+                contentType(ContentType.Application.Json)
+                setBody(userInfo)
+            }
+            Log.i("referral", response.body<String>().toString())
+            if (response.status.value == 201) {
+
+            }else{
+
+            }
+
+
+        } catch (e: Exception) {
+            Log.i("airtable", e.toString())
+        }
+
+
+    }
+        }
     suspend fun isUserRegistered(number: Long): Boolean =
         withContext(Dispatchers.IO) {
             val client = HttpClient(CIO) {
@@ -190,10 +279,12 @@ class UserInfo_Airtable_Repo {
                     })
                 }
             }
+
+
             val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?UserPhone=eq.$number"
 
 
-            val userInfo = Fields(number, wallet , total_bal)
+            val userInfo = Fields(number, wallet , total_bal )
             var status by Delegates.notNull<String>()
             try {
                 val response = client.patch {
@@ -206,7 +297,7 @@ class UserInfo_Airtable_Repo {
                     contentType(ContentType.Application.Json)
                     setBody(userInfo)
                 }
-                status = response.status.toString()
+                status = response.status.value.toString()
                 Log.i("airtabledata", response.body<String>().toString())
 
             } catch (e: Exception) {
@@ -231,7 +322,7 @@ class UserInfo_Airtable_Repo {
                     })
                 }
             }
-            val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Withdraw Request"
+            val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/WithdrawRequest"
             val userInfo = FieldsX( phone, WalletBalance , "Pending")
             var date : String = ""
             var status = "Pending"
@@ -247,8 +338,10 @@ class UserInfo_Airtable_Repo {
                     contentType(ContentType.Application.Json)
                     setBody(userInfo)
                 }
-                responseStatus = response.status.toString()
-                Log.i("userdataa" , response.body<String>().toString())
+                responseStatus = response.status.value.toString()
+                if(response.status.value == 201){
+
+                }
 
             } catch (e: Exception) {
                 Log.i("withdrawData", e.toString())
@@ -293,77 +386,109 @@ class UserInfo_Airtable_Repo {
 
 
 
-    suspend fun updateOfferHistory(userData: userData ,offerId: Int , offerPrice:String , status :String) = withContext(Dispatchers.IO){
+    suspend fun updateOfferHistory(userData: userData ,offerId: Int , offerPrice:String , status :String) = withContext(Dispatchers.IO) {
 
 
-            val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Offers History"
-            val client = HttpClient(CIO){
-                install(ContentNegotiation){
-                    Gson()
-                    json(
-                        Json{
-                            isLenient = true
-                            prettyPrint = true
-                        }
-                    )
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory"
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        isLenient = true
+                        prettyPrint = true
+                    }
+                )
+            }
+        }
+
+        val offerHistory = `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields(
+            userData.userNumber,
+            offerId,
+            status,
+            offerPrice.toInt()
+        )
+
+
+        try {
+            val response = client.post {
+                url(url)
+                headers {
+                    append("apikey", apiKey)
+                    append("Authorization", "Bearer $apiKey")
+                }
+                contentType(ContentType.Application.Json)
+                setBody(offerHistory)
+            }
+            if (response.status.value == 201) {
+                return@withContext true
+            } else {
+                Log.i("airtable", response.body<String>().toString())
+
+            }
+
+
+        } catch (e: Exception) {
+            Log.i("airtable", e.toString())
+        }
+    }
+
+
+
+
+        suspend fun updateCompletedOffer(     number :Long , total_bal: Int  , wallet: Int,     userData: userData ,offerId: Int , offerPrice:String  , status :String) = withContext(Dispatchers.IO){
+
+            val history = getOfferHistory()
+            var completed = false
+            for(offer in history){
+                if(offer.OfferId == offerId && offer.UserId == userData.userNumber && offer.Status.contains("Completed"))
+                {
+                    completed = true
+                    break;
                 }
             }
+            if(!completed){
 
-            val offerHistory = `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields(userData.userNumber , offerId ,  status , offerPrice )
-
-            Log.i("offerhistory" , "userid"+userData.userNumber)
-            Log.i("offerhistory" , getOfferHistory().toString())
-
-        val status =  client.post {
-            url(url)
-            headers {
-                append("apikey", apiKey)
-                append("Authorization", "Bearer $apiKey")
-            }
-            contentType(ContentType.Application.Json)
-            setBody(offerHistory)
-        }
-
-            Log.i("offerhistory" , status.status.value.toString())
-        }
-
-
-
-    suspend fun updateCompletedOffer(     number :Long , total_bal: Int  , wallet: Int,     userData: userData ,offerId: Int , offerPrice:String  , status :String) = withContext(Dispatchers.IO){
-
-            val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Offers History?UserId=eq.$number&OfferId=eq.$offerId"
-            val client = HttpClient(CIO){
-                install(ContentNegotiation){
-                    Gson()
-                    json(
-                        Json{
-                            isLenient = true
-                            prettyPrint = true
-                        }
-                    )
+                val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?UserId=eq.$number&OfferId=eq.$offerId"
+                val client = HttpClient(CIO){
+                    install(ContentNegotiation){
+                        Gson()
+                        json(
+                            Json{
+                                isLenient = true
+                                prettyPrint = true
+                            }
+                        )
+                    }
                 }
+
+                val offerHistory =  `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields(userData.userNumber , offerId ,  status , offerPrice.toInt() )
+
+                Log.i("offerhistory" , "userid"+userData.userNumber)
+                Log.i("offerhistory" , getOfferHistory().toString())
+
+                val status =  client.post {
+                    url(url)
+                    headers {
+                        append("apikey", apiKey)
+                        append("Prefer", "resolution=merge-duplicates")
+
+                        append("Authorization", "Bearer $apiKey")
+                    }
+                    contentType(ContentType.Application.Json)
+                    setBody(offerHistory)
+                }
+                val total_wallet =  getWallet(number)
+
+                val wallet = total_wallet.currentBal + offerPrice.toInt()
+                val total = total_wallet.totalBa + offerPrice.toInt()
+                Log.i("wallett" , total.toString())
+                updateWallet(number!!.toLong() , wallet , total)
+
+                Log.i("offerhistory" , status.status.value.toString())
             }
 
-            val offerHistory =  `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields(userData.userNumber , offerId ,  status , offerPrice )
 
-            Log.i("offerhistory" , "userid"+userData.userNumber)
-            Log.i("offerhistory" , getOfferHistory().toString())
-
-        val status =  client.post {
-            url(url)
-            headers {
-                append("apikey", apiKey)
-                append("Prefer", "resolution=merge-duplicates")
-
-                append("Authorization", "Bearer $apiKey")
-            }
-            contentType(ContentType.Application.Json)
-            setBody(offerHistory)
-        }
-            val total_wallet = wallet + offerPrice.toInt()
-            updateWallet(number!!.toLong() , total_wallet  , (total_bal +offerPrice.toInt()))
-
-            Log.i("offerhistory" , status.status.value.toString())
         }
 
 
@@ -372,9 +497,7 @@ class UserInfo_Airtable_Repo {
 
     suspend fun getOfferHistory() : ArrayList<`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields> = withContext(Dispatchers.IO){
 
-
-
-        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Offers History?select=*"
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?select=*"
 
         val client = HttpClient(CIO) {
             install(ContentNegotiation) {
@@ -391,21 +514,23 @@ class UserInfo_Airtable_Repo {
                 append("Authorization", "Bearer $apiKey")
             }
         }
-
-        Log.i("supabase" , "oh nooo" +  response.status.toString())
-
-        Log.i("supabase" , "oh nooo" +  response.body<String>().toString())
-
-        val type = object : TypeToken<ArrayList<`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields>>(){}.type
-
-         var jsonObject :JSONArray = JSONArray()
+        var list :ArrayList<`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields> = ArrayList()
+Log.i("blacklistt" , response.toString())
        try {
-            jsonObject = JSONArray(JSONObject(response.body<String>()))
+           var json = JSONArray( response.body<String>().toString())
+           Log.i("blacklistt" , response.body<String>().toString())
+
+           for(i in 0 until json.length()){
+               var offerHistory = JSONObject(json[i].toString())
+               Log.i("blacklistt" , offerHistory.getLong("UserId").toString())
+
+               list.add(`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields(offerHistory.getLong("UserId") , offerHistory.getInt("OfferId")  , offerHistory.getString("Status") , offerHistory.getInt("Payout")))
+           }
        }catch(e:Exception){
 
        }
 
-           return@withContext Gson().fromJson( jsonObject.toString(), type )
+           return@withContext list
     }
 
 
@@ -464,6 +589,41 @@ class UserInfo_Airtable_Repo {
         return users
 
 }
+
+    suspend fun getVersion() : Version = withContext(Dispatchers.IO){
+
+
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/LatestVersion?select=*"
+
+        val client = HttpClient(CIO){
+            install(ContentNegotiation){
+                Gson()
+                json(
+                    Json{
+                        isLenient = true
+                        prettyPrint = true
+                    }
+                )
+            }
+        }
+
+        val response = client.get(url) {
+            headers {
+                append("apikey", apiKey)
+                append("Authorization", "Bearer $apiKey")
+            }
+        }
+
+        Log.i("supabase" , response.body<String>().toString())
+
+            val json = JSONArray( response.body<String>().toString())
+                val version_json = JSONObject(json[0].toString())
+                 val version = Version(version_json.getDouble("id") , version_json.getString("Link") )
+
+            return@withContext version
+        }
+
+
 
 
     suspend fun thereExists(list:kotlin.collections.ArrayList<OfferHistoryRecord>, element :OfferHistoryRecord):Boolean = withContext(Dispatchers.IO){

@@ -50,7 +50,6 @@ class Wallet : AppCompatActivity() {
                                 userNumber,
                                 requestAmount.toInt(),
                                 walletBalance!!,
-                                userRecordId!! ,
                             )
                                 viewModel.getWithdrawalRequest().observe(this, Observer { status ->
                                 if (status.response.contains("200")) {

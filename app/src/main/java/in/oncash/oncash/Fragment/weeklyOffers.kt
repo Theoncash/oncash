@@ -72,47 +72,6 @@ class weeklyOffers : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CoroutineScope(Dispatchers.Main).launch {
-            var roomDb = Room.databaseBuilder(
-                view.context,
-                TimerDb::class.java,
-                "Timer"
-            )    .fallbackToDestructiveMigration() // Add this line for destructive migration
-
-                .build()
-
-            withContext(Dispatchers.IO)
-            {
-                endTime = roomDb.TimerQuery().getEndTime()
-
-                val timerTime = endTime - calendar
-
-                withContext(Dispatchers.Main) {
-
-                    object : CountDownTimer( timerTime, 1000) {
-                        override fun onTick(millisUntilFinished: Long) {
-                            // Update the UI for the current item with the remaining time
-                            val formattedTime = formatTime(millisUntilFinished)
-                            binding.countdownTextView.text = " $formattedTime"
-                        }
-
-                        override fun onFinish() {
-                            binding.countdownTextView.text = "Cashback: 30% - Offer Ended"
-                            offer = 70
-                        }
-                    }.start()
-                }
-            }
-
-        }
-
-
-
-
-
-
-
-
 
         val homeViewmodel = activity.run{
             this?.let { ViewModelProvider(it).get(home_viewModel::class.java) }

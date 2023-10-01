@@ -16,9 +16,9 @@ class wallet_viewModel:ViewModel() {
     private val withdrawalRequest :MutableLiveData<withdrawalsuccess> = MutableLiveData()
     private val wallet : MutableLiveData<walletDatatype> = MutableLiveData()
     private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
-    fun withdrawRequest(userNumber: Long, requestAmount: Int, walletBalance: Int , userRecordId :String )  {
+    fun withdrawRequest(userNumber: Long, requestAmount: Int, walletBalance: Int )  {
         viewModelScope.launch {
-            withdrawalRequest.value = withdraw_usecase().withdrawRequest(userNumber, requestAmount, walletBalance, userRecordId )
+            withdrawalRequest.value = withdraw_usecase().withdrawRequest(userNumber, requestAmount, walletBalance )
         }
     }
 
