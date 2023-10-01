@@ -11,11 +11,11 @@
 
     <ImageView
         android:id="@+id/backButton_Info"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:elevation="14dp"
-        android:src="@drawable/backbut"
+        android:src="@drawable/go_back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.015"

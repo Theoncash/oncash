@@ -69,6 +69,10 @@ Description
     <string name="description_on_boarding_third_slide">Sign up for Oncash today and start earning money</string>
     <string name="title_button_get_started">Sign Up</string>
     <string name="number_for_secure_transactions">Number for Secure Transactions.</string>
+
+
+    <!-- LeaderBoard-->
     <string name="contact">Contact</string>
+    <string name="Leader">LeaderBoard</string>
 
 </resources>

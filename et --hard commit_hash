@@ -1,0 +1,10 @@
+[33m9fa65bf[m[33m ([m[1;36mHEAD -> [m[1;32mv7[m[33m, [m[1;31morigin/v7[m[33m)[m HEAD@{0}: checkout: moving from v7 to v7
+[33m9fa65bf[m[33m ([m[1;36mHEAD -> [m[1;32mv7[m[33m, [m[1;31morigin/v7[m[33m)[m HEAD@{1}: branch: Reset to origin/v7
+[33m9fa65bf[m[33m ([m[1;36mHEAD -> [m[1;32mv7[m[33m, [m[1;31morigin/v7[m[33m)[m HEAD@{2}: checkout: moving from v9 to v7
+[33m9145436[m[33m ([m[1;31morigin/v9[m[33m, [m[1;32mv9[m[33m)[m HEAD@{3}: checkout: moving from v7 to v9
+[33m9fa65bf[m[33m ([m[1;36mHEAD -> [m[1;32mv7[m[33m, [m[1;31morigin/v7[m[33m)[m HEAD@{4}: merge origin/v9: updating HEAD
+[33m9fa65bf[m[33m ([m[1;36mHEAD -> [m[1;32mv7[m[33m, [m[1;31morigin/v7[m[33m)[m HEAD@{5}: merge origin/v9: updating HEAD
+[33m9fa65bf[m[33m ([m[1;36mHEAD -> [m[1;32mv7[m[33m, [m[1;31morigin/v7[m[33m)[m HEAD@{6}: merge origin/v9: updating HEAD
+[33m9fa65bf[m[33m ([m[1;36mHEAD -> [m[1;32mv7[m[33m, [m[1;31morigin/v7[m[33m)[m HEAD@{7}: merge origin/v9: updating HEAD
+[33m9fa65bf[m[33m ([m[1;36mHEAD -> [m[1;32mv7[m[33m, [m[1;31morigin/v7[m[33m)[m HEAD@{8}: checkout: moving from master to v7
+[33m8fbf47f[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/Design[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{9}: clone: from https://github.com/Theoncash/oncash.git

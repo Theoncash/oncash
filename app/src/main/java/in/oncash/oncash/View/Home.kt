@@ -111,6 +111,9 @@ class Home : AppCompatActivity() {
                     if (navController.currentDestination!!.id == R.id.profile2) {
                         navController.navigate(R.id.action_profile2_to_weeklyOffers)
                     }
+                    if (navController.currentDestination!!.id == R.id.contactFragment) {
+                        navController.navigate(R.id.action_contactFragment_to_weeklyOffers)
+                    }
                 }
                 if (it.itemId == R.id.history) {
                     if (navController.currentDestination!!.id == R.id.weeklyOffers) {
@@ -121,6 +124,9 @@ class Home : AppCompatActivity() {
                     }
                     if (navController.currentDestination!!.id == R.id.profile2) {
                         navController.navigate(R.id.action_profile2_to_monthlyOffers)
+                    }
+                    if (navController.currentDestination!!.id == R.id.contactFragment) {
+                        navController.navigate(R.id.action_contactFragment_to_monthlyOffers)
                     }
                 }
                 if (it.itemId == R.id.redeem) {
@@ -133,6 +139,9 @@ class Home : AppCompatActivity() {
                     if (navController.currentDestination!!.id == R.id.profile2) {
                         navController.navigate(R.id.action_profile2_to_redeem2)
                     }
+                    if (navController.currentDestination!!.id == R.id.contactFragment) {
+                        navController.navigate(R.id.action_contactFragment_to_redeem2)
+                    }
                 }
                 if (it.itemId == R.id.profile) {
                     if (navController.currentDestination!!.id == R.id.weeklyOffers) {
@@ -143,6 +152,23 @@ class Home : AppCompatActivity() {
                     }
                     if (navController.currentDestination!!.id == R.id.redeem2) {
                         navController.navigate(R.id.action_redeem2_to_profile2)
+                    }
+                    if (navController.currentDestination!!.id == R.id.contactFragment) {
+                        navController.navigate(R.id.action_contactFragment_to_profile2)
+                    }
+                }
+                if (it.itemId == R.id.contact) {
+                    if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                        navController.navigate(R.id.action_weeklyOffers_to_contactFragment)
+                    }
+                    if (navController.currentDestination!!.id == R.id.monthlyOffers) {
+                        navController.navigate(R.id.action_monthlyOffers_to_contactFragment)
+                    }
+                    if (navController.currentDestination!!.id == R.id.redeem2) {
+                        navController.navigate(R.id.action_redeem2_to_contactFragment)
+                    }
+                    if (navController.currentDestination!!.id == R.id.profile2) {
+                        navController.navigate(R.id.action_profile2_to_contactFragment)
                     }
                 }
                 true

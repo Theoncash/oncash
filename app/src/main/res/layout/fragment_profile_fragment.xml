@@ -32,7 +32,7 @@
             android:id="@+id/wallet_text"
             android:layout_width="100dp"
             android:layout_height="35dp"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="25dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
@@ -81,7 +81,7 @@
             android:layout_width="100dp"
             android:layout_height="35dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="172dp"
+            android:layout_marginTop="148dp"
             android:layout_marginEnd="262dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
@@ -90,7 +90,7 @@
             android:textSize="@dimen/text_x_large"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.413"
+            app:layout_constraintHorizontal_bias="0.31"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/piggy_icon" />
 
@@ -98,7 +98,7 @@
             android:id="@+id/Contact_Text"
             android:layout_width="100dp"
             android:layout_height="35dp"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="25dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
@@ -115,8 +115,8 @@
             android:id="@+id/history_text"
             android:layout_width="100dp"
             android:layout_height="35dp"
-            android:layout_marginStart="49dp"
-            android:layout_marginTop="240dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="196dp"
             android:layout_marginEnd="262dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
@@ -124,16 +124,32 @@
             android:textAppearance="@style/wallet_bala"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.31"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/piggy_icon" />
+
+        <TextView
+            android:id="@+id/LeaderBoard_Text"
+            android:layout_width="120dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="25dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="@string/Leader"
+            android:textAppearance="@style/wallet_bala"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.033"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Contact_Text" />
 
         <ImageView
             android:id="@+id/click"
             android:layout_width="50dp"
             android:layout_height="13dp"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="480dp"
+            android:layout_marginTop="440dp"
             android:layout_marginEnd="60dp"
             android:gravity="top"
             android:src="@drawable/click_img"
@@ -147,7 +163,7 @@
             android:layout_width="50dp"
             android:layout_height="13dp"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="60dp"
             android:gravity="top"
             android:src="@drawable/click_img"
@@ -156,14 +172,14 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/wallet_text"
             app:layout_constraintTop_toBottomOf="@+id/click"
-            app:layout_constraintVertical_bias="0.073" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
             android:id="@+id/click3"
             android:layout_width="50dp"
             android:layout_height="13dp"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="60dp"
             android:gravity="top"
             android:src="@drawable/click_img"
@@ -171,6 +187,20 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/Contact_Text"
             app:layout_constraintTop_toBottomOf="@+id/click2" />
+
+        <ImageView
+            android:id="@+id/click4"
+            android:layout_width="50dp"
+            android:layout_height="13dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="60dp"
+            android:gravity="top"
+            android:src="@drawable/click_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/LeaderBoard_Text"
+            app:layout_constraintTop_toBottomOf="@+id/click3" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

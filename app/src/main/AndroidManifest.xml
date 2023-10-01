@@ -21,6 +21,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Oncash"
         tools:targetApi="33">
+        <activity
+            android:name=".View.ReferalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".View.LeaderBoard"
+            android:exported="false" />
+
         <receiver
             android:name=".Component.smsReceiver"
             android:enabled="true"
@@ -30,20 +37,16 @@
             </intent-filter>
         </receiver>
 
-
         <activity
             android:name=".View.onboarding"
-            android:screenOrientation="fullSensor"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
         <activity
             android:name=".View.Login"
             android:exported="false">

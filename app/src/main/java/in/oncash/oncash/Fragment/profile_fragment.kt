@@ -3,15 +3,16 @@ package `in`.oncash.oncash.Fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import `in`.oncash.oncash.R
+import `in`.oncash.oncash.View.LeaderBoard
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.databinding.FragmentProfileFragmentBinding
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,17 +46,42 @@ class profile_fragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentProfileFragmentBinding.inflate(inflater , container , false)
         return binding.root
+
+
+
+
+
     }
 
-    @SuppressLint("ResourceType")
+    @SuppressLint("ResourceType", "CommitTransaction")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var homeViewmodel: home_viewModel = activity.run{
             ViewModelProvider(this!!)[home_viewModel::class.java]
         }
 
+        binding.LeaderBoardText.setOnClickListener {
+            startActivity(Intent(Intent(requireActivity().application, LeaderBoard::class.java)))
+        }
 
+        binding.historyText.setOnClickListener {
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.profile_fragment, monthlyOffers())
+            transaction?.commit()
+        }
 
+        binding.walletText.setOnClickListener {
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.profile_fragment, redeem()) // Assuming MonthlyOffers is a Fragment class
+            transaction?.disallowAddToBackStack()
+            transaction?.commit()
+        }
+        binding.ContactText.setOnClickListener {
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.profile_fragment, contactFragment()) // Assuming MonthlyOffers is a Fragment class
+            transaction?.disallowAddToBackStack()
+            transaction?.commit()
+        }
 
      /*   try {
             binding.currentBalance.text = homeViewmodel.getWalletPrice().value!!.currentBal.toString()
