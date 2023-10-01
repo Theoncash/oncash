@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import `in`.oncash.oncash.R
 import `in`.oncash.oncash.View.LeaderBoard
+import `in`.oncash.oncash.View.ReferalActivity
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.databinding.FragmentProfileFragmentBinding
 
@@ -62,6 +63,10 @@ class profile_fragment : Fragment() {
 
         binding.LeaderBoardText.setOnClickListener {
             startActivity(Intent(Intent(requireActivity().application, LeaderBoard::class.java)))
+        }
+
+        binding.referalIcon.setOnClickListener {
+            startActivity(Intent(Intent(requireActivity().application, ReferalActivity::class.java)))
         }
 
         binding.historyText.setOnClickListener {

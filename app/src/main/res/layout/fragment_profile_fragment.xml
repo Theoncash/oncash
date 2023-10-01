@@ -81,7 +81,7 @@
             android:layout_width="100dp"
             android:layout_height="35dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="148dp"
+            android:layout_marginTop="130dp"
             android:layout_marginEnd="262dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
@@ -144,6 +144,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Contact_Text" />
 
+
         <ImageView
             android:id="@+id/click"
             android:layout_width="50dp"
@@ -201,6 +202,24 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/LeaderBoard_Text"
             app:layout_constraintTop_toBottomOf="@+id/click3" />
+
+        <ImageView
+            android:id="@+id/referal_icon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="345dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="80dp"
+            android:gravity="top"
+            android:src="@drawable/referal_img"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/click4"
+            app:layout_constraintVertical_bias="0.6" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
