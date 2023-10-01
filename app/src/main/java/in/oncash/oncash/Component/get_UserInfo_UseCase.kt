@@ -11,40 +11,27 @@ import org.json.JSONObject
 class get_UserInfo_UseCase {
 
 
-    suspend fun loginManager(userNumber: Long): UserData1 = withContext(Dispatchers.Default)
+    suspend fun loginManager(userNumber: Long): Boolean = withContext(Dispatchers.Default)
     {
-        val userData: UserData1 = isUserRegistered(userNumber)
+        val userData: Boolean = isUserRegistered(userNumber)
+        if(userData){
+            return@withContext true
+        }else{
+            registerUser(userNumber)
+            return@withContext true
 
-        if (!userData.isUserRegistered) {
-            return@withContext UserData1(true, registerUser(userNumber))
         }
         return@withContext userData
     }
 
-    suspend fun isUserRegistered(userNumber: Long): UserData1 = withContext(Dispatchers.Default) {
+    suspend fun isUserRegistered(userNumber: Long): Boolean = withContext(Dispatchers.Default) {
 
-        var isUserRegistered: Boolean = false
-        var userRecordId: String = ""
-        if(users != null){
+        val isRegistered: Boolean = UserInfo_Airtable_Repo().isUserRegistered(userNumber)
 
-            for (i in 0 until users!!.length()) {
-
-                userRecordId = JSONObject(users[i]!!.toString()).getString("id").toString()
-
-                val user = JSONObject(users[i]!!.toString()).getString("fields")
-                val phone = JSONObject(user).getString("UserPhone")
-                if (phone.toLong() == userNumber) {
-                    isUserRegistered = true
-                    return@withContext UserData1(isUserRegistered, userRecordId)
-
-                }
-            }
-        }
-
-        return@withContext UserData1(isUserRegistered, userRecordId)
+        return@withContext isRegistered
     }
 
-    private suspend fun registerUser(userNumber: Long): String = withContext(Dispatchers.Default) {
+    private suspend fun registerUser(userNumber: Long): Boolean = withContext(Dispatchers.Default) {
 
         return@withContext UserInfo_Airtable_Repo().createUser(userNumber, 0 , 0)
     }
@@ -55,22 +42,18 @@ class get_UserInfo_UseCase {
         val list : ArrayList<withdrawalTransaction> = ArrayList()
         try {
             withdrawalTransaction  =
-                UserInfo_Airtable_Repo().getWithdrawTransaction().value!!
+                UserInfo_Airtable_Repo().getWithdrawTransaction(userNumber.toString()).value!!
         }catch (e:NullPointerException){
 
         }
-        lateinit var createdTime: String
         try{
         for (i in 0 until withdrawalTransaction!!.length()) {
-            createdTime = JSONObject(withdrawalTransaction[i]!!.toString()).getString("createdTime").toString()
-            val user = JSONObject(withdrawalTransaction[i]!!.toString()).getString("fields")
-            val requestedAmount = JSONObject(user).getString("WalletBalance")
-            val phone = JSONObject(user).getString("UserNumber")
-            val status = JSONObject(user).getString("Status")
+            val user = JSONObject(withdrawalTransaction[i]!!.toString())
+            val requestedAmount = user.getString("WalletBalance")
+            val phone =user.getString("UserNumber")
+            val status = user.getString("Status")
             if (phone.toLong() == userNumber) {
-               val date : String = createdTime.split("T")[0]
-
-                list.add( withdrawalTransaction(date , requestedAmount ,  status ))
+                list.add( withdrawalTransaction( requestedAmount ,  status ))
             }
         }}catch(e:Exception){
 

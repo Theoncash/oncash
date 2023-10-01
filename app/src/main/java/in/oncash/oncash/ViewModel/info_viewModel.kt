@@ -22,46 +22,46 @@ class info_viewModel : ViewModel() {
         return InstructionsList
     }
 
-    fun updateOfferHistory(user : userData , offerId: String , offerPrice:String , offerName : String , status:String){
+    fun updateOfferHistory(user : userData , offerId: Int , offerPrice:String ,  status:String){
         viewModelScope.launch {
-            offerHistory_component().updateAirtable(user , offerId , offerPrice , offerName , status)
+            offerHistory_component().updateAirtable(user , offerId , offerPrice , status)
         }
     }
-    fun addBlacklist(user : userData , offerId: String ){
+    fun addBlacklist(user : userData , offerId: Int ){
         viewModelScope.launch {
             UserInfo_Airtable_Repo().addBlacklist(user , offerId)
         }
     }
-    fun getBlacklist(userId : String , offerId: String ) : MutableLiveData<Boolean>{
+    fun getBlacklist(userId : Long , offerId: Int ) : MutableLiveData<Boolean>{
         val Blacklisted : MutableLiveData<Boolean> = MutableLiveData(false)
         viewModelScope.launch {
           var Blacklist =   UserInfo_Airtable_Repo().getBlacklist()
             for (offer in Blacklist){
-                if (offer.fields.UserId == userId && offer.fields.OfferId == offerId){
+                if (offer.UserId == userId && offer.OfferId == offerId){
                     Blacklisted.postValue(true)
                 }
             }
         }
         return Blacklisted
     }
-    fun isCompleted (userId: String  , offerName : String):MutableLiveData<Boolean>{
+    fun isCompleted (userId: Long  , offerId: Int ):MutableLiveData<Boolean>{
        var isCompleted = MutableLiveData<Boolean>(false)
         viewModelScope.launch {
            val offerHistory =  offerHistory_component().getOfferHIstory( userId )
             for (offer in offerHistory ){
-               if( offer.fields.OfferName.contains( offerName ) && offer.fields.Status == "Completed")
+               if( offer.OfferId == offerId && offer.Status == "Completed")
                   isCompleted.postValue(  true )
             }
         }
         return isCompleted
     }
 
-    fun isOfferBeign (userId: String  , offerName : String):Boolean{
+    fun isOfferBeign (userId: Long  , offerId : Int):Boolean{
         var isCompleted = MutableLiveData<Boolean>(false)
         viewModelScope.launch {
             val offerHistory =  offerHistory_component().getOfferHIstory( userId )
             for (offer in offerHistory ){
-                if( offer.fields.OfferName.contains( offerName ) && offer.fields.Status == "Being Reviewed")
+                if( offer.OfferId == offerId && offer.Status == "Being Reviewed")
                     isCompleted.postValue(  true )
             }
         }

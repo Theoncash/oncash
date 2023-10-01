@@ -18,7 +18,7 @@ class withdraw_usecase {
     ):String  = withContext(Dispatchers.Default){
             lateinit var status :String
             val updateWallet = WalletBalance - RequestedAmount
-            val walletstatus = UserInfo_Airtable_Repo().updateWallet(phone, updateWallet, userRecordId , 0)
+            val walletstatus = UserInfo_Airtable_Repo().updateWallet(phone, updateWallet , 0)
             Log.i("withdraw"  , walletstatus)
             if (walletstatus.contains("200"))
             {
@@ -34,7 +34,6 @@ class withdraw_usecase {
             userNumber,
             requestAmount.toInt(),
             walletBalance,
-           userRecordId,
         )
         val status = withdrawalTransaction.response
         if (status .contains("200"))

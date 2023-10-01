@@ -2,6 +2,7 @@ package `in`.oncash.oncash.View
 
 import android.Manifest
 import android.app.AppOpsManager
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,7 +11,9 @@ import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.animation.DecelerateInterpolator
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,7 +23,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.room.Room
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 
 import `in`.oncash.oncash.DataType.OfferList
 import `in`.oncash.oncash.DataType.userData
@@ -70,22 +75,19 @@ class Home : AppCompatActivity() {
                     applicationContext,
                     userDb::class.java,
                     "User"
-                ).build()
+                )    .fallbackToDestructiveMigration() // Add this line for destructive migration
+
+                    .build()
 
                 withContext(Dispatchers.IO)
                 {
-                    if (roomDb.userQuery().getUserId().isNullOrEmpty()) {
-                        withContext(Dispatchers.Main){
-                            getUserData()
-                        }
 
-                    } else {
                         userData.userNumber = roomDb.userQuery().getUserNumber()
                         homeViewmodel.setUserData(userData)
                         homeViewmodel.withdrawalTransaction(userData.userNumber)
                         homeViewmodel.getOffersHistory(userData.userNumber)
                         homeViewmodel.getWallet(userData.userNumber)
-                    }
+
 
                 }
             }
@@ -93,6 +95,18 @@ class Home : AppCompatActivity() {
 //            getUserData()
 //        }
             FirebaseApp.initializeApp(this)
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            Toast.makeText(baseContext, "msg", Toast.LENGTH_SHORT).show()
+        })
             binding = ActivityHomeBinding.inflate(layoutInflater)
             setContentView(binding.root)
 

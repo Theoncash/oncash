@@ -63,6 +63,10 @@ class home_viewModel : ViewModel() {
         }
         return offerList
     }
+    fun getOffer():ArrayList<Offer>{
+        return offerList.value!!.weeklyOffersList
+    }
+
 //offer history viewmodel
 private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveData()
     fun getOffersHistory(userId:Long){
