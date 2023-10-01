@@ -88,21 +88,21 @@ class Info : AppCompatActivity() {
         //Observing the getInstructionList() in info_viewmodel (ie which gets the data from info_FirebaseRepo)
         val info_viewModel: info_viewModel by viewModels()
         lifecycleScope.launch {
-            info_viewModel.getBlacklist( number.toString() ,  offerId!!).observe(this@Info) {
+            info_viewModel.getBlacklist( number!!.toLong() ,  offerId!!.toInt()).observe(this@Info) {
                 if (!it) {
                     lifecycleScope.launch {
 
                         if (!isBeing(
                                 info_viewModel,
-                                number!!,
+                                number!!.toLong(),
                                 appName!!,
-                                offerName!!,
+                                offerId!!.toInt(),
                                 this@Info,
                                 number!!.toLong(),
                                 this@Info
                             )
                         ) {
-                            info_viewModel.isCompleted(number.toString() ,  offerId!!).observe(this@Info) {
+                            info_viewModel.isCompleted(number!!.toLong() ,  offerId!!.toInt()).observe(this@Info) {
                                 if (it == false) {
                                     info_viewModel.getInstrutionList(offerId!!)
                                         .observe(this@Info, Observer {
@@ -209,7 +209,7 @@ class Info : AppCompatActivity() {
                         intent.setPackage("com.android.chrome")
                         info_viewModel.updateOfferHistory(
                             userData(number!!.toLong()),
-                            offerId!!, offerPrice.toString(), offerName = offerName!!, "Being Reviewed"
+                            offerId!!.toInt(), offerPrice.toString(),  "Being Reviewed"
                         )
                         try {
                             this.startActivity(intent)
@@ -277,9 +277,9 @@ class Info : AppCompatActivity() {
 @SuppressLint("SuspiciousIndentation")
 suspend fun isBeing(
     infoViewModel: info_viewModel,
-    userId: String,
+    userId: Long,
     appName: String,
-    offerName: String,
+    offerId: Int,
     lifecycleOwner: LifecycleOwner,
     userNumber: Long,
     context: Context
@@ -287,15 +287,16 @@ suspend fun isBeing(
     var isB : Boolean = false
 
 
-    var bool =  infoViewModel.isOfferBeign(userId, offerName)
+    var bool =  infoViewModel.isOfferBeign(userId, offerId)
         Log.i("blacklistt", isB.toString())
         if (!bool) {
+            val regSMS = isRegistered(context , appName , appName)
             val appInstalled: Boolean = isAppInstalled(context, appName)
             isB = appInstalled
 
-            if (appInstalled) {
+            if (appInstalled || regSMS) {
                 isB = true
-                infoViewModel.addBlacklist(userData( userNumber), offerName)
+                infoViewModel.addBlacklist(userData( userNumber), offerId)
             }
 
             Log.i("blacklistt", "returning $isB")

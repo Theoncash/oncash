@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class loginViewModel:ViewModel() {
-    private  var userData:MutableLiveData<UserData1> = MutableLiveData()
+    private  var userData:MutableLiveData<Boolean> = MutableLiveData()
 
     fun addUser(userNumber : Long ) {
 
@@ -23,7 +23,7 @@ class loginViewModel:ViewModel() {
         }
     }
 
-    fun getUserData1(): MutableLiveData<UserData1>{
+    fun getUserData1(): MutableLiveData<Boolean>{
         return userData
     }
 

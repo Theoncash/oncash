@@ -42,7 +42,6 @@ class withdrawalTransaction_RecylerViewAdapter : RecyclerView.Adapter<withdrawal
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: viewholder, position: Int) {
 
-        holder.date.text= withdrawalTransactionList.get(position).Date
         holder.amount.text = withdrawalTransactionList.get(position).WithdrawalAmount
         holder.status.text = withdrawalTransactionList.get(position).Status
     }

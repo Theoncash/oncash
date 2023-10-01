@@ -44,7 +44,7 @@ class weeklyOffers : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    var userData: userData  = userData("",0)
+    var userData: userData  = userData(0)
     lateinit var binding : FragmentWeeklyOffersBinding
     val offerViewModel: offer_viewmodel by viewModels()
     lateinit var OfferList : OfferList
@@ -77,7 +77,9 @@ class weeklyOffers : Fragment() {
                 view.context,
                 TimerDb::class.java,
                 "Timer"
-            ).build()
+            )    .fallbackToDestructiveMigration() // Add this line for destructive migration
+
+                .build()
 
             withContext(Dispatchers.IO)
             {
@@ -117,7 +119,7 @@ class weeklyOffers : Fragment() {
         }
         lateinit var adapter:Offer_RecylerViewAdapter
 
-
+        homeViewmodel!!.getUserData(view.context)
         homeViewmodel!!.getuserData().observe(viewLifecycleOwner){
             userData = it
             val offerRecylerview: RecyclerView = view.findViewById(R.id.weeklyOffer_recylerview)

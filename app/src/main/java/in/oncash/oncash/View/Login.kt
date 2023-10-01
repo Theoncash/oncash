@@ -16,6 +16,8 @@ import `in`.oncash.oncash.ViewModel.loginViewModel
 import `in`.oncash.oncash.databinding.ActivityLoginBinding
 import com.google.android.material.snackbar.Snackbar
 import `in`.oncash.oncash.Component.customLoadingDialog
+import `in`.oncash.oncash.RoomDb.User
+import `in`.oncash.oncash.RoomDb.userDb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,16 +60,19 @@ class Login : AppCompatActivity() {
                         viewModel.addUser(phone.toLong())
                         viewModel.getUserData1().observe(this@Login, Observer { userData ->
 
-                            if (userData.isUserRegistered) {
+                            if (userData) {
                                 lifecycleScope.launch {
-                                    Log.i("LoginData", userData.userRecordId.toString())
                                     UserDataStoreUseCase().storeUser(
                                         this@Login,
-                                        userData.isUserRegistered,
+                                        true,
                                         phone.toLong(),
-                                        userData.userRecordId
                                     )
-
+                                    var roomDb = Room.databaseBuilder(
+                                        this@Login,
+                                        userDb::class.java,
+                                        "Timer"
+                                    ).build()
+                                    roomDb.userQuery().addUser(User(phone.toLong()))
                                     val calendar = Calendar.getInstance()
                                     calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 2)
                                     CoroutineScope(Dispatchers.Main).launch {
@@ -75,7 +80,8 @@ class Login : AppCompatActivity() {
                                             this@Login,
                                             TimerDb::class.java,
                                             "Timer"
-                                        ).build()
+                                        )    .fallbackToDestructiveMigration() // Add this line for destructive migration
+                                            .build()
 
                                         withContext(Dispatchers.IO)
                                         {
@@ -95,10 +101,6 @@ class Login : AppCompatActivity() {
                                     Snackbar.LENGTH_LONG
                                 ).show()
                             }
-                            Log.i(
-                                "login Data",
-                                userData.isUserRegistered.toString() + userData.userRecordId
-                            )
 
 
                         })

@@ -36,11 +36,10 @@ class wallet_viewModel:ViewModel() {
         return withdrawalRequest
     }
 
-    fun getWallet(userRecordId :String) {
+    fun getWallet(userNumber: Long ) {
         viewModelScope.launch {
-            Log.i("recordID" , userRecordId)
             wallet.value = UserInfo_Airtable_Repo().getWallet(
-                userRecordId
+                userNumber
             )
         }
     }
