@@ -71,9 +71,11 @@ Description
     <string name="number_for_secure_transactions">Number for Secure Transactions.</string>
 
 
-    <!-- Profile Page-->
+    <!-- Names-->
     <string name="contact">Contact</string>
-    <string name="Leader">LeaderBoard</string>
+    <string name="Leader">Leaderboard</string>
     <string name="Referal">Refer And Earn</string>
+    <string name="Offer_history">Offer History</string>
+
 
 </resources>

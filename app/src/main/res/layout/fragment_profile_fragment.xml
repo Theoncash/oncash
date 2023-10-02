@@ -68,7 +68,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="140dp"
-            android:text="Ammount"
+            android:text="Amount"
             android:textColor="@color/white"
             android:textSize="@dimen/text_xx_medium"
             app:layout_constraintEnd_toEndOf="parent"

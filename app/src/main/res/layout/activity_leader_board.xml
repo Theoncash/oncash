@@ -7,6 +7,8 @@
     tools:context=".View.LeaderBoard">
 
 
+
+
     <ImageView
         android:id="@+id/backButton_lb"
         android:layout_width="50dp"
@@ -21,6 +23,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.034" />
 
+
+    <TextView
+        android:id="@+id/Leader"
+        android:layout_width="234dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="150dp"
+        android:gravity="center"
+        android:text="@string/Leader"
+        android:textColor="#171A1F"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/leaderBoard_recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.687" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/leaderBoard_recyclerView"
         android:layout_width="409dp"
@@ -29,6 +51,7 @@
         android:layout_marginEnd="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.973" />
