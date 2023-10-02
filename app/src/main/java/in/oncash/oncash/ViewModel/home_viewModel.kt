@@ -28,6 +28,7 @@ class home_viewModel : ViewModel() {
      val completedOffers : MutableLiveData<Int> = MutableLiveData(0)
      val totalOffers : MutableLiveData<Int> = MutableLiveData(0)
      val userNumber : MutableLiveData<Long> = MutableLiveData()
+     val verionInfo : MutableLiveData<Version> = MutableLiveData()
     private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
 
 
@@ -42,7 +43,9 @@ class home_viewModel : ViewModel() {
     }
 
 
-    
+    fun getVersionInfo():MutableLiveData<Version>{
+        return verionInfo
+    }
 
     fun setProgressBar(completedOffer : Int, totalOffer: Int){
         completedOffers.value = completedOffer
@@ -101,11 +104,10 @@ private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveD
     }
 
     fun getVersion():MutableLiveData<Version>{
-        val version :MutableLiveData<Version> = MutableLiveData()
         viewModelScope.launch {
-           version.postValue( UserInfo_Airtable_Repo().getVersion() )
+            verionInfo.postValue( UserInfo_Airtable_Repo().getVersion() )
         }
-        return version
+        return verionInfo
     }
 
     fun getuserData():MutableLiveData<userData>{

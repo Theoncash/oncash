@@ -76,7 +76,7 @@ class weeklyOffers : Fragment() {
         val homeViewmodel = activity.run{
             this?.let { ViewModelProvider(it).get(home_viewModel::class.java) }
         }
-        lateinit var adapter:Offer_RecylerViewAdapter
+         var adapter:Offer_RecylerViewAdapter = Offer_RecylerViewAdapter(userData)
 
         homeViewmodel!!.getUserData(view.context)
         homeViewmodel!!.getuserData().observe(viewLifecycleOwner){

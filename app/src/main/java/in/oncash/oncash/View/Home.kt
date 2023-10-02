@@ -50,7 +50,7 @@ class Home : AppCompatActivity() {
     lateinit var OfferList : OfferList
     private  var userData: userData = userData(0)
     lateinit var roomDb:userDb
-
+    var needToUpdate = false
     private val version : Double = 1.1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +62,9 @@ class Home : AppCompatActivity() {
 //            setContentView(R.layout.activity_home) // Load the layout for no internet
             homeViewmodel.getVersion().observe(this){
                 if(it.id > version){
+                    needToUpdate = true
                     showCustomDialog(it)
+//                   startActivity( Intent(this , update::class.java) )
                 }else{
 
                     val REQUEST_SMS_PERMISSION = 734973 // Use any unique integer value
@@ -198,14 +200,12 @@ class Home : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        lifecycleScope.launch {
-            homeViewmodel.getOfferList()
+        if (!needToUpdate) {
+            lifecycleScope.launch {
+                homeViewmodel.getOfferList()
+            }
         }
-
-
     }
-
     private fun showCustomDialog(version :Version) {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.custom_dialog)
