@@ -46,7 +46,7 @@
     <string name="login">Login</string>
     <string name="visa_card">Offer </string>
     <string name="please_logi">Please login to continue</string>
-    <string name="get_started">Sign in</string>
+    <string name="get_started">Login</string>
     <string name="weekly">Weekly Paid</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -61,11 +61,11 @@ Description
     <string name="steps">Steps</string>
     <!-- Onboarding screen -->
     <string name="title_on_boarding_first_slide">Welcome to Oncash!</string>
-    <string name="description_on_boarding_first_slide"> It allows you to earn money by doing simple tasks, such as installing apps, registering for websites, and shopping online. With Oncash, you can earn money while you\'re browsing the web, shopping online, or just doing your everyday activities.</string>
+    <string name="description_on_boarding_first_slide"> Transforming every offers into enjoyable money-making opportunities! </string>
     <string name="title_on_boarding_second_slide">How it works</string>
-    <string name="description_on_boarding_second_slide">To earn money with Oncash, simply complete tasks. When you complete a task, you will earn a certain amount of money. You can then redeem your earnings for cash or gift cards.</string>
+    <string name="description_on_boarding_second_slide">Unlock earnings on OnCash by effortlessly completing tasks. Each task you conquer brings you closer to your cash reward!</string>
     <string name="title_on_boarding_third_slide">Get started</string>
-    <string name="description_on_boarding_third_slide">Sign up for Oncash today and start earning money! It\'s easy to get started. Then, you can start completing tasks and earning money.</string>
+    <string name="description_on_boarding_third_slide">Embark on your OnCash journey today and kickstart your earnings!</string>
     <string name="title_button_get_started">Sign Up</string>
     <string name="number_for_secure_transactions">Number for Secure Transactions.</string>
 
