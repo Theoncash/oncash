@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_weeklyOffers_to_profile2"
             app:destination="@id/profile2" />
+        <action
+            android:id="@+id/action_weeklyOffers_to_contactFragment"
+            app:destination="@id/contactFragment" />
     </fragment>
     <fragment
         android:id="@+id/monthlyOffers"
@@ -37,6 +40,12 @@
         <action
             android:id="@+id/action_monthlyOffers_to_profile2"
             app:destination="@id/profile2" />
+        <action
+            android:id="@+id/action_monthlyOffers_to_contactFragment"
+            app:destination="@id/contactFragment" />
+        <action
+            android:id="@+id/action_monthlyOffers_to_contactFragment2"
+            app:destination="@id/contactFragment" />
     </fragment>
     <fragment
         android:id="@+id/redeem2"
@@ -52,6 +61,9 @@
         <action
             android:id="@+id/action_redeem2_to_profile2"
             app:destination="@id/profile2" />
+        <action
+            android:id="@+id/action_redeem2_to_contactFragment"
+            app:destination="@id/contactFragment" />
     </fragment>
     <fragment
         android:id="@+id/profile2"
@@ -67,5 +79,26 @@
         <action
             android:id="@+id/action_profile2_to_weeklyOffers"
             app:destination="@id/weeklyOffers" />
+        <action
+            android:id="@+id/action_profile2_to_contactFragment"
+            app:destination="@id/contactFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/contactFragment"
+        android:name="in.oncash.oncash.Fragment.contactFragment"
+        android:label="fragment_contact"
+        tools:layout="@layout/fragment_contact" >
+        <action
+            android:id="@+id/action_contactFragment_to_redeem2"
+            app:destination="@id/redeem2" />
+        <action
+            android:id="@+id/action_contactFragment_to_monthlyOffers"
+            app:destination="@id/monthlyOffers" />
+        <action
+            android:id="@+id/action_contactFragment_to_weeklyOffers"
+            app:destination="@id/weeklyOffers" />
+        <action
+            android:id="@+id/action_contactFragment_to_profile2"
+            app:destination="@id/profile2" />
     </fragment>
 </navigation>

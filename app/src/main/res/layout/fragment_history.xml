@@ -7,41 +7,22 @@
     android:layout_height="match_parent">
 
 
-    <TextView
-        android:id="@+id/history1"
-        android:layout_width="234dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="150dp"
-        android:fontFamily="@font/noto"
-        android:gravity="center"
-        android:text="@string/withdrawal_history"
-        android:textColor="#171A1F"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/history_cardView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/history_cardView"
         android:layout_width="408dp"
         android:layout_height="729dp"
-        android:backgroundTint="#DEF3FF"
         app:cardCornerRadius="38dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/OfferHistory_recylerview"
-            android:layout_width="392dp"
-            android:layout_height="687dp"
+            android:layout_width="390dp"
+            android:layout_height="600dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="80dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -50,6 +31,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/history1"
+            android:layout_width="234dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="150dp"
+            android:gravity="center"
+            android:text="@string/Offer_history"
+            android:textColor="#171A1F"
+            android:textSize="20sp" />
 
 
     </androidx.cardview.widget.CardView>

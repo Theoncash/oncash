@@ -7,6 +7,7 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.SoundPool
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -29,6 +30,7 @@ import androidx.room.Room
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
+import `in`.oncash.oncash.Component.MyFirebaseMessagingService
 
 import `in`.oncash.oncash.DataType.OfferList
 import `in`.oncash.oncash.DataType.SerializedDataType.Version
@@ -52,9 +54,11 @@ class Home : AppCompatActivity() {
     lateinit var roomDb:userDb
     var needToUpdate = false
     private val version : Double = 1.1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+         soundPool = SoundPool.Builder().setMaxStreams(1).build()
+         soundID = soundPool.load(this, R.raw.water_drop, 1)
 //        if (!isNetworkConnected(this)) {
 //            setContentView(R.layout.no_internet) // Load the layout for no internet
 //
@@ -110,6 +114,7 @@ class Home : AppCompatActivity() {
 //        lifecycleScope.launch {
 //            getUserData()
 //        }
+
                     FirebaseApp.initializeApp(this)
                     FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                         if (!task.isSuccessful) {
@@ -131,16 +136,22 @@ class Home : AppCompatActivity() {
                     val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
                     val navController = navHostFragment.navController
                     binding.bottomNavigation.setOnItemSelectedListener {
-                        if(it.itemId == R.id.home)
-                        {
-                            if(navController.currentDestination!!.id==R.id.monthlyOffers){
+                        // Play sound
+                        soundPool.play(soundID, 1f, 1f, 1, 0, 1f)
+
+                        // Handle item click logic here
+                        if (it.itemId == R.id.home) {
+                            if (navController.currentDestination!!.id == R.id.monthlyOffers) {
                                 navController.navigate(R.id.action_monthlyOffers_to_weeklyOffers)
                             }
-                            if(navController.currentDestination!!.id==R.id.redeem2){
+                            if (navController.currentDestination!!.id == R.id.redeem2) {
                                 navController.navigate(R.id.action_redeem2_to_weeklyOffers)
                             }
-                            if(navController.currentDestination!!.id==R.id.profile2){
+                            if (navController.currentDestination!!.id == R.id.profile2) {
                                 navController.navigate(R.id.action_profile2_to_weeklyOffers)
+                            }
+                            if (navController.currentDestination!!.id == R.id.contactFragment) {
+                                navController.navigate(R.id.action_contactFragment_to_weeklyOffers)
                             }
                         }
                         if (it.itemId == R.id.history) {
@@ -150,22 +161,28 @@ class Home : AppCompatActivity() {
                             if (navController.currentDestination!!.id == R.id.redeem2) {
                                 navController.navigate(R.id.action_redeem2_to_monthlyOffers)
                             }
-                            if(navController.currentDestination!!.id==R.id.profile2){
+                            if (navController.currentDestination!!.id == R.id.profile2) {
                                 navController.navigate(R.id.action_profile2_to_monthlyOffers)
                             }
+                            if (navController.currentDestination!!.id == R.id.contactFragment) {
+                                navController.navigate(R.id.action_contactFragment_to_monthlyOffers)
+                            }
                         }
-                        if(it.itemId == R.id.redeem){
+                        if (it.itemId == R.id.redeem) {
                             if (navController.currentDestination!!.id == R.id.weeklyOffers) {
                                 navController.navigate(R.id.action_weeklyOffers_to_redeem2)
                             }
                             if (navController.currentDestination!!.id == R.id.monthlyOffers) {
                                 navController.navigate(R.id.action_monthlyOffers_to_redeem2)
                             }
-                            if(navController.currentDestination!!.id == R.id.profile2){
+                            if (navController.currentDestination!!.id == R.id.profile2) {
                                 navController.navigate(R.id.action_profile2_to_redeem2)
                             }
+                            if (navController.currentDestination!!.id == R.id.contactFragment) {
+                                navController.navigate(R.id.action_contactFragment_to_redeem2)
+                            }
                         }
-                        if(it.itemId == R.id.profile){
+                        if (it.itemId == R.id.profile) {
                             if (navController.currentDestination!!.id == R.id.weeklyOffers) {
                                 navController.navigate(R.id.action_weeklyOffers_to_profile2)
                             }
@@ -174,6 +191,23 @@ class Home : AppCompatActivity() {
                             }
                             if (navController.currentDestination!!.id == R.id.redeem2) {
                                 navController.navigate(R.id.action_redeem2_to_profile2)
+                            }
+                            if (navController.currentDestination!!.id == R.id.contactFragment) {
+                                navController.navigate(R.id.action_contactFragment_to_profile2)
+                            }
+                        }
+                        if (it.itemId == R.id.contact) {
+                            if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                                navController.navigate(R.id.action_weeklyOffers_to_contactFragment)
+                            }
+                            if (navController.currentDestination!!.id == R.id.monthlyOffers) {
+                                navController.navigate(R.id.action_monthlyOffers_to_contactFragment)
+                            }
+                            if (navController.currentDestination!!.id == R.id.redeem2) {
+                                navController.navigate(R.id.action_redeem2_to_contactFragment)
+                            }
+                            if (navController.currentDestination!!.id == R.id.profile2) {
+                                navController.navigate(R.id.action_profile2_to_contactFragment)
                             }
                         }
                         true
@@ -268,5 +302,13 @@ class Home : AppCompatActivity() {
     @Deprecated("Deprecated in Java", ReplaceWith("this.finish()"))
     override fun onBackPressed() {
        this.finish()
+    }
+
+    private lateinit var soundPool: SoundPool
+    private var soundID: Int = 0
+
+    override fun onDestroy() {
+        super.onDestroy()
+        soundPool.release()
     }
 }

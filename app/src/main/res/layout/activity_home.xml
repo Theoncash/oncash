@@ -7,21 +7,20 @@
     android:background="#FFFFFF"
     tools:context=".View.Home">
 
-
     <TextView
-            android:id="@+id/walletTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginBottom="48dp"
-            android:text="20"
-            android:textSize="34sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.269" />
+        android:id="@+id/walletTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="48dp"
+        android:text="20"
+        android:textSize="34sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.269" />
 
 
     <androidx.fragment.app.FragmentContainerView
@@ -52,6 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.434"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/bottom_navigation_background"
         app:menu="@menu/bottom_navigation" />
 
 

@@ -103,7 +103,7 @@ class weeklyOffers : Fragment() {
             }
         })
 
-        view.findViewById<Button>(R.id.weeklyButton).setOnClickListener {
+        /*view.findViewById<Button>(R.id.weeklyButton).setOnClickListener {
             if (OfferList.weeklyOffersList.isNotEmpty()) {
                 adapter.updateList(OfferList.weeklyOffersList , offer)
             }
@@ -115,7 +115,7 @@ class weeklyOffers : Fragment() {
             }else{
                 Snackbar.make(view , "No Monthly Offers Available " , Snackbar.LENGTH_LONG).show()
             }
-        }
+        }*/
 
     }
 

@@ -88,6 +88,13 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".View.ReferalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".View.LeaderBoard"
+            android:exported="false" />
     </application>
 
 </manifest>
