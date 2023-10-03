@@ -69,4 +69,10 @@ Description
     <string name="title_button_get_started">Sign Up</string>
     <string name="number_for_secure_transactions">Number for Secure Transactions.</string>
 
+
+    <!-- Names-->
+    <string name="contact">Contact</string>
+    <string name="Leader">Leaderboard</string>
+    <string name="Referal">Refer And Earn</string>
+    <string name="Offer_history">Offer History</string>
 </resources>
