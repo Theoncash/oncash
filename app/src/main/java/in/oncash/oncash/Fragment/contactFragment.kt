@@ -77,9 +77,11 @@ class contactFragment : Fragment() {
                 binding.whatspp.setOnClickListener {
                     val url = "https://chat.whatsapp.com/IDEyUIpJLChCgrT6TbE108" // Replace with the URL you want to open
 
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(url)
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.setPackage("com.android.chrome")
+                    requireView().context.startActivity(intent)
                     if (intent.resolveActivity(requireContext().packageManager) != null) {
                         startActivity(intent)
                     } else {
@@ -89,11 +91,13 @@ class contactFragment : Fragment() {
 
 
                 binding.gmail.setOnClickListener {
-                    val emailIntent = Intent(Intent.ACTION_SENDTO)
-                    emailIntent.data = Uri.parse("mailto:onbread.assist@gmail.com")
+                    val url = "mailto:onbread.assist@gmail.com"
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
-                    if (emailIntent.resolveActivity(requireActivity().packageManager) != null) {
-                        startActivity(emailIntent)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.setPackage("com.android.chrome")
+                    if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                        startActivity(intent)
                     } else {
                         Toast.makeText(requireContext(), "No email client found", Toast.LENGTH_SHORT).show()
                     }

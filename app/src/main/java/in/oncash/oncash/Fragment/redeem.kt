@@ -1,5 +1,8 @@
 package `in`.oncash.oncash.Fragment
 
+import android.icu.text.NumberFormat
+import android.icu.util.Currency
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -7,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -61,18 +65,20 @@ class redeem : Fragment() {
         return  binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-         var userRecordId :String = ""
         homeViewmodel = activity.run{
             ViewModelProvider(this!!).get(home_viewModel::class.java)
         }
 
-        homeViewmodel.getWalletPrice().observe(viewLifecycleOwner) {
-            Log.i("wallet" , it.toString())
-                walletBalance = it.currentBal
-            binding.walletBala.text = walletBalance.toString()
+        homeViewmodel.getWalletPrice().observe(viewLifecycleOwner) { walletInfo ->
+            val walletBalance = walletInfo.currentBal
+            val formattedBalance = NumberFormat.getCurrencyInstance().apply {
+                currency = Currency.getInstance("INR")
+            }.format(walletBalance)
+
+            binding.walletBala.text = formattedBalance
         }
 
             homeViewmodel.getuserData().observe(viewLifecycleOwner){
@@ -86,15 +92,12 @@ class redeem : Fragment() {
             binding.withdrawalTransaction.layoutManager = LinearLayoutManager(view.context , LinearLayoutManager.VERTICAL ,false)
         homeViewmodel.getWithdrawalTransaction().observe(viewLifecycleOwner){
             adapter.updateList(it)
-
         }
             lifecycleScope.launch { getTransaction() }
 
-            binding.withdrawButton.setOnClickListener {
-                val requestAmount = binding.walletBala.text.toString()
-                if (requestAmount.isNotEmpty()) {
-                    if (walletBalance.toInt() >= requestAmount.toInt()) {
-                        if (requestAmount.toInt() > 20) {
+        binding.withdrawButton.setOnClickListener {
+
+            if (walletBalance > 20 ) {
                                 val loadingDialog = customLoadingDialog(view.context)
 
 // To show the dialog
@@ -111,7 +114,7 @@ class redeem : Fragment() {
 
                             viewModel.withdrawRequest(
                                 userNumber,
-                                requestAmount.toInt(),
+                                walletBalance,
                                 walletBalance,
                             )
                             viewModel.getWithdrawalRequest().observe(viewLifecycleOwner) { status ->
@@ -142,19 +145,10 @@ class redeem : Fragment() {
                                 Snackbar.LENGTH_SHORT
                             ).show()
                         }
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            "Insufficient balance",
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                    }
-                } else {
-                    Snackbar.make(binding.root, "Please enter withdraw amount", Snackbar.LENGTH_LONG)
-                        .show()
+
                 }
             }
-        }
+
 
 
         private  fun getTransaction(){

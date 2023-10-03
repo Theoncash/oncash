@@ -47,7 +47,6 @@ import kotlinx.coroutines.withContext
 
 class Home : AppCompatActivity() {
      lateinit var binding: ActivityHomeBinding
-
     val homeViewmodel: home_viewModel by viewModels()
     lateinit var OfferList : OfferList
     private  var userData: userData = userData(0)
@@ -58,6 +57,7 @@ class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          soundPool = SoundPool.Builder().setMaxStreams(1).build()
+
          soundID = soundPool.load(this, R.raw.water_drop, 1)
 //        if (!isNetworkConnected(this)) {
 //            setContentView(R.layout.no_internet) // Load the layout for no internet

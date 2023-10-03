@@ -85,5 +85,7 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_get_started"
         android:text="@string/title_button_get_started"
-        style="@style/OnBoarding.Button" />
+        android:textColor="@color/white"
+        style="@style/OnBoarding.Button"
+        />
 </androidx.constraintlayout.motion.widget.MotionLayout>
