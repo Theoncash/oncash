@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+
+    <View
+        android:id="@+id/v"
+        android:layout_width="360dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_curve"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.645"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/serial_num"
+        android:layout_width="20dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center"
+        android:text="1"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/v"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/v"
+        app:layout_constraintTop_toTopOf="@+id/v" />
+
+    <TextView
+        android:id="@+id/user"
+        android:layout_width="130dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="100dp"
+        android:gravity="center"
+        android:text="+91 9606672706"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/v"
+        app:layout_constraintEnd_toStartOf="@+id/offerHistory_price"
+        app:layout_constraintTop_toTopOf="@+id/v" />
+
+    <TextView
+        android:id="@+id/offerHistory_price"
+        android:layout_width="60dp"
+        android:layout_height="19dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="12dp"
+        android:gravity="center"
+        android:text="200"
+        android:textColor="#2DEFAE"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/v"
+        app:layout_constraintEnd_toEndOf="@+id/v"
+        app:layout_constraintTop_toTopOf="@+id/v"
+        app:layout_constraintVertical_bias="0.516" />
+</androidx.constraintlayout.widget.ConstraintLayout>
