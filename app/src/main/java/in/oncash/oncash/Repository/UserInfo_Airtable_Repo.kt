@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken
 import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.BlackList_Fields
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.ReferralsDataType
+import `in`.oncash.oncash.DataType.SerializedDataType.OfferInfo
 import `in`.oncash.oncash.DataType.SerializedDataType.Referral
 import `in`.oncash.oncash.DataType.SerializedDataType.ReferralFields
 import `in`.oncash.oncash.DataType.SerializedDataType.Referred
@@ -167,6 +168,51 @@ class UserInfo_Airtable_Repo {
                 url(url)
                 headers {
                     append("apikey", apiKey)
+                    append("Authorization", "Bearer $apiKey")
+                }
+                contentType(ContentType.Application.Json)
+                setBody(userInfo)
+
+            }
+            Log.i("refferral" , "r" + response.body<String>().toString())
+
+            if( response.status.value == 201 ){
+                return@withContext true
+            }
+
+
+        } catch (e: Exception) {
+            Log.i("airtable", e.toString())
+        }
+
+        return@withContext false
+
+
+    }
+
+    suspend fun removeOneCap(offerId:Int) = withContext(Dispatchers.IO) {
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                })
+            }
+        }
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OfferInfo"
+        val offer_info = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OfferInfo?OfferId=eq.$offerId"
+        val offerInfo = getData(offer_info)
+        val offer =  JSONObject (JSONArray(offerInfo.body<String>())[0].toString())
+        val offer_name = offer.getString("OfferName")!!
+        val cap = offer.getInt("Cap")
+        val userInfo = OfferInfo(offerId ,    offer_name , (cap - 1) )
+        try {
+            val response = client.post {
+                url(url)
+                headers {
+                    append("apikey", apiKey)
+                    append("Prefer", "resolution=merge-duplicates")
                     append("Authorization", "Bearer $apiKey")
                 }
                 contentType(ContentType.Application.Json)
