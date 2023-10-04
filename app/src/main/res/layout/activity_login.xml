@@ -35,7 +35,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.402" />
+        app:layout_constraintVertical_bias="0.081" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -49,6 +49,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+
 
 
         <TextView
@@ -78,6 +80,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <EditText
+            android:id="@+id/refeeral_code"
+            android:layout_width="300dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="230dp"
+            android:background="@drawable/default_outlined_button"
+            android:gravity="center"
+            android:hint="Referal Code (Optional)"
+            android:inputType="phone"
+            android:textColorHint="#797979"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="continueBut"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="phoneButtonInput" />
         <Button
             android:id="@+id/continueBut"
             android:layout_width="300dp"

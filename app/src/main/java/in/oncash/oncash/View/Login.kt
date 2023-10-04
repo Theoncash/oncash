@@ -54,12 +54,16 @@ class Login : AppCompatActivity() {
                     }, 3000) // Replace 3000 with the actual duration of your background work
 
                     val phone = binding.phoneButtonInput.text.toString()
+                    var refeeral_code = binding.refeeralCode.text.toString()
+                    if(refeeral_code == ""){
+                        refeeral_code = 0.toString()
+                    }
 
                     if (phone.length == 10) {
 
 // add referral code section here
-                        viewModel.addUser(phone.toLong() , 0)
-                        viewModel.getUserData1().observe(this@Login, Observer { userData ->
+                        viewModel.addUser(phone.toLong() , refeeral_code.toInt() )
+                        viewModel.getUserData1().observe(this@Login) { userData ->
 
                             if (userData) {
                                 lifecycleScope.launch {
@@ -89,7 +93,7 @@ class Login : AppCompatActivity() {
                             }
 
 
-                        })
+                        }
 
 
                     } else {

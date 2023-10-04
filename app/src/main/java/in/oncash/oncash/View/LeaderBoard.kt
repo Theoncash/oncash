@@ -17,10 +17,6 @@ class LeaderBoard : AppCompatActivity() {
             startActivity(Intent(this,Home::class.java))
         }
 
-
-
-
-
     }
 }
 
