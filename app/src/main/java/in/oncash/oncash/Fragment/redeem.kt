@@ -73,7 +73,7 @@ class redeem : Fragment() {
         }
 
         homeViewmodel.getWalletPrice().observe(viewLifecycleOwner) { walletInfo ->
-            val walletBalance = walletInfo.currentBal
+             walletBalance = walletInfo.currentBal
             val formattedBalance = NumberFormat.getCurrencyInstance().apply {
                 currency = Currency.getInstance("INR")
             }.format(walletBalance)

@@ -82,6 +82,8 @@ class contactFragment : Fragment() {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     intent.setPackage("com.android.chrome")
                     requireView().context.startActivity(intent)
+
+
                     if (intent.resolveActivity(requireContext().packageManager) != null) {
                         startActivity(intent)
                     } else {

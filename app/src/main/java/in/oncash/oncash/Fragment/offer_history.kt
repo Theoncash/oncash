@@ -59,10 +59,7 @@ class monthlyOffers : Fragment() {
         homeViewmodel = activity?.run {
             ViewModelProvider(this)[home_viewModel::class.java]
         }!!
-//        homeViewmodel.getuserData().observe(viewLifecycleOwner) {
-//            Log.i("offerhistory" , it.userRecordId.toString() + "user id --")
-//           homeViewmodel.getOffersHistory(it.userRecordId)
-//        }
+
         homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner) { offerhistory ->
                 val offer = homeViewmodel.getOffer()
                 adapter.updateList(offerhistory , offer )

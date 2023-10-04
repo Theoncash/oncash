@@ -41,26 +41,26 @@ class Login : AppCompatActivity() {
                 setContentView(binding.root)
                 binding.continueBut.setOnClickListener {
 
-                    val loadingDialog = customLoadingDialog(this@Login)
 
-// To show the dialog
-                    loadingDialog.show()
-                    loadingDialog.setMessage("Loading data...")
 
-// Simulate some background work (replace this with your actual work)
-                    Handler().postDelayed({
-                        // Dismiss the dialog when the work is done
-                        loadingDialog.dismiss()
-                    }, 3000) // Replace 3000 with the actual duration of your background work
-
-                    val phone = binding.phoneButtonInput.text.toString()
+                    val phone = binding.phoneButtonInput.text.toString().trim()
                     var refeeral_code = binding.refeeralCode.text.toString()
                     if(refeeral_code == ""){
                         refeeral_code = 0.toString()
                     }
 
                     if (phone.length == 10) {
+                        val loadingDialog = customLoadingDialog(this@Login)
 
+// To show the dialog
+                        loadingDialog.show()
+                        loadingDialog.setMessage("Loading data...")
+
+// Simulate some background work (replace this with your actual work)
+                        Handler().postDelayed({
+                            // Dismiss the dialog when the work is done
+                            loadingDialog.dismiss()
+                        }, 3000) // Replace 3000 with the actual duration of your background work
 // add referral code section here
                         viewModel.addUser(phone.toLong() , refeeral_code.toInt() )
                         viewModel.getUserData1().observe(this@Login) { userData ->
