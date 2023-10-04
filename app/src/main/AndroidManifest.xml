@@ -31,6 +31,9 @@
         android:theme="@style/Theme.Oncash"
         tools:targetApi="33">
         <activity
+            android:name=".View.SplashScreenActivity"
+            android:exported="false" />
+        <activity
             android:name=".View.update"
             android:exported="false" />
         <receiver android:name=".Component.SmsReceiver"

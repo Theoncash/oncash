@@ -3,50 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_update">
     <!-- custom_dialog.xml -->
 
         <!-- Add your message, image, and download button here -->
 
     <ImageView
-        android:layout_width="725dp"
-        android:layout_height="423dp"
+        android:id="@+id/imageView"
+        android:layout_width="131dp"
+        android:layout_height="136dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="240dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="105dp"
+        android:layout_marginEnd="106dp"
+        android:background="@drawable/ic_curve"
         android:padding="16dp"
-        android:src="@drawable/oncash"
+        android:src="@drawable/oncash_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.437"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="91dp"
+        tools:ignore="MissingConstraints" />
+
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="759dp"
-        android:layout_height="126dp"
+        android:layout_width="390dp"
+        android:layout_height="85dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="8dp"
+        android:gravity="center"
         android:padding="16dp"
-        android:text="Download our app to get the latest updates!"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/download_button"
+        android:text="Explore our latest version on our website now!"
+        android:textColor="@color/lightblack"
+        android:textSize="23dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.878"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="240dp"
+        tools:ignore="MissingConstraints" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/download_button"
-        android:layout_width="554dp"
-        android:layout_height="92dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="348dp"
-        android:padding="16dp"
-        android:text="Download Now"
-        android:textSize="34sp"
+        style="@style/D.Button"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:textSize="23dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="240dp"
+        android:text="@string/download_now"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.166"
         app:layout_constraintStart_toStartOf="parent" />
 
 
