@@ -5,19 +5,40 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.WindowManager
 import `in`.oncash.oncash.R
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
-        val SPLASH_DELAY: Long = 3000 // 3 seconds
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        setContentView(R.layout.activity_splash_screen)
 
-            Handler().postDelayed({
-                startActivity(Intent(this, Home::class.java))
-                finish()
-            }, SPLASH_DELAY)
-        }
+        // on below line we are calling
+        // handler to run a task
+        // for specific time interval
+        Handler().postDelayed({
+            // on below line we are
+            // creating a new intent
+            val i = Intent(
+                this@SplashScreenActivity,
+                Home::class.java
+            )
+            // on below line we are
+            // starting a new activity.
+            startActivity(i)
+
+            // on the below line we are finishing
+            // our current activity.
+            finish()
+        }, 2000)
     }
+}
+

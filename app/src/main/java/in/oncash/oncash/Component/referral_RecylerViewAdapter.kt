@@ -43,7 +43,7 @@ class referral_RecylerViewAdapter() : RecyclerView.Adapter<referral_RecylerViewA
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewholder {
         parent.context
 
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.leader_board_recyclerview,parent,false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.refereal_recyclerview,parent,false)
 
         return viewholder(v)
 
