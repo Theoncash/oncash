@@ -27,7 +27,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="23dp"
         android:layout_marginEnd="132dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:text="Refer And Earn"
         android:textSize="18dp"
         android:textStyle="bold"
