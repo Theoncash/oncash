@@ -21,11 +21,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+
 import com.bumptech.glide.Glide
-import `in`.oncash.oncash.Component.checkRegistered
 import `in`.oncash.oncash.Component.customLoadingDialog
 import `in`.oncash.oncash.Component.step_Adapter
 import `in`.oncash.oncash.DataType.Step
@@ -236,16 +233,8 @@ finish()
                             userData(number!!.toLong()),
                             offerId!!.toInt(), offerPrice.toString(),  "Being Reviewed")
 
-                        val inputData = Data.Builder()
-                            .putString("appId", offerId)
-                            .putString("regSms" , regSMS)
-                            .build()
 
-                        val workRequest = OneTimeWorkRequest.Builder(checkRegistered::class.java)
-                            .setInputData(inputData)
-                            .build()
 
-                        WorkManager.getInstance(this).enqueue(workRequest)
                         try {
                             this.startActivity(intent)
                         } catch (ex: ActivityNotFoundException) {

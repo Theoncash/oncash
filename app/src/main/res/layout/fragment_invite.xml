@@ -12,12 +12,25 @@
         android:id="@+id/steps"
         android:layout_width="335dp"
         android:layout_height="110dp"
+        android:layout_marginBottom="100dp"
         android:background="@drawable/steps_invite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/referal_code"
+        android:layout_width="300dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="102dp"
+        android:layout_marginTop="380dp"
+        android:layout_marginEnd="103dp"
+        android:gravity="center"
+        android:text="Referal code"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.851" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,10 +16,12 @@ import `in` .oncash.oncash.R
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.ViewModel.referral_viewModel
+import `in`.oncash.oncash.databinding.FragmentInviteBinding
+import `in`.oncash.oncash.databinding.FragmentStatusBinding
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -32,6 +34,7 @@ class StatusFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var binding : FragmentStatusBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +49,8 @@ class StatusFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_status, container, false)
-    }
+        binding = FragmentStatusBinding.inflate(inflater , container , false)
+        return binding.root      }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,18 +59,17 @@ class StatusFragment : Fragment() {
             ViewModelProvider(this!!)[referral_viewModel::class.java]
         }
         val userData = referralViewmodel.userData.value!!
-        val referral: RecyclerView = view.findViewById(R.id.status_recyclerview)
+        val referral: RecyclerView = view.findViewById(`in`.oncash.oncash.R.id.status_recyclerview)
         val referral_adapter = referral_RecylerViewAdapter(  )
         referral.adapter = referral_adapter
-        referral.layoutManager =
-            LinearLayoutManager( view.context , LinearLayoutManager.VERTICAL, false)
-
+        referral.layoutManager = LinearLayoutManager( view.context , LinearLayoutManager.VERTICAL, false)
 
         lifecycleScope.launch {
             UserInfo_Airtable_Repo().getRefferals(userData.userNumber).observe(viewLifecycleOwner){
                 if (it.Referral_users != null ){
                     referral_adapter.updateList(it.Referral_users)
                 }
+                binding.totalBal.text = it.Total_Referral_amt.toString()
             }
 
         }

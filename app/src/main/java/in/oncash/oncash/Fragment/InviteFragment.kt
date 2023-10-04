@@ -1,11 +1,19 @@
 package `in`.oncash.oncash.Fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import `in`.oncash.oncash.R
+import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
+import `in`.oncash.oncash.ViewModel.referral_viewModel
+import `in`.oncash.oncash.databinding.FragmentInviteBinding
+import `in`.oncash.oncash.databinding.FragmentProfileFragmentBinding
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -19,6 +27,8 @@ private const val ARG_PARAM2 = "param2"
  */
 class InviteFragment : Fragment() {
     // TODO: Rename and change types of parameters
+    lateinit var binding : FragmentInviteBinding
+
     private var param1: String? = null
     private var param2: String? = null
 
@@ -35,9 +45,27 @@ class InviteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_invite, container, false)
-    }
+        // Inflate the layout for this fragment
+        binding = FragmentInviteBinding.inflate(inflater , container , false)
+        return binding.root    }
 
+    @SuppressLint("SetTextI18n")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        var referralViewmodel: referral_viewModel = activity.run{
+            ViewModelProvider(this!!)[referral_viewModel::class.java]
+        }
+        val userId = referralViewmodel.userData.value
+
+        lifecycleScope.launch {
+            UserInfo_Airtable_Repo().getReferralCode(userId!!.userNumber).observe(viewLifecycleOwner){
+
+                binding.referalCode.text =  "Referral code : $it"
+            }
+        }
+
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

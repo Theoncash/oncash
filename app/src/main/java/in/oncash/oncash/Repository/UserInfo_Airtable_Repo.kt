@@ -689,6 +689,19 @@ Log.i("blacklistt" , response.toString())
         return@withContext thereExisit
     }
 
+    suspend fun getReferralCode(userId:Long) : MutableLiveData<Int>{
+        val url =
+            "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referral?UserId=eq.$userId&select=*"
+        val response = getData(url)
+        var code = 0
+        var json = JSONArray(response.body<String>().toString())
+        if (json.toString() != "[]" || json.length() > 0) {
+            code = JSONObject(json[0].toString()).getInt("Referral_code")
+        }
+        val referral_code = MutableLiveData<Int>()
+        referral_code.postValue(code)
+        return referral_code
+    }
     suspend fun getRefferals(userId :Long):MutableLiveData<ReferralsDataType>{
         val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referral?UserId=eq.$userId&select=*"
         val response = getData(url)
