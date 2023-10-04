@@ -68,8 +68,7 @@ class Info : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.backButtonInfo.setOnClickListener {
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
+finish()
         }
         //videoVIew
         /* val videoview= binding.videoView

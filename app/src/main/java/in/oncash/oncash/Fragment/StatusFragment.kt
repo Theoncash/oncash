@@ -5,7 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import `in`.oncash.oncash.Component.leaderBoard_RecylerViewAdapter
+import `in`.oncash.oncash.Component.referral_RecylerViewAdapter
+import `in`.oncash.oncash.DataType.userData
 import `in` .oncash.oncash.R
+import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
+import `in`.oncash.oncash.ViewModel.home_viewModel
+import `in`.oncash.oncash.ViewModel.referral_viewModel
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,6 +49,29 @@ class StatusFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_status, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        var referralViewmodel: referral_viewModel = activity.run{
+            ViewModelProvider(this!!)[referral_viewModel::class.java]
+        }
+        val userData = referralViewmodel.userData.value!!
+        val referral: RecyclerView = view.findViewById(R.id.status_recyclerview)
+        val referral_adapter = referral_RecylerViewAdapter(  )
+        referral.adapter = referral_adapter
+        referral.layoutManager =
+            LinearLayoutManager( view.context , LinearLayoutManager.VERTICAL, false)
+
+
+        lifecycleScope.launch {
+            UserInfo_Airtable_Repo().getRefferals(userData.userNumber).observe(viewLifecycleOwner){
+                if (it.Referral_users != null ){
+                    referral_adapter.updateList(it.Referral_users)
+                }
+            }
+
+        }
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

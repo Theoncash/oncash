@@ -109,7 +109,6 @@ class Home : AppCompatActivity() {
 
 
                     }
-                    Toast.makeText(this , userData.userNumber.toString() , Toast.LENGTH_LONG).show()
 
 //        lifecycleScope.launch {
 //            getUserData()
@@ -126,7 +125,6 @@ class Home : AppCompatActivity() {
                         val token = task.result
 
                         // Log and toast
-                        Toast.makeText(baseContext, "msg", Toast.LENGTH_SHORT).show()
                     })
                     binding = ActivityHomeBinding.inflate(layoutInflater)
                     setContentView(binding.root)

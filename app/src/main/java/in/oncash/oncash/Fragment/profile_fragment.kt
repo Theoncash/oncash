@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.R
 import `in`.oncash.oncash.View.LeaderBoard
 import `in`.oncash.oncash.View.ReferalActivity
@@ -57,36 +59,19 @@ class profile_fragment : Fragment() {
            /* binding.totalBalance.text = homeViewmodel.getWalletPrice().value!!.totalBa.toString()*/
         }catch (e: Exception){
         }
+        val phone = homeViewmodel.getuserData().value ?: userData(0)
         binding.LeaderBoardText.setOnClickListener {
-            startActivity(Intent(Intent(requireActivity().application, LeaderBoard::class.java)))
+            startActivity(Intent(requireActivity().application, LeaderBoard::class.java).putExtra("userPhone" , phone.userNumber))
         }
 
         binding.referalIcon.setOnClickListener {
-            startActivity(Intent(Intent(requireActivity().application, ReferalActivity::class.java)))
+            startActivity(Intent(requireActivity().application, ReferalActivity::class.java).putExtra("number" , phone.userNumber ))
         }
 
         binding.ReferalText.setOnClickListener {
-            startActivity(Intent(Intent(requireActivity().application, ReferalActivity::class.java)))
+            startActivity(Intent(requireActivity().application, ReferalActivity::class.java).putExtra("number" , phone.userNumber ))
         }
 
-        binding.historyText.setOnClickListener {
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.replace(R.id.profile_fragment, monthlyOffers())
-            transaction?.commit()
-        }
-
-        binding.walletText.setOnClickListener {
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.replace(R.id.profile_fragment, redeem()) // Assuming MonthlyOffers is a Fragment class
-            transaction?.disallowAddToBackStack()
-            transaction?.commit()
-        }
-        binding.ContactText.setOnClickListener {
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.replace(R.id.profile_fragment, contactFragment()) // Assuming MonthlyOffers is a Fragment class
-            transaction?.disallowAddToBackStack()
-            transaction?.commit()
-        }
     }
     companion object {
         /**

@@ -24,10 +24,10 @@ private const val ARG_PARAM2 = "param2"
 class contactFragment : Fragment() {
 
 
-    lateinit var binding :FragmentContactBinding
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var binding :FragmentContactBinding
 
 
 
@@ -37,6 +37,8 @@ class contactFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+
     }
 
     override fun onCreateView(
@@ -47,9 +49,40 @@ class contactFragment : Fragment() {
         binding = FragmentContactBinding.inflate(inflater , container , false )
         return  binding.root
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.whatspp.setOnClickListener {
+            val url = "https://chat.whatsapp.com/IDEyUIpJLChCgrT6TbE108" // Replace with the URL you want to open
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.setPackage("com.android.chrome")
+            requireView().context.startActivity(intent)
 
 
+            if (intent.resolveActivity(requireContext().packageManager) != null) {
+                startActivity(intent)
+            } else {
+                Toast.makeText(requireContext(), "No web browser found", Toast.LENGTH_SHORT).show()
+            }
+        }
 
+
+        binding.gmail.setOnClickListener {
+            val url = "mailto:onbread.assist@gmail.com"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.setPackage("com.android.chrome")
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            } else {
+                Toast.makeText(requireContext(), "No email client found", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
@@ -74,36 +107,7 @@ class contactFragment : Fragment() {
                 }
 
 
-                binding.whatspp.setOnClickListener {
-                    val url = "https://chat.whatsapp.com/IDEyUIpJLChCgrT6TbE108" // Replace with the URL you want to open
 
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.setPackage("com.android.chrome")
-                    requireView().context.startActivity(intent)
-
-
-                    if (intent.resolveActivity(requireContext().packageManager) != null) {
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(requireContext(), "No web browser found", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-
-                binding.gmail.setOnClickListener {
-                    val url = "mailto:onbread.assist@gmail.com"
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.setPackage("com.android.chrome")
-                    if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(requireContext(), "No email client found", Toast.LENGTH_SHORT).show()
-                    }
-                }
 
             }
 

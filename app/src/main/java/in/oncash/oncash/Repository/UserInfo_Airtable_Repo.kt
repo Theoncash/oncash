@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.BlackList_Fields
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
+import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.ReferralsDataType
 import `in`.oncash.oncash.DataType.SerializedDataType.Referral
 import `in`.oncash.oncash.DataType.SerializedDataType.ReferralFields
 import `in`.oncash.oncash.DataType.SerializedDataType.Referred
@@ -287,7 +288,7 @@ class UserInfo_Airtable_Repo {
             val userInfo = Fields(number, wallet , total_bal )
             var status by Delegates.notNull<String>()
             try {
-                val response = client.patch {
+                val response = client.post {
                     url(url)
                     headers {
                         append("apikey", apiKey)
@@ -307,6 +308,7 @@ class UserInfo_Airtable_Repo {
             return@withContext status
 
         }
+
 
     suspend fun withdrawRequest(
         phone: Long,
@@ -573,20 +575,25 @@ Log.i("blacklistt" , response.toString())
 
     }
 
-    suspend fun getLeaderBoard() : ArrayList<Fields>{
-        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?order=Wallet.desc&select=*"
-
+    suspend fun getLeaderBoard() : MutableLiveData<ArrayList<Fields>>{
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?Total_Bal=gt.0&order=Total_Bal.desc&select=*"
+        val list = MutableLiveData<ArrayList<Fields>>()
         val response = getData(url)
         val users :ArrayList<Fields> = ArrayList()
         var json = JSONArray( response.body<String>().toString())
         for(i in 0 until json.length()){
             var user = JSONObject(json[i].toString())
-            val number = user.getInt("UserPhone")
+            val number = user.getLong("UserPhone")
             val wallet = user.getInt("Wallet")
             val total_bal = user.getInt("Total_Bal")
             users.add(Fields(number.toLong() , wallet , total_bal))
     }
-        return users
+        Log.i("leaderboardd" , response.body<String>().toString())
+        Log.i("leaderboardd" , users.toString())
+
+        list.postValue(users)
+
+        return list
 
 }
 
@@ -636,27 +643,70 @@ Log.i("blacklistt" , response.toString())
         return@withContext thereExisit
     }
 
-    suspend fun getRefferals(userId :Long):Referral{
-        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referral?UserId=eq.$userId&select=Referral_code ,Referral_amount"
+    suspend fun getRefferals(userId :Long):MutableLiveData<ReferralsDataType>{
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referral?UserId=eq.$userId&select=*"
         val response = getData(url)
         var json = JSONArray( response.body<String>().toString())
-        var user_referral_info = JSONObject(json[0].toString())
-        var user_referral_code = user_referral_info.getInt("Referral_code")
-        var user_referral_amount = user_referral_info.getInt("Referral_amount")
+        if(json.toString() != "[]" || json.length() > 0) {
+            val user_referral_info = JSONObject(json[0].toString())
 
-        val referred_url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referred?Referred_code=eq.$user_referral_code&select=UserId"
-        val referrals = getData(referred_url)
-        val  users = JSONArray( referrals.body<String>().toString())
-        val referred_users = ArrayList<Long>()
+            var user_referral_code = user_referral_info.getInt("Referral_code")
+            var user_referral_amount = user_referral_info.getInt("Referral_amount")
+            Log.i("userdataa" , user_referral_code.toString())
 
-        for (i in 0 until users.length()){
-            val user = JSONObject(users[i].toString()).getInt("UserId")
-            referred_users.add(user.toLong())
+
+            val referred_url =
+                "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referred?Referred_code=eq.${user_referral_code.toString()}&select=UserId"
+            val referrals = getData(referred_url)
+            val users = JSONArray(referrals.body<String>())
+            Log.i("userdataa" , users.toString())
+            val referred_users = ArrayList<Long>()
+
+            for (i in 0 until users.length()) {
+                val user = JSONObject(users[i].toString()).getLong("UserId")
+                Log.i("userdataa" , JSONObject(users[0].toString()).getLong("UserId").toString())
+                referred_users.add(user.toLong())
+            }
+
+            val final_referred_users = ArrayList<Fields>()
+
+            for (user in referred_users) {
+                val referral_url =
+                    "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?UserPhone=eq.$user&select=*"
+                val users_info = getData(referral_url)
+                Log.i("userdataa" , users_info.body<String>(). toString())
+
+                val amaount_json = JSONArray(users_info.body<String>().toString())
+                val amount = JSONObject(amaount_json[0].toString()).getInt("Total_Bal")
+                final_referred_users.add(Fields(user, 0, amount.toInt()))
+            }
+
+            Log.i("userdataa" , referred_users.toString())
+
+            val referral: Referral =
+                getReferralAmt(referred_users, user_referral_amount, userId, user_referral_code)
+            Log.i("userdataa" , referral.toString())
+
+            val mutableLiveData = MutableLiveData<ReferralsDataType>()
+            mutableLiveData.postValue(
+                ReferralsDataType(
+                    final_referred_users,
+                    referral.Referral_amt,
+                    referral.Total_Referral_amt
+                )
+            )
+            return mutableLiveData
         }
-        val referral:Referral=  getReferralAmt(referred_users , user_referral_amount , userId , user_referral_code )
+        val mutableLiveData = MutableLiveData<ReferralsDataType>()
 
-        return referral
-
+        mutableLiveData.postValue(
+            ReferralsDataType(
+                null,
+                0,
+                0
+            )
+        )
+        return mutableLiveData
         }
 
     suspend fun getReferralAmt(referred_users :ArrayList<Long> ,redeemed_referred_amt :Int , userId: Long , referral_code: Int):Referral{
@@ -665,19 +715,27 @@ Log.i("blacklistt" , response.toString())
         val users_info = getData(url)
         val  users = JSONArray( users_info.body<String>().toString())
         var total_referred_amount = 0
+        Log.i("userdataa" ,"reffered_usres" +  referred_users.toString())
+
         for (i in 0 until users.length()){
-            val user = JSONObject(users[i].toString()).getInt("UserId")
+            val user = JSONObject(users[i].toString()).getLong("UserPhone")
             if (referred_users.contains(user.toLong())){
-                total_referred_amount +=  JSONObject(users[i].toString()).getInt("Wallet")
+                Log.i("userdataa" , user.toString())
+
+                total_referred_amount += ( JSONObject(users[i].toString()).getInt("Wallet") * 20 ) / 100
             }
         }
 
         val user_url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?UserPhone=eq.$userId&select=*"
         val user_info = getData(user_url)
         val  user = JSONArray( user_info.body<String>().toString())
+        Log.i("userdataa" , user.toString())
+
         val referral_earned = (total_referred_amount - redeemed_referred_amt)
         val wallet = JSONObject(user[0].toString()).getInt("Wallet") + referral_earned
         val total_bal = JSONObject(user[0].toString()).getInt("Total_Bal") + referral_earned
+        Log.i("userdataa" , referral_earned.toString())
+
         updateWallet(userId , wallet , total_bal )
         updateReferral(userId , referral_code , total_referred_amount)
 
@@ -726,7 +784,7 @@ Log.i("blacklistt" , response.toString())
             val userInfo = ReferralFields(userId, referral_code, referral_amt)
             var status by Delegates.notNull<String>()
             try {
-                val response = client.patch {
+                val response = client.post {
                     url(url)
                     headers {
                         append("apikey", apiKey)

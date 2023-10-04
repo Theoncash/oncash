@@ -92,10 +92,8 @@
             android:inputType="phone"
             android:textColorHint="#797979"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="continueBut"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="phoneButtonInput" />
+            app:layout_constraintStart_toStartOf="parent"/>
         <Button
             android:id="@+id/continueBut"
             android:layout_width="300dp"
