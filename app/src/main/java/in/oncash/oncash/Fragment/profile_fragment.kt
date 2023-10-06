@@ -64,6 +64,12 @@ class profile_fragment : Fragment() {
             startActivity(Intent(requireActivity().application, LeaderBoard::class.java).putExtra("userPhone" , phone.userNumber))
         }
 
+        binding.v.setOnClickListener {
+            startActivity(Intent(requireActivity().application, LeaderBoard::class.java).putExtra("userPhone" , phone.userNumber))
+        }
+        binding.v2.setOnClickListener {
+            startActivity(Intent(requireActivity().application, ReferalActivity::class.java).putExtra("number" , phone.userNumber ))
+        }
         binding.referalIcon.setOnClickListener {
             startActivity(Intent(requireActivity().application, ReferalActivity::class.java).putExtra("number" , phone.userNumber ))
         }

@@ -13,6 +13,36 @@
         android:background="@drawable/bacground_img_profile">
 
 
+        <View
+            android:id="@+id/v"
+            android:layout_width="300dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_curve2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Explore_text"
+            app:layout_constraintVertical_bias="0.053" />
+
+        <View
+            android:id="@+id/v2"
+            android:layout_width="300dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_curve2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/v"
+            app:layout_constraintVertical_bias="0.049" />
+
         <ImageView
             android:id="@+id/piggy_icon"
             android:layout_width="109dp"
@@ -70,7 +100,6 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
             android:text="Explore"
-            android:textColor="@color/black"
             android:textSize="@dimen/text_x_large"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -83,63 +112,68 @@
             android:id="@+id/LeaderBoard_Text"
             android:layout_width="120dp"
             android:layout_height="35dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="196dp"
-            android:layout_marginEnd="262dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="192dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
             android:text="@string/Leader"
             android:textAppearance="@style/wallet_bala"
+            android:textColor="@color/black"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/v"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.31"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/piggy_icon" />
-
+            app:layout_constraintHorizontal_bias="0.506"
+            app:layout_constraintStart_toStartOf="@+id/v"
+            app:layout_constraintTop_toTopOf="@+id/v"
+            app:layout_constraintVertical_bias="0.642" />
 
         <TextView
             android:id="@+id/Referal_text"
             android:layout_width="140dp"
             android:layout_height="35dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
             android:text="@string/Referal"
             android:textAppearance="@style/wallet_bala"
             android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/v2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.015"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LeaderBoard_Text" />
+            app:layout_constraintHorizontal_bias="0.159"
+            app:layout_constraintStart_toStartOf="@+id/v2"
+            app:layout_constraintTop_toTopOf="@+id/v2"
+            app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
-            android:id="@+id/click"
-            android:layout_width="50dp"
+            android:id="@+id/click1"
+            android:layout_width="49dp"
             android:layout_height="13dp"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="440dp"
-            android:layout_marginEnd="60dp"
             android:gravity="top"
             android:src="@drawable/click_img"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/history_text"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/v"
+            app:layout_constraintEnd_toEndOf="@+id/v"
+            app:layout_constraintHorizontal_bias="0.929"
+            app:layout_constraintStart_toEndOf="@+id/LeaderBoard_Text"
+            app:layout_constraintTop_toTopOf="@+id/v"
+            app:layout_constraintVertical_bias="0.588" />
 
         <ImageView
             android:id="@+id/click2"
             android:layout_width="50dp"
             android:layout_height="13dp"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="45dp"
-            android:layout_marginEnd="60dp"
             android:gravity="top"
             android:src="@drawable/click_img"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/click"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintBottom_toBottomOf="@+id/v2"
+            app:layout_constraintEnd_toEndOf="@+id/v2"
+            app:layout_constraintHorizontal_bias="0.92"
+            app:layout_constraintStart_toEndOf="@+id/Referal_text"
+            app:layout_constraintTop_toTopOf="@+id/v2"
+            app:layout_constraintVertical_bias="0.441" />
 
         <ImageView
             android:id="@+id/referal_icon"

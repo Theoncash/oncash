@@ -31,18 +31,6 @@
         tools:targetApi="33">
 
 
-
-
-        <activity
-            android:name=".View.SplashScreenActivity"
-        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
-            android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
         <activity
             android:name=".View.update"
             android:exported="false" />
