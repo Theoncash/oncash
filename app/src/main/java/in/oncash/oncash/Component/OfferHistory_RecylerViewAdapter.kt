@@ -42,7 +42,7 @@ class OfferHistory_RecylerViewAdapter : RecyclerView.Adapter<OfferHistory_Recyle
     }
 
     override fun onBindViewHolder(holder: viewholder, position: Int) {
-        holder.offerName.text = " "
+        holder.offerName.text = offers[offerList[position ].OfferId - 1].Name
         holder.status.text = offerList.get(position).Status
         holder.price.text = offerList.get(position).Payout.toString() // holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.offeranimation)
         Glide.with(holder.itemView).load(offers[offerList[position ].OfferId - 1].Image).into(holder.offerImage)
