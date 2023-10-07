@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.media.SoundPool
 import android.net.ConnectivityManager
@@ -15,9 +16,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.animation.DecelerateInterpolator
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -25,19 +24,17 @@ import androidx.core.app.AppOpsManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.room.Room
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
-import `in`.oncash.oncash.Component.MyFirebaseMessagingService
-
+import `in`.oncash.oncash.Component.smsReceiver
 import `in`.oncash.oncash.DataType.OfferList
 import `in`.oncash.oncash.DataType.SerializedDataType.Version
 import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.R
-import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
-import `in`.oncash.oncash.RoomDb.User
 import `in`.oncash.oncash.RoomDb.userDb
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.databinding.ActivityHomeBinding
@@ -64,6 +61,9 @@ class Home : AppCompatActivity() {
 //
 //        }else{
 //            setContentView(R.layout.activity_home) // Load the layout for no internet
+
+
+
             homeViewmodel.getVersion().observe(this){
                 if(it.id > version){
                     needToUpdate = true
@@ -232,6 +232,19 @@ class Home : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+//
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+//            // Request the RECEIVE_SMS permission
+//            val REQUEST_SMS_PERMISSION = 734973 // Use any unique integer value
+//
+//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_SMS), REQUEST_SMS_PERMISSION)
+//        }
+//        val registrationChecker = smsReceiver( )
+//        val intentFilter = IntentFilter()
+//        intentFilter.addAction(packageName + "android.provider.Telephony.SMS_RECEIVED")
+//        registerReceiver(registrationChecker,
+//             intentFilter
+//        );
         if (!needToUpdate) {
             lifecycleScope.launch {
                 homeViewmodel.getOfferList()
@@ -297,9 +310,10 @@ class Home : AppCompatActivity() {
             binding.walletTextView.text = wallet.currentBal.toString()
         })
     }
-    @Deprecated("Deprecated in Java", ReplaceWith("this.finish()"))
     override fun onBackPressed() {
-       this.finish()
+
+       finish()
+
     }
 
     private lateinit var soundPool: SoundPool
@@ -307,6 +321,10 @@ class Home : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        val registrationChecker = smsReceiver( )
+        unregisterReceiver(registrationChecker);
+
         soundPool.release()
+
     }
 }

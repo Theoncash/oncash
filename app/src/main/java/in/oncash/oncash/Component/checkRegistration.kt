@@ -33,6 +33,7 @@ class checkRegistration : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
         if (intent.getAction().equals(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)) {
+            Log.i("SMSDATA" , "DDATA")
             GlobalScope.launch {
                 test()
             }

@@ -100,7 +100,7 @@ finish()
                 if (!it) {
                     lifecycleScope.launch {
 
-                        if (!isBeing(
+                        isBeing(
                                 info_viewModel,
                                 number!!.toLong(),
                                 appName!!,
@@ -108,72 +108,92 @@ finish()
                                 this@Info,
                                 number!!.toLong(),
                                 this@Info
-                            )
-                        ) {
-                            info_viewModel.isCompleted(number!!.toLong() ,  offerId!!.toInt()).observe(this@Info) {
-                                if (it == false) {
-                                    info_viewModel.getInstrutionList(offerId!!)
-                                        .observe(this@Info, Observer {
-                                            if (it.isNotEmpty()) {
-                                                for (i in 0 until noOfSteps!!.toInt()) {
-                                                    if (i == 0) {
-                                                        list.add(Step(false, "Install the App"))
-                                                    }
-                                                    if (i == 1) {
-                                                        list.add(Step(false, "Register in the App"))
+                            ) {
+                            if (!it) {
+                                info_viewModel.isCompleted(number!!.toLong(), offerId!!.toInt())
+                                    .observe(this@Info) {
+                                        if (it == false) {
+                                            info_viewModel.getInstrutionList(offerId!!)
+                                                .observe(this@Info, Observer {
+                                                    if (it.isNotEmpty()) {
+                                                        for (i in 0 until noOfSteps!!.toInt()) {
+                                                            if (i == 0) {
+                                                                list.add(
+                                                                    Step(
+                                                                        false,
+                                                                        "Install the App"
+                                                                    )
+                                                                )
+                                                            }
+                                                            if (i == 1) {
+                                                                list.add(
+                                                                    Step(
+                                                                        false,
+                                                                        "Register in the App"
+                                                                    )
+                                                                )
+
+                                                            }
+                                                            if (i == 2) {
+                                                                list.add(
+                                                                    Step(
+                                                                        false,
+                                                                        "Completed 1st Trade "
+                                                                    )
+                                                                )
+
+                                                            }
+                                                        }
+
 
                                                     }
-                                                    if (i == 2) {
-                                                        list.add(
-                                                            Step(
-                                                                false,
-                                                                "Completed 1st Trade "
+                                                    adapter.updateList(list)
+                                                    binding.offerLinkButtonInfo.visibility =
+                                                        View.VISIBLE
+
+                                                    lifecycleScope.launch {
+                                                        if (isAppInstalled(this@Info, appName!!)) {
+                                                            list[0] =
+                                                                Step(true, list[0].instruction)
+                                                            Toast.makeText(
+                                                                this@Info,
+                                                                list[0].instruction.toString(),
+                                                                Toast.LENGTH_LONG
+                                                            ).show()
+
+                                                            adapter.updateList(list)
+
+                                                        }
+                                                        if (isRegistered(
+                                                                this@Info,
+                                                                appName,
+                                                                regSMS!!
                                                             )
-                                                        )
+                                                        ) {
+                                                            list[1] =
+                                                                Step(true, list[1].instruction)
+                                                            adapter.updateList(list)
 
+
+                                                            if (getTimeSpent(appName) >= 0) {
+                                                                binding.offerLinkButtonInfo.text =
+                                                                    " Claim Reward "
+
+                                                            }
+                                                        }
                                                     }
-                                                }
-
-
-                                            }
-                                            adapter.updateList(list)
+                                                })
+                                        } else {
+                                            binding.offerLinkButtonInfo.text = "Completed"
                                             binding.offerLinkButtonInfo.visibility = View.VISIBLE
-
-                                            lifecycleScope.launch {
-                                                if (isAppInstalled(this@Info, appName!!)) {
-                                                    list[0] = Step(true, list[0].instruction)
-                                                    Toast.makeText(
-                                                        this@Info,
-                                                        list[0].instruction.toString(),
-                                                        Toast.LENGTH_LONG
-                                                    ).show()
-
-                                                    adapter.updateList(list)
-
-                                                }
-                                                if (isRegistered(this@Info, appName, regSMS!!)) {
-                                                    list[1] = Step(true, list[1].instruction)
-                                                    adapter.updateList(list)
+                                        }
 
 
-                                                    if (getTimeSpent(appName) >= 0) {
-                                                        binding.offerLinkButtonInfo.text =
-                                                            " Claim Reward "
-
-                                                    }
-                                                }
-                                            }
-                                        })
-                                } else {
-                                    binding.offerLinkButtonInfo.text = "Completed"
-                                    binding.offerLinkButtonInfo.visibility = View.VISIBLE
-                                }
-
-
+                                    }
+                            } else {
+                                binding.offerLinkButtonInfo.text = "Not Eligible"
+                                binding.offerLinkButtonInfo.visibility = View.VISIBLE
                             }
-                        } else {
-                            binding.offerLinkButtonInfo.text = "Not Eligible"
-                            binding.offerLinkButtonInfo.visibility = View.VISIBLE
                         }
                     }
                 }else{
@@ -306,30 +326,38 @@ suspend fun isBeing(
     offerId: Int,
     lifecycleOwner: LifecycleOwner,
     userNumber: Long,
-    context: Context
-): Boolean {
+    context: Context,
+    callback: (Boolean) -> Unit
+
+)
+{
     var isB : Boolean = false
 
 
-    var bool =  infoViewModel.isOfferBeign(userId, offerId)
-        Log.i("blacklistt", bool.toString())
-        if (bool == false) {
-            val regSMS = isRegistered(context , appName , appName)
-            val appInstalled: Boolean = isAppInstalled(context, appName)
-            isB = appInstalled
+    infoViewModel.isOfferBeign(userId, offerId)
+     infoViewModel.getIsCompleted().observe(lifecycleOwner){ bool ->
+        Log.i("blacklisttt", bool.toString())
+        if (!bool) {
+            lifecycleOwner.lifecycleScope.launch {
+                val regSMS = isRegistered(context , appName , appName)
+                val appInstalled: Boolean = isAppInstalled(context, appName)
+                isB = appInstalled
 
-            if (appInstalled || regSMS) {
-                isB = true
-                infoViewModel.addBlacklist(userData( userNumber), offerId)
+                if (appInstalled || regSMS) {
+                    isB = true
+                    infoViewModel.addBlacklist(userData( userNumber), offerId)
+                }
             }
-
-            Log.i("blacklistt", "returning $isB")
         }
 
 
-    // You may need to handle the case where `isOfferBeing` is not observed or not applicable.
-    // For now, returning false as a placeholder.
-    return isB
+         Log.i("blacklisttt", "returning $isB")
+
+         // You may need to handle the case where `isOfferBeing` is not observed or not applicable.
+         // For now, returning false as a placeholder.
+         callback(isB)
+    }
+
 }
 
  fun isAppInstalled(context: Context , appName: String): Boolean {
