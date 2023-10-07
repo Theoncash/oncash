@@ -97,14 +97,13 @@ class redeem : Fragment() {
             lifecycleScope.launch { getTransaction() }
 
         binding.withdrawButton.setOnClickListener {
-            val loadingDialog = customLoadingDialog(view.context)
+        binding.withdrawButton.isClickable = false
+            if (walletBalance > 20 ) {
+                val loadingDialog = customLoadingDialog(view.context)
 
 // To show the dialog
-            loadingDialog.show()
-            loadingDialog.setMessage("Loading data...")
-            if (walletBalance > 20 ) {
-
-
+                loadingDialog.show()
+                loadingDialog.setMessage("Loading data...")
 // Simulate some background work (replace this with your actual work)
                                 Handler().postDelayed({
                                     // Dismiss the dialog when the work is done
@@ -128,7 +127,8 @@ class redeem : Fragment() {
 
                                     withdrawalList.add(status.withdrawalTransaction)
                                     adapter.updateList(withdrawalList)
-
+                                    binding.withdrawButton.isClickable = true
+                                    walletBalance = 0
                                     Snackbar.make(
                                         binding.root,
                                         "Withdraw Successful",
@@ -139,11 +139,8 @@ class redeem : Fragment() {
 
                             }
 
-                        } else {                             Handler().postDelayed({
-                // Dismiss the dialog when the work is done
-                loadingDialog.dismiss()
-            }, 3000) // Replace 3000 with the actual duration of your background work
-
+                        } else {
+                binding.withdrawButton.isClickable = true
 
                 Snackbar.make(
                                 binding.root,
