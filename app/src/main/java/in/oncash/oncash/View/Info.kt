@@ -45,6 +45,7 @@ class Info : AppCompatActivity() {
         binding = ActivityInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var isClicked = false
         //Getting Data from the intent form home(Activity)
         val offerId: String? = intent.getStringExtra("OfferId")
         val offerName = intent.getStringExtra("OfferName")
@@ -212,7 +213,8 @@ finish()
         //Redirecting user to chrome after the event of button accurs
         binding.offerLinkButtonInfo.setOnClickListener{
 
-            if(binding.offerLinkButtonInfo.text.contains( "Claim")){
+            if(binding.offerLinkButtonInfo.text.contains( "Claim") && !isClicked){
+                isClicked  = true
                 val total_bal =  home_viewModel().totalOffers.value
                 val loadingDialog = customLoadingDialog(this)
 
