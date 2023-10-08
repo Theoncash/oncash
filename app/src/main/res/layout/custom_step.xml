@@ -72,7 +72,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/instructions_expandable"
         android:layout_width="310dp"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:visibility="gone"
         android:layout_marginTop="10dp"
@@ -83,12 +83,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView3">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/instruction_recylerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </androidx.recyclerview.widget.RecyclerView>
 </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
