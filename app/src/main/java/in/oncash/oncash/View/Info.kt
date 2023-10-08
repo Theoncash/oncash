@@ -96,6 +96,10 @@ finish()
         }, 4000)
 
         var list: ArrayList<Step> = ArrayList()
+        var Instruction: ArrayList<Instruction> = ArrayList()
+
+        var ClosingInstruction: ArrayList<Instruction> = ArrayList()
+
         //Observing the getInstructionList() in info_viewmodel (ie which gets the data from info_FirebaseRepo)
         val info_viewModel: info_viewModel by viewModels()
         lifecycleScope.launch {
@@ -119,6 +123,7 @@ finish()
                                             info_viewModel.getInstrutionList(offerId!!)
                                                 .observe(this@Info, Observer {
                                                     if (it.isNotEmpty()) {
+                                                        Instruction = it
                                                         for (i in 0 until noOfSteps!!.toInt()) {
                                                             if (i == 0) {
                                                                 list.add(
@@ -150,7 +155,7 @@ finish()
 
 
                                                     }
-                                                    adapter.updateList(list)
+                                                    adapter.updateList(list , Instruction , ClosingInstruction)
                                                     binding.offerLinkButtonInfo.visibility =
                                                         View.VISIBLE
 
@@ -164,7 +169,7 @@ finish()
                                                                 Toast.LENGTH_LONG
                                                             ).show()
 
-                                                            adapter.updateList(list)
+                                                            adapter.updateList(list , Instruction , ClosingInstruction)
 
                                                         }
                                                         if (isRegistered(
@@ -175,7 +180,7 @@ finish()
                                                         ) {
                                                             list[1] =
                                                                 Step(true, list[1].instruction)
-                                                            adapter.updateList(list)
+                                                            adapter.updateList(list , Instruction , ClosingInstruction)
 
 
                                                             if (getTimeSpent(appName) >= 0) {
@@ -193,12 +198,11 @@ finish()
                                                     "Close your account "
                                                 )
                                             )
-                                            var closingInstruction : ArrayList<Instruction> = ArrayList()
                                             info_viewModel.getClosingInstrutionList(offerId!!).observe(this@Info){
-                                                closingInstruction = it
+                                                ClosingInstruction = it
                                             }
 
-                                            adapter.updateList(list)
+                                            adapter.updateList(list , Instruction , ClosingInstruction)
                                             binding.offerLinkButtonInfo.text = "Completed"
                                             binding.offerLinkButtonInfo.visibility = View.VISIBLE
                                         }

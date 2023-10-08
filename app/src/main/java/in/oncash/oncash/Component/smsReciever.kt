@@ -7,26 +7,28 @@ import android.telephony.SmsMessage
 import android.util.Log
 
 class smsReceiver : BroadcastReceiver() {
-
     override fun onReceive(context: Context?, intent: Intent) {
         if (intent.action == "android.provider.Telephony.SMS_RECEIVED") {
-            Log.d("SMSReceiver", "Sender:")
+            Log.d("SMSReceiver", "Received SMS")
 
             val bundle = intent.extras
             if (bundle != null) {
-                val pdus = bundle["pdus"] as Array<Any>?
-                for (pdu in pdus!!) {
-                    val smsMessage = SmsMessage.createFromPdu(pdu as ByteArray)
-                    val sender = smsMessage.displayOriginatingAddress
-                    val message = smsMessage.displayMessageBody
+                val pdus = bundle.get("pdus") as? Array<ByteArray>
+                if (pdus != null) {
+                    for (pdu in pdus) {
+                        val smsMessage = SmsMessage.createFromPdu(pdu)
+                        val sender = smsMessage.displayOriginatingAddress
+                        val message = smsMessage.displayMessageBody
 
-                    // Handle the received SMS message here
-                    Log.d("SMSReceiver", "Sender: $sender")
-                    Log.d("SMSReceiver", "Message: $message")
+                        // Handle the received SMS message here
+                        Log.d("SMSReceiver", "Sender: $sender")
+                        Log.d("SMSReceiver", "Message: $message")
+                    }
                 }
             }
         }
     }
+}
 
 //    override fun onReceive(context: Context, intent: Intent) {
 //        if (intent.action != null && intent.action == "android.provider.Telephony.SMS_RECEIVED") {
@@ -57,4 +59,4 @@ class smsReceiver : BroadcastReceiver() {
 //            }
 //        }
 //    }
-}
+

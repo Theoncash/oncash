@@ -33,67 +33,38 @@ class checkRegistration : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
         if (intent.getAction().equals(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)) {
-            Log.i("SMSDATA" , "DDATA")
-            GlobalScope.launch {
-                test()
-            }
-        }
-
-        val pdus = intent.extras?.get("pdus") as Array<*>
-        for (pdu in pdus) {
-            val smsMessage = SmsMessage.createFromPdu(pdu as ByteArray)
-            val messageBody = smsMessage.messageBody
-            // Check the message content and take appropriate action
+            val pdus = intent.extras?.get("pdus") as Array<*>
+            for (pdu in pdus) {
+                val smsMessage = SmsMessage.createFromPdu(pdu as ByteArray)
+                val messageBody = smsMessage.messageBody
+                // Check the message content and take appropriate action
 
 
 
 
-            GlobalScope.launch {
-               val offers =  Offer_FIrebase().getData()
-                for (offer in offers){
-                    val key = offer.regSMS!!
-                    if (messageBody.contains(key)) {
-                        GlobalScope.launch {
-                            UserInfo_Airtable_Repo().removeOneCap(offer.OfferId!!.toInt())
+                GlobalScope.launch {
+                    val offers =  Offer_FIrebase().getData()
+                    for (offer in offers){
+                        val key = offer.regSMS!!
+                        Log.i("SMSDATA" , key)
+
+                        if (messageBody.contains(key)) {
+                            GlobalScope.launch {
+                                Log.i("SMSDATA" , "sENDING REQUEST"+key)
+
+                                UserInfo_Airtable_Repo().removeOneCap(offer.OfferId!!.toInt())
+                            }
                         }
                     }
                 }
+
+
             }
-
-
         }
-    }
-}
-
- suspend fun test(){
-    val apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZhbWxwd2d4bXRxcHhueWt6YXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU5Njg4MTksImV4cCI6MjAxMTU0NDgxOX0.zVIW9Z1GdvEUEPZpQgxkJwIal_MkgIN-gIEhrnKPKeg"
-
-    var url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/test"
-
-    val client = HttpClient(CIO){
-        install(ContentNegotiation){
-            json(
-                Json{
-                    isLenient = true
-                    prettyPrint = true
-                }
-            )
         }
-    }
-
-    val test =  test(2 )
-
-    val status =  client.post {
-        url(url)
-        headers {
-            append("apikey", apiKey)
-            append("Authorization", "Bearer $apiKey")
         }
-        contentType(ContentType.Application.Json)
-        setBody(test)
-    }
 
-    Log.i("supabasee" , status.status.toString())
 
-}
+
+
 

@@ -206,7 +206,8 @@ class UserInfo_Airtable_Repo {
         val offer =  JSONObject (JSONArray(offerInfo.body<String>())[0].toString())
         val offer_name = offer.getString("OfferName")!!
         val cap = offer.getInt("Cap")
-        val userInfo = OfferInfo(offerId ,    offer_name , (cap - 1) )
+        val dayLeft = offer.getInt("DayLeft")
+        val userInfo = OfferInfo(offerId ,    offer_name , (cap - 1) , dayLeft)
         try {
             val response = client.post {
                 url(url)
@@ -700,6 +701,25 @@ Log.i("blacklistt" , response.toString())
         }
         val referral_code = MutableLiveData<Int>()
         referral_code.postValue(code)
+        return referral_code
+    }
+     suspend fun getOfferInfo(offerId:Int) : OfferInfo{
+        Log.i("fbDataa" , offerId.toString() )
+
+        val url =
+            "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OfferInfo?OfferId=eq.$offerId&select=*"
+        val response = getData(url)
+        var cap = 0
+        var dayLeft = 0
+        var name = ""
+        var json = JSONArray(response.body<String>().toString())
+        if (json.toString() != "[]" || json.length() > 0) {
+            cap = JSONObject(json[0].toString()).getInt("Cap")
+            dayLeft = JSONObject(json[0].toString()).getInt("DayLeft")
+            name = JSONObject(json[0].toString()).getString("OfferName")
+        }
+        Log.i("fbDataa" ,  cap.toString())
+        val referral_code = OfferInfo(offerId , name, cap , dayLeft)
         return referral_code
     }
     suspend fun getRefferals(userId :Long):MutableLiveData<ReferralsDataType>{

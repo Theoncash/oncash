@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import `in`.oncash.oncash.Component.checkRegistration
+import `in`.oncash.oncash.Component.smsReceiver
 import `in`.oncash.oncash.DataType.OfferList
 import `in`.oncash.oncash.DataType.SerializedDataType.Version
 import `in`.oncash.oncash.DataType.userData
@@ -49,6 +50,7 @@ class Home : AppCompatActivity() {
     lateinit var roomDb:userDb
     var needToUpdate = false
     private val version : Double = 1.1
+    val  SMS_PERMISSION_REQUEST_CODE = 734973;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +63,9 @@ class Home : AppCompatActivity() {
 //        }else{
 //            setContentView(R.layout.activity_home) // Load the layout for no internet
 
-        val smsReceiver = checkRegistration()
-        val intentFilter = IntentFilter("android.provider.Telephony.SMS_RECEIVED")
-        registerReceiver(smsReceiver, intentFilter)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS), SMS_PERMISSION_REQUEST_CODE)
+        }
 
             homeViewmodel.getVersion().observe(this){
                 if(it.id > version){
@@ -327,5 +329,20 @@ class Home : AppCompatActivity() {
 
         soundPool.release()
 
+    }
+   override fun onRequestPermissionsResult(
+       requestCode: Int,
+       permissions: Array<out String>,
+       grantResults: IntArray
+   ) {
+       super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+       if (requestCode == SMS_PERMISSION_REQUEST_CODE.toInt()) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val intentFilter = IntentFilter("android.provider.Telephony.SMS_RECEIVED")
+                registerReceiver(checkRegistration() , intentFilter )
+            } else {
+                // Permission denied, handle accordingly (e.g., show a message to the user)
+            }
+        }
     }
 }

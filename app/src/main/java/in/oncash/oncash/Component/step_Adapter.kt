@@ -26,12 +26,10 @@ import `in`.oncash.oncash.R
         val description :TextView
         var isClicked :Boolean = false
         val instruction :CardView
-        val recylerView :RecyclerView
 
         init {
             description = itemView.findViewById(`in`.oncash.oncash.R.id.stepName)
             status = itemView.findViewById(R.id.stepImage)
-            recylerView = itemView.findViewById(R.id.instruction_recylerview)
             instruction = itemView.findViewById(R.id.instructions_expandable)
         }
     }
@@ -63,10 +61,13 @@ import `in`.oncash.oncash.R
 
         holder.itemView.setOnClickListener{
             if (!holder.isClicked){
-                if(holder.description.text.contains("Register")){
-                }
-                if(holder.description.text.contains("Close")){
-                }
+//                if(holder.description.text.contains("Register")){
+//                    holder.recylerView.text = Instruction.toString()
+//                }
+//                if(holder.description.text.contains("Close")){
+//                    holder.recylerView.text = ClosingInstruction.toString()
+//
+//                }
                 holder.instruction.visibility = View.VISIBLE
                 holder.isClicked = true
 
