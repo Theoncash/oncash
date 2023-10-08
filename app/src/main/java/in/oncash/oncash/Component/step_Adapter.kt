@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import `in`.oncash.oncash.DataType.Instruction
 import `in`.oncash.oncash.DataType.Step
 import `in`.oncash.oncash.R
@@ -25,11 +27,13 @@ import `in`.oncash.oncash.R
         val description :TextView
         var isClicked :Boolean = false
         val instruction :CardView
+        val recyclerView :RecyclerView
 
         init {
             description = itemView.findViewById(`in`.oncash.oncash.R.id.stepName)
             status = itemView.findViewById(R.id.stepImage)
             instruction = itemView.findViewById(R.id.instructions_expandable)
+            recyclerView = itemView.findViewById(R.id.instruction_recyclerview)
         }
     }
 
@@ -60,13 +64,19 @@ import `in`.oncash.oncash.R
 
         holder.itemView.setOnClickListener{
             if (!holder.isClicked){
-//                if(holder.description.text.contains("Register")){
-//                    holder.recylerView.text = Instruction.toString()
-//                }
-//                if(holder.description.text.contains("Close")){
-//                    holder.recylerView.text = ClosingInstruction.toString()
-//
-//                }
+                if(holder.description.text.contains("Register")){
+                    val adapter =  Instructions_RecylerViewAdapter()
+                    holder.recyclerView.adapter  = adapter
+                    holder.recyclerView.layoutManager =LinearLayoutManager(holder.itemView.context , LinearLayoutManager.VERTICAL , false)
+                    adapter.updateList(Instruction)
+                }
+                if(holder.description.text.contains("Close")){
+                    val adapter =  Instructions_RecylerViewAdapter()
+                    holder.recyclerView.adapter  = adapter
+                    holder.recyclerView.layoutManager =LinearLayoutManager(holder.itemView.context , LinearLayoutManager.VERTICAL , false)
+                    adapter.updateList(ClosingInstruction)
+
+                }
                 holder.instruction.visibility = View.VISIBLE
                 holder.isClicked = true
 
