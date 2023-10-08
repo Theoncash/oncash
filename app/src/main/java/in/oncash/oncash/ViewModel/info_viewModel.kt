@@ -56,19 +56,23 @@ class info_viewModel : ViewModel() {
         }
         return isCompleted
     }
+ private   val isCompleted :MutableLiveData<Boolean> = MutableLiveData()
 
-    fun isOfferBeign (userId: Long  , offerId : Int):Boolean{
-        var isCompleted = MutableLiveData<Boolean>(false)
+    suspend fun getIsCompleted():MutableLiveData<Boolean>{
+        return isCompleted
+    }
+   suspend fun isOfferBeign (userId: Long  , offerId : Int){
         viewModelScope.launch {
             val offerHistory =  offerHistory_component().getOfferHIstory( userId )
             for (offer in offerHistory ){
-                Log.i("blacklistt" , offer.toString())
+                Log.i("blacklisttt" , offer.toString())
 
-                if( offer.OfferId == offerId && offer.Status.contains( "Being Reviewed"))
-                    isCompleted.postValue(  true )
+                if( offer.OfferId == offerId && offer.Status.contains( "Being Reviewed")){
+                    isCompleted.postValue(   true )
+                    Log.i("blacklisttt" , isCompleted.toString())
+
+                }
             }
         }
-        Log.i("blacklistt" , isCompleted.value.toString())
-        return isCompleted.value!!
     }
 }

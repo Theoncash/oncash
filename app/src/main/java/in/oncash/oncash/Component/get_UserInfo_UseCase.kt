@@ -1,5 +1,6 @@
 package `in`.oncash.oncash.Component
 
+import android.annotation.SuppressLint
 import `in`.oncash.oncash.DataType.UserData1
 import `in`.oncash.oncash.DataType.withdrawalTransaction
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
@@ -37,6 +38,7 @@ class get_UserInfo_UseCase {
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     suspend fun getuserWithdrwalHistory(userNumber: Long): ArrayList<withdrawalTransaction> = withContext(Dispatchers.Default) {
         var withdrawalTransaction: JSONArray? = null
         val list : ArrayList<withdrawalTransaction> = ArrayList()

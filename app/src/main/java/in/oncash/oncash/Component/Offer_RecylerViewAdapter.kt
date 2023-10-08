@@ -68,14 +68,8 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
         val url :URL = URL( offerList[position].Image )
 
         var colour  :String = ""
-        GlobalScope.launch { withContext(Dispatchers.IO) {
-            val background = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            colour =  Integer.toHexString( getDominantColor(background)).substring(2)
-//            withContext(Dispatchers.Main){
-//                holder.background.background = linearGradientDrawable(colour)
-//            }
-        }
-            }
+
+
 //
 //        val animation = AnimationUtils.loadAnimation(
 //            context, if (position > lastPosition) {com.example.oncash.R.anim.offeranimation }else {com.example.oncash.R.anim.offeranimationdown}

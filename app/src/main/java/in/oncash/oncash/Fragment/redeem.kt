@@ -42,6 +42,7 @@ class redeem : Fragment() {
     private var param2: String? = null
     lateinit var  binding : FragmentRedeemBinding
     private var userNumber: Long = 0
+
     private var userRecordId: String? = null
     var walletBalance = 0
     private val viewModel: wallet_viewModel by viewModels()
@@ -96,14 +97,13 @@ class redeem : Fragment() {
             lifecycleScope.launch { getTransaction() }
 
         binding.withdrawButton.setOnClickListener {
-
+        binding.withdrawButton.isClickable = false
             if (walletBalance > 20 ) {
-                                val loadingDialog = customLoadingDialog(view.context)
+                val loadingDialog = customLoadingDialog(view.context)
 
 // To show the dialog
-                                loadingDialog.show()
-                                loadingDialog.setMessage("Loading data...")
-
+                loadingDialog.show()
+                loadingDialog.setMessage("Loading data...")
 // Simulate some background work (replace this with your actual work)
                                 Handler().postDelayed({
                                     // Dismiss the dialog when the work is done
@@ -127,7 +127,8 @@ class redeem : Fragment() {
 
                                     withdrawalList.add(status.withdrawalTransaction)
                                     adapter.updateList(withdrawalList)
-
+                                    binding.withdrawButton.isClickable = true
+                                    walletBalance = 0
                                     Snackbar.make(
                                         binding.root,
                                         "Withdraw Successful",
@@ -139,7 +140,9 @@ class redeem : Fragment() {
                             }
 
                         } else {
-                            Snackbar.make(
+                binding.withdrawButton.isClickable = true
+
+                Snackbar.make(
                                 binding.root,
                                 "Requested Amount Should Be More Then 20 Rs",
                                 Snackbar.LENGTH_SHORT
