@@ -89,6 +89,5 @@
             android:layout_height="match_parent" />
 
 </androidx.cardview.widget.CardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 
