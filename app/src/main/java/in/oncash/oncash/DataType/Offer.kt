@@ -14,4 +14,6 @@ public final data class Offer(
     val payout: String? = "",
     val regSMS: String? = " ",
     val subid: String? = "",
+    val cap :Int ,
+    val dayLeft :Int
 )

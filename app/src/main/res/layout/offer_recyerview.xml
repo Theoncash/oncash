@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_marginStart="19dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:gravity="top"
         android:text="Offer Name"
         android:textSize="16sp"
@@ -50,6 +50,23 @@
         app:layout_constraintVertical_bias="0.482" />
 
     <TextView
+        android:id="@+id/offer_timer"
+        android:layout_width="150dp"
+        android:layout_height="19dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="24dp"
+        android:gravity="top"
+        android:text="Offer ends in 3 day's"
+        android:textColor="#969696"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/offer_imageview"
+        app:layout_constraintTop_toBottomOf="@+id/offerHistory_name"
+        app:layout_constraintVertical_bias="0.487" />
+
+    <TextView
         android:id="@+id/offerHistory_price"
         android:layout_width="60dp"
         android:layout_height="19dp"
@@ -65,6 +82,5 @@
         app:layout_constraintStart_toEndOf="@+id/offer_imageview"
         app:layout_constraintTop_toBottomOf="@+id/offerHistory_name"
         app:layout_constraintVertical_bias="0.0" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

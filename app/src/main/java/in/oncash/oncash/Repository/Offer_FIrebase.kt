@@ -8,12 +8,16 @@ import kotlinx.coroutines.tasks.await
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import com.google.gson.Gson
+import `in`.oncash.oncash.DataType.SerializedDataType.OfferInfo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 
 import kotlinx.coroutines.withContext
 
 class Offer_FIrebase  {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun getData() : ArrayList<Offer>  = withContext(Dispatchers.IO){
        // FirebaseApp.initializeApp(context)
         val data : DatabaseReference = FirebaseDatabase.getInstance().getReference("Offers")
@@ -35,8 +39,13 @@ class Offer_FIrebase  {
                 val payout = snapShot.child("payout").getValue(String::class.java)
                 val type = snapShot.child("Type").getValue(String::class.java)
                 val videoId = snapShot.child("VideoId").getValue(String::class.java)
+                Log.i("fbData", "offer"+offerId.toString())
 
 
+
+
+                var offerInfo : OfferInfo =  UserInfo_Airtable_Repo().getOfferInfo(offerId!!.toInt());
+                Log.i("fbData", "offerInfo${offerInfo.OfferName}")
 
                 // Create an instance of the Offer data class
                 val offer = Offer(
@@ -53,6 +62,8 @@ class Offer_FIrebase  {
                     payout = payout,
                     Type = type,
                     VideoId = videoId,
+                    cap = offerInfo.Cap,
+                   dayLeft =  offerInfo.DayLeft
                 )
 
                 Log.i("fbData", offer.noOfSteps!!.toString())
