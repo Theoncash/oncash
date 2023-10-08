@@ -34,12 +34,14 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
     class viewholder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val name : TextView
         val price :TextView
+        val DaysLeft : TextView
         val background : ImageView
         lateinit var  offerId :String
         init {
             name = itemView.findViewById(`in`.oncash.oncash.R.id.offerHistory_name)
             price = itemView.findViewById(R.id.offerHistory_price)
             background = itemView.findViewById(R.id.offer_imageview)
+            DaysLeft = itemView.findViewById(R.id.offer_timer)
         }
     }
 
@@ -64,7 +66,7 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
         val text =  (offerList[position].Price!!.toInt() * offer ) /100
         holder.price.text = "₹ $text "
         Glide.with(holder.itemView.context).load(offerList[position].Image).into(holder.background)
-
+        holder.DaysLeft.text = offerList[position].dayLeft.toString()
         val url :URL = URL( offerList[position].Image )
 
         var colour  :String = ""
