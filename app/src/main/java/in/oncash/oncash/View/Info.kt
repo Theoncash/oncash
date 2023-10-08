@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import `in`.oncash.oncash.Component.customLoadingDialog
 import `in`.oncash.oncash.Component.step_Adapter
+import `in`.oncash.oncash.DataType.Instruction
 import `in`.oncash.oncash.DataType.Step
 import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
@@ -33,6 +34,7 @@ import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.ViewModel.info_viewModel
 import `in`.oncash.oncash.databinding.ActivityInfoBinding
 import kotlinx.coroutines.launch
+import java.lang.reflect.Array
 import java.util.Calendar
 
 
@@ -185,6 +187,18 @@ finish()
                                                     }
                                                 })
                                         } else {
+                                            list.add(
+                                                Step(
+                                                    false,
+                                                    "Close your account "
+                                                )
+                                            )
+                                            var closingInstruction : ArrayList<Instruction> = ArrayList()
+                                            info_viewModel.getClosingInstrutionList(offerId!!).observe(this@Info){
+                                                closingInstruction = it
+                                            }
+
+                                            adapter.updateList(list)
                                             binding.offerLinkButtonInfo.text = "Completed"
                                             binding.offerLinkButtonInfo.visibility = View.VISIBLE
                                         }

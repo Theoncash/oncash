@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+<androidx.constraintlayout.widget.ConstraintLayout
     android:visibility="visible"
     tools:visibility="visible"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="#DEF3FF">
+
+
 
 
 
@@ -81,13 +86,14 @@
         android:id="@+id/frame_MAIN"
         android:layout_width="425dp"
         android:layout_height="512dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/layout_bg"
         app:cornerRadius="38dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item">
+        app:layout_constraintTop_toBottomOf="@+id/item"
+        app:layout_constraintVertical_bias="0.0">
 
 
         <TextView
@@ -151,7 +157,6 @@
         </RelativeLayout>
 
         <Button
-            android:visibility="invisible"
             android:id="@+id/offerLinkButtonInfo"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
@@ -170,6 +175,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="20sp"
+            android:visibility="invisible"
             app:cornerRadius="59dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -177,3 +183,4 @@
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
+</ScrollView>

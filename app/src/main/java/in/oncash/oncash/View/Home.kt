@@ -24,13 +24,12 @@ import androidx.core.app.AppOpsManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.room.Room
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
-import `in`.oncash.oncash.Component.smsReceiver
+import `in`.oncash.oncash.Component.checkRegistration
 import `in`.oncash.oncash.DataType.OfferList
 import `in`.oncash.oncash.DataType.SerializedDataType.Version
 import `in`.oncash.oncash.DataType.userData
@@ -62,7 +61,9 @@ class Home : AppCompatActivity() {
 //        }else{
 //            setContentView(R.layout.activity_home) // Load the layout for no internet
 
-
+        val smsReceiver = checkRegistration()
+        val intentFilter = IntentFilter("android.provider.Telephony.SMS_RECEIVED")
+        registerReceiver(smsReceiver, intentFilter)
 
             homeViewmodel.getVersion().observe(this){
                 if(it.id > version){
@@ -311,7 +312,7 @@ class Home : AppCompatActivity() {
         })
     }
     override fun onBackPressed() {
-
+        super.onBackPressed()
        finish()
 
     }
@@ -321,7 +322,7 @@ class Home : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        val registrationChecker = smsReceiver( )
+        val registrationChecker = checkRegistration( )
         unregisterReceiver(registrationChecker);
 
         soundPool.release()

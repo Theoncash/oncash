@@ -17,6 +17,8 @@ import `in`.oncash.oncash.R
 
  class step_Adapter : RecyclerView.Adapter<`in`.oncash.oncash.Component.step_Adapter.viewholder>() {
     var InstructionList : ArrayList<Step> = ArrayList()
+     var Instruction : ArrayList<Instruction> = ArrayList()
+     var ClosingInstruction : ArrayList<Instruction> = ArrayList()
 
     var context : Context?=null
     class viewholder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -24,9 +26,12 @@ import `in`.oncash.oncash.R
         val description :TextView
         var isClicked :Boolean = false
         val instruction :CardView
+        val recylerView :RecyclerView
+
         init {
             description = itemView.findViewById(`in`.oncash.oncash.R.id.stepName)
             status = itemView.findViewById(R.id.stepImage)
+            recylerView = itemView.findViewById(R.id.instruction_recylerview)
             instruction = itemView.findViewById(R.id.instructions_expandable)
         }
     }
@@ -54,19 +59,22 @@ import `in`.oncash.oncash.R
             holder.status.setImageResource(R.drawable.completed)
         }else{
             holder.status.setImageResource(R.drawable.notcompleted)
-
         }
 
         holder.itemView.setOnClickListener{
             if (!holder.isClicked){
+                if(holder.description.text.contains("Register")){
+                }
+                if(holder.description.text.contains("Close")){
+                }
                 holder.instruction.visibility = View.VISIBLE
                 holder.isClicked = true
+
             }else{
                 holder.instruction.visibility = View.GONE
                 holder.isClicked = false
             }
         }
-
     }
 
     override fun getItemCount(): Int {
@@ -76,9 +84,13 @@ import `in`.oncash.oncash.R
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateList(list :ArrayList<Step>){
+    fun updateList(list :ArrayList<Step> , instructionlist:ArrayList<Instruction> , closingInstruction: ArrayList<Instruction>)  {
         this.InstructionList.clear()
         this.InstructionList.addAll(list)
+        this.Instruction.clear()
+        this.Instruction.addAll(instructionlist)
+        this.ClosingInstruction.clear()
+        this.ClosingInstruction.addAll(closingInstruction)
         notifyDataSetChanged()
     }
 }

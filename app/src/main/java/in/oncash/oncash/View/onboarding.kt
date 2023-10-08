@@ -21,6 +21,8 @@ class onboarding : AppCompatActivity() {
             isUserLogin = UserDataStoreUseCase().retrieveUser(this@onboarding)
             if (isUserLogin == true) {
                 startActivity(Intent(this@onboarding, Home::class.java))
+                finish()
+
             } else {
                 setContentView(R.layout.onboarding_motion_layout)
 
@@ -29,6 +31,7 @@ class onboarding : AppCompatActivity() {
                 button.setOnClickListener {
                     val intent = Intent(this@onboarding, Login::class.java)
                     startActivity(intent)
+                    finish()
                 }
             }
     }

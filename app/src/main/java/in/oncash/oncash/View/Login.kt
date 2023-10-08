@@ -18,7 +18,6 @@ import com.google.android.material.snackbar.Snackbar
 import `in`.oncash.oncash.Component.customLoadingDialog
 import `in`.oncash.oncash.RoomDb.User
 import `in`.oncash.oncash.RoomDb.userDb
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

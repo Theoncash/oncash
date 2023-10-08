@@ -57,11 +57,11 @@
                 android:id="@+id/expandalbe_btn"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_marginStart="270dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
                 android:contentDescription="TODO"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/expandable_btn" />
 
@@ -83,7 +83,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView3">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/instruction_recylerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        </androidx.recyclerview.widget.RecyclerView>
 </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
