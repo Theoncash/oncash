@@ -75,7 +75,7 @@ Description
     <string name="Leader">Leaderboard</string>
     <string name="Referal">Refer And Earn</string>
     <string name="Offer_history">Offer History</string>
-    <string name="get">Complete all offers to earn ₹500</string>
+    <string name="get">Help 3 friends and get ₹500</string>
     <string name="download_now">Download Now</string>
     <string name="you_re_total_rewards_earned">You’re total rewards earned</string>
 </resources>

@@ -9,6 +9,9 @@
     android:background="#DEF3FF">
 
 
+
+
+
     <ImageView
         android:id="@+id/backButton_Info"
         android:layout_width="50dp"
@@ -134,16 +137,16 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/instructionList_info"
                 android:layout_width="301dp"
-                android:layout_height="202dp"
+                android:layout_height="250dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="28dp" />
+                android:layout_marginBottom="9dp" />
 
         </RelativeLayout>
 

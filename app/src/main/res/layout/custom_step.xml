@@ -4,31 +4,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/stepLayout"
+    android:layout_marginBottom="10dp"
     android:layout_width="wrap_content"
-    android:layout_height="80dp">
+    android:layout_height="wrap_content">
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
         android:layout_width="310dp"
-        android:layout_height="78dp"
-        android:layout_marginStart="1dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
         android:layout_marginEnd="1dp"
         app:cardCornerRadius="10sp"
-        app:cardElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardElevation="2dp"
+        app:layout_constraintBottom_toTopOf="@id/instructions_expandable"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="300dp"
+            android:layout_height="40dp">
 
             <ImageView
                 android:id="@+id/stepImage"
-                android:layout_width="57dp"
-                android:layout_height="50dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:contentDescription="TODO"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -38,19 +42,49 @@
                 android:id="@+id/stepName"
                 android:layout_width="215dp"
                 android:layout_height="31dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:text="TextView"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.198"
                 app:layout_constraintStart_toEndOf="@+id/stepImage"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.325" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+            <ImageView
+                android:id="@+id/expandalbe_btn"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="270dp"
+                android:layout_marginTop="10dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/expandable_btn" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/instructions_expandable"
+        android:layout_width="310dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="10dp"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="10sp"
+        app:cardElevation="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView3">
+
+
+</androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

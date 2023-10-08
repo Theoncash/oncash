@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import `in`.oncash.oncash.DataType.Instruction
@@ -21,10 +22,12 @@ import `in`.oncash.oncash.R
     class viewholder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val status : ImageView
         val description :TextView
-
+        var isClicked :Boolean = false
+        val instruction :CardView
         init {
             description = itemView.findViewById(`in`.oncash.oncash.R.id.stepName)
             status = itemView.findViewById(R.id.stepImage)
+            instruction = itemView.findViewById(R.id.instructions_expandable)
         }
     }
 
@@ -52,6 +55,16 @@ import `in`.oncash.oncash.R
         }else{
             holder.status.setImageResource(R.drawable.notcompleted)
 
+        }
+
+        holder.itemView.setOnClickListener{
+            if (!holder.isClicked){
+                holder.instruction.visibility = View.VISIBLE
+                holder.isClicked = true
+            }else{
+                holder.instruction.visibility = View.GONE
+                holder.isClicked = false
+            }
         }
 
     }
