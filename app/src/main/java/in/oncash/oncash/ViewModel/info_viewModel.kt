@@ -15,6 +15,7 @@ class info_viewModel : ViewModel() {
 
     val InstructionsList : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
     val ClosingInstructionsList : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
+    val OfferQueries : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
 
     fun getInstrutionList(offerId: String) : MutableLiveData<ArrayList<Instruction>>{
         viewModelScope.launch{
@@ -28,7 +29,15 @@ class info_viewModel : ViewModel() {
             ClosingInstructionsList.value = Info_FirebaseRepo().getClosingnstructionList(offerId)
         }
 
-        return InstructionsList
+        return ClosingInstructionsList
+    }
+
+    fun getOfferQueries(offerId: String) : MutableLiveData<ArrayList<Instruction>>{
+        viewModelScope.launch{
+            OfferQueries.value = Info_FirebaseRepo().getOfferQueries(offerId)
+        }
+
+        return OfferQueries
     }
 
     fun updateOfferHistory(user : userData , offerId: Int , offerPrice:String ,  status:String){

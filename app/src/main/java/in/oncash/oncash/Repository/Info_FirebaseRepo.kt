@@ -43,7 +43,23 @@ class Info_FirebaseRepo {
 
 
     }
+    suspend fun getOfferQueries( offerId :String) :ArrayList<Instruction>  = withContext(Dispatchers.IO){
+        val response : ArrayList<Instruction> = ArrayList()
+        val data : DatabaseReference = FirebaseDatabase.getInstance().getReference("Offers").child(offerId).child("OfferQueries")
+        try {
+            data.get().await().children.map { snapShot ->
+                val instruction = snapShot.value as String
+                val serialNumber = snapShot.key as String
+                response.add(Instruction(instruction , serialNumber))
+            }
+        } catch (_: Exception) {
 
+        }
+
+        return@withContext response
+
+
+    }
 
 
 

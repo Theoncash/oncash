@@ -2,6 +2,7 @@ package `in`.oncash.oncash.Component
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,7 +65,12 @@ import `in`.oncash.oncash.R
 
         holder.itemView.setOnClickListener{
             if (!holder.isClicked){
+                Log.i("instructionData" , Instruction.toString())
+                holder.instruction.visibility = View.VISIBLE
+                holder.isClicked = true
                 if(holder.description.text.contains("Register")){
+                    Log.i("instructionData" , Instruction.toString())
+
                     val adapter =  Instructions_RecylerViewAdapter()
                     holder.recyclerView.adapter  = adapter
                     holder.recyclerView.layoutManager =LinearLayoutManager(holder.itemView.context , LinearLayoutManager.VERTICAL , false)
@@ -77,8 +83,7 @@ import `in`.oncash.oncash.R
                     adapter.updateList(ClosingInstruction)
 
                 }
-                holder.instruction.visibility = View.VISIBLE
-                holder.isClicked = true
+
 
             }else{
                 holder.instruction.visibility = View.GONE
