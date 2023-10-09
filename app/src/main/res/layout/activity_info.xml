@@ -29,7 +29,7 @@
                 android:id="@+id/offerImage_info"
                 android:layout_width="127dp"
                 android:layout_height="111dp"
-                android:layout_marginStart="90dp"
+                android:layout_marginStart="80dp"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
         </LinearLayout>
 
@@ -91,10 +91,6 @@
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 
-
-        <!-- Description Section -->
-
-        <!-- Steps Section -->
 
         <TextView
             android:id="@+id/description"
@@ -173,7 +169,7 @@
             android:layout_width="311dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:layout_margin="60dp"
             android:backgroundTint="#2479E9"
             android:fontFamily="@font/noto"
             android:text="Let's go"
