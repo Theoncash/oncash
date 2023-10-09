@@ -49,7 +49,7 @@ class Home : AppCompatActivity() {
     private  var userData: userData = userData(0)
     lateinit var roomDb:userDb
     var needToUpdate = false
-    private val version : Double = 1.1
+    private val version : Double = 1.2
     val  SMS_PERMISSION_REQUEST_CODE = 734973;
 
     override fun onCreate(savedInstanceState: Bundle?) {
