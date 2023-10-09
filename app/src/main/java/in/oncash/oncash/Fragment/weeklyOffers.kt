@@ -1,5 +1,6 @@
 package `in`.oncash.oncash.Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.LayoutInflater
@@ -19,6 +20,8 @@ import `in`.oncash.oncash.DataType.OfferList
 import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.R
 import `in`.oncash.oncash.RoomDb.TimerDb
+import `in`.oncash.oncash.View.LeaderBoard
+import `in`.oncash.oncash.View.ReferalActivity
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.ViewModel.offer_viewmodel
 import `in`.oncash.oncash.databinding.FragmentWeeklyOffersBinding
@@ -60,6 +63,8 @@ class weeklyOffers : Fragment() {
         }
     }
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,9 +74,9 @@ class weeklyOffers : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         val homeViewmodel = activity.run{
             this?.let { ViewModelProvider(it).get(home_viewModel::class.java) }
@@ -102,6 +107,11 @@ class weeklyOffers : Fragment() {
                homeViewmodel.setProgressBar(completedOffers , totalOffers)
             }
         })
+
+        val phone = homeViewmodel.getuserData().value ?: userData(0)
+        binding.continueBut.setOnClickListener{
+            startActivity(Intent(requireActivity().application, LeaderBoard::class.java).putExtra("userPhone" , phone.userNumber))
+        }
 
         /*view.findViewById<Button>(R.id.weeklyButton).setOnClickListener {
             if (OfferList.weeklyOffersList.isNotEmpty()) {
