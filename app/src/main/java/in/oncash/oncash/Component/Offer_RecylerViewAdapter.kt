@@ -58,6 +58,7 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: viewholder, position: Int) {
         val price :Int = offerList[position].Price!!.toInt()
 
@@ -66,7 +67,7 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
         val text =  (offerList[position].Price!!.toInt() * offer ) /100
         holder.price.text = "₹ $text "
         Glide.with(holder.itemView.context).load(offerList[position].Image).into(holder.background)
-        holder.DaysLeft.text = offerList[position].dayLeft.toString()
+        holder.DaysLeft.text = "Only ${offerList[position].cap.toString()} Offer  Left "
         val url :URL = URL( offerList[position].Image )
 
         var colour  :String = ""
