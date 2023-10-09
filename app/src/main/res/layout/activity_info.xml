@@ -3,187 +3,183 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:visibility="visible"
-    tools:visibility="visible"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:background="#DEF3FF">
+    android:fillViewport="true"
+    tools:context=".View.Info">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/backButton_Info"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/go_back" />
+
+            <ImageView
+                android:id="@+id/offerImage_info"
+                android:layout_width="127dp"
+                android:layout_height="111dp"
+                android:layout_marginStart="90dp"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        </LinearLayout>
+
+        <!-- Offer Details Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <!-- First CardView -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/item"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                app:cardCornerRadius="30dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/offername_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/visa_card"
+                        android:textAppearance="@style/visa_card" />
+
+                    <TextView
+                        android:id="@+id/offer_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Offer Ends in 3 Days"
+                        android:textAppearance="@style/offer_price" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Second CardView -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
+                app:cardBackgroundColor="#2479E9"
+                app:cardCornerRadius="50dp">
+
+                <TextView
+                    android:id="@+id/offer_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="@string/some_id"
+                    android:textAppearance="@style/offer_price"
+                    android:textColor="#FFFFFF" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
 
+        <!-- Description Section -->
 
-
-
-
-
-    <ImageView
-        android:id="@+id/backButton_Info"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:elevation="14dp"
-        android:src="@drawable/go_back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.015"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.034" />
-
-    <ImageView
-        android:id="@+id/offerImage_info"
-        android:layout_width="127dp"
-        android:layout_height="111dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="20dp"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toTopOf="@+id/item"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/item"
-        android:layout_width="167dp"
-        android:layout_height="49dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp"
-        android:background="@color/white"
-        app:cardCornerRadius="59dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offerImage_info">
-
-        <TextView
-            android:id="@+id/offername_info"
-            android:layout_width="98dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:text="@string/visa_card"
-            android:textAppearance="@style/visa_card" />
-
-        <TextView
-            android:id="@+id/offer_price"
-            android:layout_width="100dp"
-            android:layout_height="17dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="25dp"
-            android:gravity="center"
-            android:text="@string/some_id"
-            android:textAppearance="@style/offer_price" />
-
-    </androidx.cardview.widget.CardView>
-
-    <RelativeLayout
-        android:id="@+id/frame_MAIN"
-        android:layout_width="425dp"
-        android:layout_height="512dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/layout_bg"
-        app:cornerRadius="38dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item"
-        app:layout_constraintVertical_bias="0.0">
-
+        <!-- Steps Section -->
 
         <TextView
             android:id="@+id/description"
-            android:layout_width="100dp"
-            android:layout_height="21dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="42dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="286dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:fontFamily="@font/noto"
             android:gravity="center"
+            android:padding="10dp"
             android:text="Description"
             android:textAppearance="@style/description" />
 
         <RelativeLayout
             android:id="@+id/frame_10000"
-            android:layout_width="wrap_content"
-            android:layout_height="311dp"
-            android:layout_below="@+id/description"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="46dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="46dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:background="@drawable/frame_10000"
             android:clipToOutline="true">
 
+            <!-- Steps Section -->
             <TextView
                 android:id="@+id/steps"
-                android:layout_width="92dp"
-                android:layout_height="23dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="232dp"
-                android:layout_marginBottom="262dp"
-                android:gravity="top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/steps"
-                android:textAppearance="@style/steps" />
-
+                android:textAppearance="@style/steps"
+                android:layout_margin="10dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/instructionList_info"
-                android:layout_width="301dp"
-                android:layout_height="250dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="9dp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/steps"
+                android:padding="10dp" />
 
+            <!-- Documents Section -->
+            <TextView
+                android:id="@+id/documents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Documents"
+                android:textAppearance="@style/steps"
+                android:layout_margin="10dp"
+                android:layout_below="@+id/instructionList_info"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/documentsList_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/documents"
+                android:padding="10dp" />
+
+            <!-- Offer Queries Section -->
+            <TextView
+                android:id="@+id/offerQueries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Offer Queries"
+                android:textAppearance="@style/steps"
+                android:layout_margin="10dp"
+                android:layout_below="@+id/documentsList_info"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/offerQueriesList_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/offerQueries"
+                android:padding="10dp" />
         </RelativeLayout>
 
 
-
-
+        <!-- Link Button Section -->
         <Button
             android:id="@+id/offerLinkButtonInfo"
-            android:layout_width="wrap_content"
+            android:layout_width="311dp"
             android:layout_height="60dp"
-            android:layout_below="@+id/frame_10000"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="69dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="64dp"
-            android:layout_marginBottom="41dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:backgroundTint="#2479E9"
             android:fontFamily="@font/noto"
-            android:gravity="center"
             android:text="Let's go"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:visibility="invisible"
-            app:cornerRadius="59dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </RelativeLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-
+            app:cornerRadius="8dp" />
+    </LinearLayout>
 </ScrollView>
