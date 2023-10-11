@@ -29,7 +29,8 @@
                 android:id="@+id/offerImage_info"
                 android:layout_width="127dp"
                 android:layout_height="111dp"
-                android:layout_marginStart="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="60dp"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
         </LinearLayout>
 
@@ -45,7 +46,7 @@
                 android:id="@+id/item"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="10dp"
                 app:cardCornerRadius="30dp">
 
                 <LinearLayout
@@ -116,9 +117,13 @@
                 android:id="@+id/steps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/steps"
-                android:textAppearance="@style/steps"
-                android:layout_margin="10dp"/>
+                android:textStyle="bold"
+                android:textAppearance="@style/steps" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/instructionList_info"
@@ -132,10 +137,14 @@
                 android:id="@+id/documents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/instructionList_info"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="Documents"
-                android:textAppearance="@style/steps"
-                android:layout_margin="10dp"
-                android:layout_below="@+id/instructionList_info"/>
+                android:textStyle="bold"
+                android:textAppearance="@style/steps" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/documentsList_info"
@@ -149,10 +158,14 @@
                 android:id="@+id/offerQueries"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/documentsList_info"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="Offer Queries"
-                android:textAppearance="@style/steps"
-                android:layout_margin="10dp"
-                android:layout_below="@+id/documentsList_info"/>
+                android:textStyle="bold"
+                android:textAppearance="@style/steps" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/offerQueriesList_info"
@@ -169,7 +182,7 @@
             android:layout_width="311dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:layout_margin="60dp"
+            android:layout_margin="10dp"
             android:backgroundTint="#2479E9"
             android:fontFamily="@font/noto"
             android:text="Let's go"

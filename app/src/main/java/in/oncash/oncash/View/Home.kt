@@ -215,6 +215,7 @@ class Home : AppCompatActivity() {
                     }
 
 
+
                     binding.walletTextView.setOnClickListener {
                         startActivity(
                             Intent(this, Wallet::class.java).putExtra(
@@ -228,6 +229,8 @@ class Home : AppCompatActivity() {
 
 
         }
+
+
 
 
 
