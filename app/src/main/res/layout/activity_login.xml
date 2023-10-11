@@ -62,13 +62,28 @@
 
             android:text="@string/Number_s"
             android:textSize="24sp" />
-
+        <EditText
+            android:id="@+id/nameButtonInput"
+            android:layout_width="300dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="150dp"
+            android:background="@drawable/default_outlined_button"
+            android:gravity="center"
+            android:hint="Full Name "
+            android:inputType="text"
+            android:textColorHint="#797979"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/phoneButtonInput"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <EditText
             android:id="@+id/phoneButtonInput"
             android:layout_width="300dp"
             android:layout_height="52dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="230dp"
             android:background="@drawable/default_outlined_button"
             android:gravity="center"
             android:hint="Phone no"
@@ -78,14 +93,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/nameButtonInput" />
 
         <EditText
             android:id="@+id/refeeral_code"
             android:layout_width="300dp"
             android:layout_height="52dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="230dp"
+            android:layout_marginTop="300dp"
             android:background="@drawable/default_outlined_button"
             android:gravity="center"
             android:hint="Referal Code (Optional)"

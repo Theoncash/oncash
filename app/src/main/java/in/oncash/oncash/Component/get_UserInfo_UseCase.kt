@@ -12,13 +12,13 @@ import org.json.JSONObject
 class get_UserInfo_UseCase {
 
 
-    suspend fun loginManager(userNumber: Long , referred_code: Int): Boolean = withContext(Dispatchers.Default)
+    suspend fun loginManager(userNumber: Long , referred_code: Int , name:String?): Boolean = withContext(Dispatchers.Default)
     {
         val userData: Boolean = isUserRegistered(userNumber)
         if(userData){
             return@withContext true
         }else{
-            registerUser(userNumber , referred_code)
+            registerUser(userNumber , referred_code  ,name)
             return@withContext true
 
         }
@@ -32,9 +32,9 @@ class get_UserInfo_UseCase {
         return@withContext isRegistered
     }
 
-    private suspend fun registerUser(userNumber: Long , referred_code:Int ): Boolean = withContext(Dispatchers.Default) {
+    private suspend fun registerUser(userNumber: Long , referred_code:Int , name:String?): Boolean = withContext(Dispatchers.Default) {
 
-        return@withContext UserInfo_Airtable_Repo().createUser(userNumber, 0 , 0 , referred_code)
+        return@withContext UserInfo_Airtable_Repo().createUser(userNumber, 0 , 0 , referred_code , name)
     }
 
 

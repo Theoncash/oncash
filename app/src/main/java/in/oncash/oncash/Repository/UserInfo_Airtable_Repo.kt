@@ -8,6 +8,7 @@ import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.Blacklist
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.BlackList_Fields
+import `in`.oncash.oncash.DataType.SerializedDataType.Fields1
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.ReferralsDataType
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferInfo
@@ -107,7 +108,7 @@ class UserInfo_Airtable_Repo {
 
     }
 
-    suspend fun createUser(number: Long, wallet: Int , total_bal :Int , referral_code: Int): Boolean =
+    suspend fun createUser(number: Long, wallet: Int , total_bal :Int , referral_code: Int , name:String?): Boolean =
         withContext(Dispatchers.IO) {
             val client = HttpClient(CIO) {
                 install(ContentNegotiation) {
@@ -119,7 +120,7 @@ class UserInfo_Airtable_Repo {
             }
             val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo"
 
-            val userInfo = Fields(number, wallet , total_bal)
+            val userInfo = Fields1(number, wallet , total_bal , name)
             val userRecordId: MutableLiveData<String> = MutableLiveData()
 
 
@@ -622,18 +623,19 @@ Log.i("blacklistt" , response.toString())
 
     }
 
-    suspend fun getLeaderBoard() : MutableLiveData<ArrayList<Fields>>{
+    suspend fun getLeaderBoard() : MutableLiveData<ArrayList<Fields1>>{
         val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?Total_Bal=gt.0&order=Total_Bal.desc&select=*"
-        val list = MutableLiveData<ArrayList<Fields>>()
+        val list = MutableLiveData<ArrayList<Fields1>>()
         val response = getData(url)
-        val users :ArrayList<Fields> = ArrayList()
+        val users :ArrayList<Fields1> = ArrayList()
         var json = JSONArray( response.body<String>().toString())
         for(i in 0 until json.length()){
             var user = JSONObject(json[i].toString())
             val number = user.getLong("UserPhone")
             val wallet = user.getInt("Wallet")
             val total_bal = user.getInt("Total_Bal")
-            users.add(Fields(number.toLong() , wallet , total_bal))
+            val name :String? = user.getString("Name")
+            users.add(Fields1(number.toLong() , wallet , total_bal , name))
     }
         Log.i("leaderboardd" , response.body<String>().toString())
         Log.i("leaderboardd" , users.toString())

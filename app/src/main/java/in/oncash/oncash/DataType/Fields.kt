@@ -6,4 +6,5 @@ data class Fields(
     val UserPhone: Long,
     val Wallet: Int,
     val Total_Bal :Int
+
 )

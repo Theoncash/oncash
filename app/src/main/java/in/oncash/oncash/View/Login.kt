@@ -44,6 +44,7 @@ class Login : AppCompatActivity() {
 
                     val phone = binding.phoneButtonInput.text.toString().trim()
                     var refeeral_code = binding.refeeralCode.text.toString()
+                    var name :String?= binding.nameButtonInput.text.toString()
                     if(refeeral_code == ""){
                         refeeral_code = 0.toString()
                     }
@@ -61,7 +62,7 @@ class Login : AppCompatActivity() {
                             loadingDialog.dismiss()
                         }, 3000) // Replace 3000 with the actual duration of your background work
 // add referral code section here
-                        viewModel.addUser(phone.toLong() , refeeral_code.toInt() )
+                        viewModel.addUser(phone.toLong() , refeeral_code.toInt()  , name)
                         viewModel.getUserData1().observe(this@Login) { userData ->
 
                             if (userData) {

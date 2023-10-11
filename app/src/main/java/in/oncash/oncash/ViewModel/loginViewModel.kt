@@ -12,12 +12,12 @@ import kotlinx.coroutines.withContext
 class loginViewModel:ViewModel() {
     private  var userData:MutableLiveData<Boolean> = MutableLiveData()
 
-    fun addUser(userNumber : Long  , referred_code : Int) {
+    fun addUser(userNumber : Long  , referred_code : Int , name :String?) {
 
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
 
-                userData.value = get_UserInfo_UseCase().loginManager(userNumber , referred_code )
+                userData.value = get_UserInfo_UseCase().loginManager(userNumber , referred_code , name)
 
             }
         }

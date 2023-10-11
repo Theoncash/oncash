@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import `in`.oncash.oncash.DataType.Fields
 import `in`.oncash.oncash.DataType.Offer
+import `in`.oncash.oncash.DataType.SerializedDataType.Fields1
 import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.View.Info
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,7 @@ import java.net.URL
 
 
 class leaderBoard_RecylerViewAdapter() : RecyclerView.Adapter<leaderBoard_RecylerViewAdapter.viewholder>() {
-    var offerList : ArrayList<Fields> = ArrayList<Fields>()
+    var offerList : ArrayList<Fields1> = ArrayList<Fields1>()
     class viewholder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val number : TextView
         val total_bal :TextView
@@ -53,10 +54,15 @@ class leaderBoard_RecylerViewAdapter() : RecyclerView.Adapter<leaderBoard_Recyle
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: viewholder, position: Int) {
 
         holder.serial_no.text = (position + 1).toString()
+        if(offerList[position].Name==null || offerList[position].Name == ""){
             holder.number.text=   offerList[position].UserPhone.toString().slice(0..3) + "XXX"
+        }else{
+            holder.number.text=   offerList[position].Name
+        }
 
         val price = offerList[position].Total_Bal.toString()
         holder.total_bal.text = "₹ $price "
@@ -75,7 +81,7 @@ class leaderBoard_RecylerViewAdapter() : RecyclerView.Adapter<leaderBoard_Recyle
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateList(list :ArrayList<Fields> ){
+    fun updateList(list :ArrayList<Fields1> ){
         this.offerList.clear()
         this.offerList.addAll(list)
         notifyDataSetChanged()
