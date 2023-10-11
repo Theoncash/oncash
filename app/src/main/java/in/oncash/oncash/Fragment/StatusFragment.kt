@@ -58,7 +58,13 @@ class StatusFragment : Fragment() {
         var referralViewmodel: referral_viewModel = activity.run{
             ViewModelProvider(this!!)[referral_viewModel::class.java]
         }
-        val userData = referralViewmodel.userData.value!!
+        var userData:userData = userData(0)
+        try {
+             userData = referralViewmodel.userData.value!!
+
+        }catch (e:Exception){
+
+        }
         val referral: RecyclerView = view.findViewById(`in`.oncash.oncash.R.id.status_recyclerview)
         val referral_adapter = referral_RecylerViewAdapter(  )
         referral.adapter = referral_adapter

@@ -107,10 +107,6 @@ class Home : AppCompatActivity() {
                             homeViewmodel.getOffersHistory(userData.userNumber)
                             homeViewmodel.getWallet(userData.userNumber)
                         }
-
-
-
-
                     }
 
 //        lifecycleScope.launch {
@@ -221,7 +217,7 @@ class Home : AppCompatActivity() {
                             Intent(this, Wallet::class.java).putExtra(
                                 "walletBalance",
                                 binding.walletTextView.text
-                            ) .putExtra("userNumber", userData.userNumber.toString()).putExtra("userRecordId", userData.userNumber))
+                            ).putExtra("userNumber", userData.userNumber.toString()).putExtra("userRecordId", userData.userNumber))
 
                     }
                 }

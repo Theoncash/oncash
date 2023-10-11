@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import `in`.oncash.oncash.R
@@ -59,9 +60,14 @@ class InviteFragment : Fragment() {
         val userId = referralViewmodel.userData.value
 
         lifecycleScope.launch {
-            UserInfo_Airtable_Repo().getReferralCode(userId!!.userNumber).observe(viewLifecycleOwner){
-                binding.referalCode.text =  "Referral code : $it"
+            try {
+                UserInfo_Airtable_Repo().getReferralCode(userId!!.userNumber).observe(viewLifecycleOwner){
+                    binding.referalCode.text =  "Referral code : $it"
+                }
+            }catch (e:Exception){
+
             }
+
         }
 
     }
