@@ -56,7 +56,6 @@ class Info : AppCompatActivity() {
         val offerName = intent.getStringExtra("OfferName")
         binding.offernameInfo.text = offerName
         var offerPrice = intent.getStringExtra("OfferPrice")
-        binding.offerPrice.text = offerPrice
         Glide.with(this).load(intent.getStringExtra("OfferImage")).into(binding.offerImageInfo)
         var offer: String? = intent.getStringExtra("OfferLink")
         val subid: String? = intent.getStringExtra("subid")
@@ -72,7 +71,7 @@ class Info : AppCompatActivity() {
         val adapter = step_Adapter()
         val Documentsadapter = Instructions_RecylerViewAdapter()
         val OfferQueriesAdapter = offerQueries_adapter()
-        binding.offerPrice.text = offerPrice!!
+        binding.offerPrice.text = "Rs." + offerPrice!!
 
         binding.instructionListInfo.adapter = adapter
         binding.instructionListInfo.layoutManager =

@@ -60,7 +60,6 @@ class InviteFragment : Fragment() {
 
         lifecycleScope.launch {
             UserInfo_Airtable_Repo().getReferralCode(userId!!.userNumber).observe(viewLifecycleOwner){
-
                 binding.referalCode.text =  "Referral code : $it"
             }
         }

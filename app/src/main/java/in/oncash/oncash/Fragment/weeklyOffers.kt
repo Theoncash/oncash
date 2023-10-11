@@ -97,8 +97,6 @@ class weeklyOffers : Fragment() {
             if (OfferList.weeklyOffersList.isNotEmpty()) {
                 this.OfferList = OfferList
                 adapter.updateList(OfferList.weeklyOffersList , offer )
-
-
             }
 
             homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner){
@@ -110,22 +108,9 @@ class weeklyOffers : Fragment() {
 
         val phone = homeViewmodel.getuserData().value ?: userData(0)
         binding.continueBut.setOnClickListener{
-            startActivity(Intent(requireActivity().application, InviteFragment::class.java).putExtra("userPhone" , phone.userNumber))
+            startActivity(Intent(requireActivity().application, ReferalActivity::class.java).putExtra("number" , userData.userNumber ))
         }
 
-        /*view.findViewById<Button>(R.id.weeklyButton).setOnClickListener {
-            if (OfferList.weeklyOffersList.isNotEmpty()) {
-                adapter.updateList(OfferList.weeklyOffersList , offer)
-            }
-        }
-
-        view.findViewById<Button>(R.id.monthlyButton).setOnClickListener {
-            if (OfferList.monthlyOfferList.isNotEmpty()) {
-                adapter.updateList(OfferList.monthlyOfferList , offer)
-            }else{
-                Snackbar.make(view , "No Monthly Offers Available " , Snackbar.LENGTH_LONG).show()
-            }
-        }*/
 
     }
 
