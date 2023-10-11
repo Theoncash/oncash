@@ -110,7 +110,7 @@ class weeklyOffers : Fragment() {
 
         val phone = homeViewmodel.getuserData().value ?: userData(0)
         binding.continueBut.setOnClickListener{
-            startActivity(Intent(requireActivity().application, LeaderBoard::class.java).putExtra("userPhone" , phone.userNumber))
+            startActivity(Intent(requireActivity().application, InviteFragment::class.java).putExtra("userPhone" , phone.userNumber))
         }
 
         /*view.findViewById<Button>(R.id.weeklyButton).setOnClickListener {
