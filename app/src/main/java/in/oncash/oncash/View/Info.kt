@@ -1,5 +1,6 @@
 package `in`.oncash.oncash.View
 
+import AppInstallReceiver
 import android.annotation.SuppressLint
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
@@ -21,6 +22,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.Data
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 
 import com.bumptech.glide.Glide
 import `in`.oncash.oncash.Component.Instructions_RecylerViewAdapter
@@ -39,11 +43,12 @@ import `in`.oncash.oncash.databinding.ActivityInfoBinding
 import kotlinx.coroutines.launch
 import java.lang.reflect.Array
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 
 class Info : AppCompatActivity() {
      lateinit var binding : ActivityInfoBinding
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "InvalidPeriodicWorkRequestInterval")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -310,8 +315,19 @@ finish()
                         info_viewModel.updateOfferHistory(
                             userData(number!!.toLong()),
                             offerId!!.toInt(), offerPrice.toString(),  "Being Reviewed")
+                        val inputData = Data.Builder()
+                            .putString("appName", appName!!)
+                            .putString("name", offerName!!)
+                            .build()
+                        val periodicWorkRequest = PeriodicWorkRequest.Builder(
+                            AppInstallReceiver::class.java,
+                            20, TimeUnit.SECONDS
+                        )       .setInputData(inputData)
 
 
+                            .build()
+
+                        WorkManager.getInstance(this).enqueue(periodicWorkRequest)
 
                         try {
                             this.startActivity(intent)

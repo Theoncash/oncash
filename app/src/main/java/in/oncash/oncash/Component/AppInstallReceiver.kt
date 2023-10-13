@@ -9,97 +9,94 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.work.Worker
+import androidx.work.WorkerParameters
+import `in`.oncash.oncash.DataType.Offer
 import `in`.oncash.oncash.R
 
-class AppInstallReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == Intent.ACTION_PACKAGE_ADDED) {
-            val packageName = intent.data?.encodedSchemeSpecificPart
-            val serviceIntent = Intent(context, AppInstallForegroundService::class.java)
-            serviceIntent.putExtra("packageName", packageName)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context?.startForegroundService(serviceIntent)
-            } else {
-                context?.startService(serviceIntent)
-            }
+class AppInstallReceiver (appContext: Context, workerParams: WorkerParameters) :
+    Worker(appContext, workerParams) {
+
+    override fun doWork(): Result {
+
+        Log.i("pwe" , "Periodic work executed!")
+
+        val appName = inputData.getString("appName")
+        val name = inputData.getString("name")
+        if(isAppInstalled(applicationContext , appName !!))
+        {
+            showNotification(applicationContext , name!!)
+            return Result.success()
+
         }
+        return Result.retry()
+
     }
 }
 
-class AppInstallForegroundService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent != null && intent.hasExtra("packageName")) {
-            val packageName = intent.getStringExtra("packageName")
-            // Handle the installed package here
-            // You can also show a notification to inform the user
 
-            val channelId = "my_notification_channel"
-            val notificationId = 1
+fun isAppInstalled(context: Context , appName: String): Boolean {
+    // get list of all the apps installed
+    // get list of all the apps installed
+    val pm: PackageManager = context.packageManager
+    try {
+        val packageInfo = pm.getInstalledApplications(0)
 
-            val notificationBuilder = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.oncash)
-                .setContentTitle("App Installed")
-                .setContentText("App $packageName has been installed.")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
-
-            val notificationManager = NotificationManagerCompat.from(this)
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+        for(app in packageInfo){
+            if(app.packageName == appName){
+                return true
             }
-            notificationManager.notify(notificationId, notificationBuilder.build())
-        }
-        // Stop the service
-        stopSelf()
-        return START_NOT_STICKY
-    }
-
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        // Create a foreground notification to inform the user
-        createForegroundNotification()
-    }
-
-    private fun createForegroundNotification() {
-        val channelId = "my_foreground_channel"
-        val notificationId = 2
-
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.oncash_icon)
-            .setContentTitle("App Install Service")
-            .setContentText("Running in the background")
-            .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setAutoCancel(false)
-            .setOngoing(true)
-
-        val notificationManager = NotificationManagerCompat.from(this)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "App Install Service",
-                NotificationManager.IMPORTANCE_LOW
-            )
-            notificationManager.createNotificationChannel(channel)
         }
 
-        val notification = notificationBuilder.build()
-        startForeground(notificationId, notification)
+    } catch (e: PackageManager.NameNotFoundException) {
+        // The app is not installed.
+        Toast.makeText(context , "packageInfo.applicationInfo.packageName" , Toast.LENGTH_LONG).show()
+
+        return false
     }
+    return false
 }
+
+fun showNotification(context: Context, name: String) {
+    // Define the channel ID as a constant
+    val channelId = "my_notification_channel"
+    val notificationId = 3133231// Use a unique ID for the notification
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channel = NotificationChannel(channelId, "My Notification Channel", NotificationManager.IMPORTANCE_DEFAULT)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+    Log.i("SMSDATA" , "working")
+
+    val notificationBuilder = NotificationCompat.Builder(context, channelId)
+        .setSmallIcon(R.drawable.oncash)
+        .setContentTitle("OnCash vibes, climb the skies! High-fives!")
+        .setContentText("Good job! You just earned $name with OnCash. Keep it up and watch your earnings grow.")
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setAutoCancel(true) // Removes the notification when tapped
+
+    val notificationManager = NotificationManagerCompat.from(context)
+    if (ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        // TODO: Consider calling
+        //    ActivityCompat#requestPermissions
+        // here to request the missing permissions, and then overriding
+        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+        //                                          int[] grantResults)
+        // to handle the case where the user grants the permission. See the documentation
+        // for ActivityCompat#requestPermissions for more details.
+        return
+    }
+    notificationManager.notify(notificationId , notificationBuilder.build())
+}
+
+
