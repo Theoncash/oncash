@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 data class Fields(
     val UserPhone: Long,
     val Wallet: Int,
-    val Total_Bal :Int
-
+    val Total_Bal :Int,
+    val Name:String?
 )

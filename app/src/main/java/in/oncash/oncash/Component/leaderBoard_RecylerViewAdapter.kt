@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import `in`.oncash.oncash.R
@@ -34,10 +35,13 @@ class leaderBoard_RecylerViewAdapter() : RecyclerView.Adapter<leaderBoard_Recyle
         val number : TextView
         val total_bal :TextView
         val serial_no : TextView
+        val image : ImageView
         init {
             number = itemView.findViewById(R.id.user_number)
             total_bal = itemView.findViewById(R.id.total_bal)
             serial_no = itemView.findViewById(R.id.serial_num)
+            image = itemView.findViewById(R.id.image)
+
         }
     }
 
@@ -62,6 +66,21 @@ class leaderBoard_RecylerViewAdapter() : RecyclerView.Adapter<leaderBoard_Recyle
             holder.number.text=   offerList[position].UserPhone.toString().slice(0..3) + "XXX"
         }else{
             holder.number.text=   offerList[position].Name
+        }
+        if(position == 0){
+            holder.serial_no.visibility = View.GONE
+            holder.image.visibility = View.VISIBLE
+            Glide.with(holder.itemView.context).load("https://static.vecteezy.com/system/resources/previews/018/842/631/non_2x/3d-badge-winner-for-1st-first-place-winner-awards-and-champion-prizes-3d-rendering-free-png.png").into(holder.image)
+        }
+        if(position == 1){
+            holder.serial_no.visibility = View.GONE
+            holder.image.visibility = View.VISIBLE
+            Glide.with(holder.itemView.context).load("https://static.vecteezy.com/system/resources/previews/018/842/766/original/3d-badge-winner-for-2nd-second-place-winner-awards-and-champion-prizes-3d-rendering-free-png.png").into(holder.image)
+        }
+        if(position ==2){
+            holder.serial_no.visibility = View.GONE
+            holder.image.visibility = View.VISIBLE
+            Glide.with(holder.itemView.context).load("https://static.vecteezy.com/system/resources/previews/018/842/778/non_2x/3d-badge-winner-for-3rd-third-place-winner-awards-and-champion-prizes-3d-rendering-free-png.png").into(holder.image)
         }
 
         val price = offerList[position].Total_Bal.toString()

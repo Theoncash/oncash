@@ -1,5 +1,10 @@
 package `in`.oncash.oncash.Fragment
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.pm.PackageManager
 import android.icu.text.NumberFormat
 import android.icu.util.Currency
 import android.os.Build
@@ -11,10 +16,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withCreated
 import androidx.recyclerview.widget.LinearLayoutManager
 import `in`.oncash.oncash.Component.withdrawalTransaction_RecylerViewAdapter
 import `in`.oncash.oncash.DataType.withdrawalTransaction
@@ -23,8 +32,12 @@ import `in`.oncash.oncash.ViewModel.wallet_viewModel
 import `in`.oncash.oncash.databinding.FragmentRedeemBinding
 import com.google.android.material.snackbar.Snackbar
 import `in`.oncash.oncash.Component.customLoadingDialog
+import `in`.oncash.oncash.R
+import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -66,6 +79,7 @@ class redeem : Fragment() {
         return  binding.root
     }
 
+    @SuppressLint("SuspiciousIndentation")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,20 +87,27 @@ class redeem : Fragment() {
             ViewModelProvider(this!!).get(home_viewModel::class.java)
         }
 
-        homeViewmodel.getWalletPrice().observe(viewLifecycleOwner) { walletInfo ->
-             walletBalance = walletInfo.currentBal
-            val formattedBalance = NumberFormat.getCurrencyInstance().apply {
-                currency = Currency.getInstance("INR")
-            }.format(walletBalance)
 
-            binding.walletBala.text = formattedBalance
-        }
 
             homeViewmodel.getuserData().observe(viewLifecycleOwner){
                 userNumber = it.userNumber
                 homeViewmodel.withdrawalTransaction(userNumber)
 
             }
+        lifecycleScope.launch {
+            withContext(
+                Dispatchers.IO
+            ){
+                walletBalance =   UserInfo_Airtable_Repo().getWallet(userNumber) .currentBal
+
+                    val formattedBalance = NumberFormat.getCurrencyInstance().apply {
+                        currency = Currency.getInstance("INR")
+                    }.format(walletBalance)
+
+                    binding.walletBala.text = formattedBalance
+                }
+            }
+
 
 
             binding.withdrawalTransaction.adapter = adapter
@@ -118,7 +139,7 @@ class redeem : Fragment() {
                                 walletBalance,
                             )
                             viewModel.getWithdrawalRequest().observe(viewLifecycleOwner) { status ->
-                                if (status.response.contains("201")) {
+                                if (status.response == "201") {
                                     // viewModel.getWallet(userRecordId)
                                     //viewModel.getWalletPrice().observe(this, Observer { wallet ->
 
@@ -129,6 +150,41 @@ class redeem : Fragment() {
                                     adapter.updateList(withdrawalList)
                                     binding.withdrawButton.isClickable = true
                                     walletBalance = 0
+
+                                    val channelId = "ONCASH_CANNEL"
+                                    val channelName = "ONCASH"
+                                    val notificationManager =  NotificationManagerCompat.from(view.context)
+
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+                                        notificationManager.createNotificationChannel(channel)
+                                    }
+                                    val notificationId = 1 // Unique ID for the notification
+
+                                    val notificationBuilder = NotificationCompat.Builder(view.context, channelId)
+                                        .setSmallIcon(R.drawable.oncash)
+                                        .setContentTitle("Withdraw Successfully")
+                                        .setContentText("Good job! You just earned ${status.withdrawalTransaction.WithdrawalAmount} with OnCash. Keep it up and watch your earnings grow. ")
+                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                        .setAutoCancel(true) // Removes the notification when tapped
+
+
+                                    if (ActivityCompat.checkSelfPermission(
+                                            view.context,
+                                            Manifest.permission.POST_NOTIFICATIONS
+                                        ) != PackageManager.PERMISSION_GRANTED
+                                    ) {
+                                        // TODO: Consider calling
+                                        //    ActivityCompat#requestPermissions
+                                        // here to request the missing permissions, and then overriding
+                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                        //                                          int[] grantResults)
+                                        // to handle the case where the user grants the permission. See the documentation
+                                        // for ActivityCompat#requestPermissions for more details.
+                                    }
+                                    notificationManager.notify(notificationId, notificationBuilder.build())
+
+
                                     Snackbar.make(
                                         binding.root,
                                         "Withdraw Successful",

@@ -16,6 +16,7 @@ import `in`.oncash.oncash.ViewModel.loginViewModel
 import `in`.oncash.oncash.databinding.ActivityLoginBinding
 import com.google.android.material.snackbar.Snackbar
 import `in`.oncash.oncash.Component.customLoadingDialog
+import `in`.oncash.oncash.Repository.Offer_FIrebase
 import `in`.oncash.oncash.RoomDb.User
 import `in`.oncash.oncash.RoomDb.userDb
 import kotlinx.coroutines.Dispatchers
@@ -39,9 +40,6 @@ class Login : AppCompatActivity() {
             } else {
                 setContentView(binding.root)
                 binding.continueBut.setOnClickListener {
-
-
-
                     val phone = binding.phoneButtonInput.text.toString().trim()
                     var refeeral_code = binding.refeeralCode.text.toString()
                     var name :String?= binding.nameButtonInput.text.toString()
@@ -63,8 +61,8 @@ class Login : AppCompatActivity() {
                         }, 3000) // Replace 3000 with the actual duration of your background work
 // add referral code section here
                         viewModel.addUser(phone.toLong() , refeeral_code.toInt()  , name)
+                        Offer_FIrebase().addReferral(phone, refeeral_code)
                         viewModel.getUserData1().observe(this@Login) { userData ->
-
                             if (userData) {
                                 lifecycleScope.launch {
                                     withContext(Dispatchers.Default){

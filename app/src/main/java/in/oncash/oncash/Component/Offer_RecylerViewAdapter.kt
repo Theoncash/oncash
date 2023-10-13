@@ -6,6 +6,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -17,17 +19,15 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import `in`.oncash.oncash.DataType.Offer
+import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields
 import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.View.Info
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.net.URL
 
 
 class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<Offer_RecylerViewAdapter.viewholder>() {
     var offerList : ArrayList<Offer> = ArrayList<Offer>()
+    var offerHistoryList : ArrayList<Fields> = ArrayList()
     var lastPosition = -1
     var offer = 100
     var context : Context?=null
@@ -67,11 +67,24 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
         val text =  (offerList[position].Price!!.toInt() * offer ) /100
         holder.price.text = "₹ $text "
         Glide.with(holder.itemView.context).load(offerList[position].Image).into(holder.background)
-        holder.DaysLeft.text = "Only ${offerList[position].cap.toString()} Offer  Left "
+        holder.DaysLeft.text = "Only ${offerList[position].cap.toString()} Slots  Available "
         val url :URL = URL( offerList[position].Image )
+        var isCompleted = false
+        for(offer in offerHistoryList){
+            if( offer.Status.contains("Completed") && offer.OfferId.toString() == offerList[position].OfferId!!)
+            {
+                isCompleted = true
+            }
+        }
+        if(isCompleted) {
+            val greenColor = 0xFF00FF00 // Light green color (0xAARRGGBB format)
 
-        var colour  :String = ""
+// Create a PorterDuffColorFilter with the green color and the mode you want (SRC_IN is a common choice)
+            val colorFilter = PorterDuffColorFilter(greenColor.toInt(), PorterDuff.Mode.SRC_IN)
 
+            holder.itemView.setBackgroundColor(Color.parseColor("#E0FFED"))
+
+        }
 
 //
 //        val animation = AnimationUtils.loadAnimation(
@@ -123,11 +136,13 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateList(list :ArrayList<Offer> , offer: Int){
+    fun updateList(list :ArrayList<Offer> , offer: Int , offerHistory :ArrayList<Fields>){
 //        val result =  DiffUtil.calculateDiff( Diffutil(offerList , list))
         this.offer = offer
         this.offerList.clear()
         this.offerList.addAll(list)
+        this.offerHistoryList.clear()
+        this.offerHistoryList.addAll(offerHistory)
         notifyDataSetChanged()
 
 //        result.dispatchUpdatesTo(this)

@@ -1,5 +1,6 @@
 package `in`.oncash.oncash.Repository
 
+import android.util.Log
 import `in`.oncash.oncash.DataType.Instruction
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -34,6 +35,8 @@ class Info_FirebaseRepo {
                 val instruction = snapShot.value as String
                 val serialNumber = snapShot.key as String
                 response.add(Instruction(instruction , serialNumber))
+                Log.i("closingInstructions" , response.toString())
+
             }
         } catch (_: Exception) {
 

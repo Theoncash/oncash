@@ -27,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.room.Room
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import `in`.oncash.oncash.Component.checkRegistration
@@ -42,6 +43,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+
 class Home : AppCompatActivity() {
      lateinit var binding: ActivityHomeBinding
     val homeViewmodel: home_viewModel by viewModels()
@@ -55,7 +57,20 @@ class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          soundPool = SoundPool.Builder().setMaxStreams(1).build()
+        val notificationPermission = Manifest.permission.POST_NOTIFICATIONS
+         val REQUEST_NOTIFICATION_PERMISSION = 4343242 // Use any unique integer value
 
+        if (ContextCompat.checkSelfPermission(this, notificationPermission) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request it
+            ActivityCompat.requestPermissions(
+                this,  // Pass your activity reference
+                arrayOf(notificationPermission),
+                REQUEST_NOTIFICATION_PERMISSION
+            )
+        } else {
+            // Permission is already granted, you can proceed to show notifications
+            // You may call your notification code here
+        }
          soundID = soundPool.load(this, R.raw.water_drop, 1)
 //        if (!isNetworkConnected(this)) {
 //            setContentView(R.layout.no_internet) // Load the layout for no internet
@@ -112,7 +127,21 @@ class Home : AppCompatActivity() {
 //        lifecycleScope.launch {
 //            getUserData()
 //        }
-
+                    FirebaseMessaging.getInstance().isAutoInitEnabled = true
+                    FirebaseMessaging.getInstance().subscribeToTopic("Referral")
+                        .addOnCompleteListener(object : OnCompleteListener<Void> {
+                            override fun onComplete(task: Task<Void>) {
+                                if (task.isSuccessful) {
+                                    // User is successfully subscribed to the topic
+                                    // You can handle success here, e.g., show a success message
+                                    Log.i("FirebaseData" , "Subscribed to 'new_entries' topic successfully.")
+                                } else {
+                                    // Subscription failed
+                                    // You can handle the failure here, e.g., show an error message
+                                    Log.i("FirebaseData" ,"Failed to subscribe to 'new_entries' topic: ${task.exception?.message}")
+                                }
+                            }
+                        })
                     FirebaseApp.initializeApp(this)
                     FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                         if (!task.isSuccessful) {

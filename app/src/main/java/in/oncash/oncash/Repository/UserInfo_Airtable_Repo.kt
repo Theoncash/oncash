@@ -1,6 +1,7 @@
 package `in`.oncash.oncash.Repository
 
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import `in`.oncash.oncash.DataType.*
@@ -12,6 +13,7 @@ import `in`.oncash.oncash.DataType.SerializedDataType.Fields1
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.ReferralsDataType
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferInfo
+import `in`.oncash.oncash.DataType.SerializedDataType.OfferTime
 import `in`.oncash.oncash.DataType.SerializedDataType.Referral
 import `in`.oncash.oncash.DataType.SerializedDataType.ReferralFields
 import `in`.oncash.oncash.DataType.SerializedDataType.Referred
@@ -29,7 +31,11 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import org.json.JSONArray
 import org.json.JSONObject
+import java.sql.Date
 import java.sql.Ref
+import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 import kotlin.random.Random
@@ -74,6 +80,51 @@ class UserInfo_Airtable_Repo {
 
         }
         return@withContext walletDatatype(current_bal ,total_bal )
+    }
+
+
+    @SuppressLint("SimpleDateFormat")
+    suspend fun getOfferTime(offerId: Int) = withContext(Dispatchers.IO) {
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                })
+            }
+        }
+
+
+        val url =  "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OfferInfo?select=OfferId=eq.$offerId&select=*"
+        val response = client.get(url) {
+            headers {
+                append("apikey", apiKey)
+                append("Authorization", "Bearer $apiKey")
+            }
+        }
+
+        var date : String  = ""
+        var  time :String = ""
+        var pt : java.util.Date?  = null
+        var praseddate : java.util.Date? = null
+        try {
+            Log.i("userrepository" ,response.body<String>())
+
+            if(response.status.value == 200 ){
+                val fields = JSONArray(response.body<String>())
+                time = JSONObject(fields[0].toString()).getString("OfferLaunch")
+                date = JSONObject(fields[0].toString()).getString("OfferLauchDate")
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                val timeFormat = SimpleDateFormat("HH:mm:ss")
+                  pt = timeFormat.parse(time)
+                  praseddate = dateFormat.parse(date)
+            }
+
+        }catch ( e:Exception){
+
+        }
+        return@withContext OfferTime(praseddate!!,pt!!)
     }
 
 
@@ -329,11 +380,14 @@ class UserInfo_Airtable_Repo {
                 }
             }
 
-
             val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?UserPhone=eq.$number"
 
+            val getname = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?UserPhone=eq.$number&select=Name"
+            val name_response = getData(getname)
+            Log.i("airtabledata", name_response.body<String>().toString())
 
-            val userInfo = Fields(number, wallet , total_bal )
+            val name = JSONObject( JSONArray(name_response.body<String>())[0].toString() ).getString("Name")
+            val userInfo = Fields(number, wallet , total_bal  , name)
             var status by Delegates.notNull<String>()
             try {
                 val response = client.post {
@@ -388,7 +442,7 @@ class UserInfo_Airtable_Repo {
                     contentType(ContentType.Application.Json)
                     setBody(userInfo)
                 }
-                responseStatus = response.status.value.toString()
+                responseStatus = response.status.value .toString()
                 if(response.status.value == 201){
 
                 }
@@ -705,6 +759,17 @@ Log.i("blacklistt" , response.toString())
         referral_code.postValue(code)
         return referral_code
     }
+     suspend fun getReferralCodee(userId:Long) : Int{
+        val url =
+            "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referral?UserId=eq.$userId&select=*"
+        val response = getData(url)
+        var code = 0
+        var json = JSONArray(response.body<String>().toString())
+        if (json.toString() != "[]" || json.length() > 0) {
+            code = JSONObject(json[0].toString()).getInt("Referral_code")
+        }
+        return code
+    }
      suspend fun getOfferInfo(offerId:Int) : OfferInfo{
         Log.i("fbDataa" , offerId.toString() )
 
@@ -759,7 +824,8 @@ Log.i("blacklistt" , response.toString())
 
                 val amaount_json = JSONArray(users_info.body<String>().toString())
                 val amount = JSONObject(amaount_json[0].toString()).getInt("Total_Bal")
-                final_referred_users.add(Fields(user, 0, amount.toInt()))
+                val name = JSONObject(amaount_json[0].toString()).getString("Name")
+                final_referred_users.add(Fields(user, 0, amount.toInt() ,name ))
             }
 
             Log.i("userdataa" , referred_users.toString())

@@ -88,5 +88,23 @@ class Offer_FIrebase  {
         }
     }
 
+     fun addReferral(userId:String , referral_code :String){
+        val database = FirebaseDatabase.getInstance()
+        val databaseReference = database.getReference("Referral")
+
+// Define the data you want to add
+        val data = mapOf(
+            userId to referral_code,
+            // Add more key-value pairs as needed
+        )
+
+// Use setValue to write the data to the specified location in the database
+        databaseReference.setValue(data)
+            .addOnSuccessListener {
+            }
+            .addOnFailureListener { error ->
+            }
+
+    }
 
 }

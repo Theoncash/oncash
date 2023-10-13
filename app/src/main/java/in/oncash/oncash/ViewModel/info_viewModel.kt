@@ -67,8 +67,9 @@ class info_viewModel : ViewModel() {
         viewModelScope.launch {
            val offerHistory =  offerHistory_component().getOfferHIstory( userId )
             for (offer in offerHistory ){
-               if( offer.OfferId == offerId && offer.Status == "Completed")
-                  isCompleted.postValue(  true )
+               if( offer.OfferId == offerId && offer.Status == "Completed"){
+                   isCompleted.postValue(  true )
+               }
             }
         }
         return isCompleted

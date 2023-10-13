@@ -122,10 +122,10 @@ finish()
         )
         Documentsadapter.updateList(Documents)
         var ClosingInstruction: ArrayList<Instruction> = ArrayList()
+        Log.i("closingInstructions" , "it.toString()")
 
 
         adapter.updateList(list , Instruction , ClosingInstruction)
-        binding.offerLinkButtonInfo.text = "Completed"
         binding.offerLinkButtonInfo.visibility = View.VISIBLE
         //Observing the getInstructionList() in info_viewmodel (ie which gets the data from info_FirebaseRepo)
         val info_viewModel: info_viewModel by viewModels()
@@ -148,8 +148,12 @@ finish()
                                 this@Info
                             ) {
                             if (!it) {
+                                Log.i("closingInstructions" , it.toString())
+
                                 info_viewModel.isCompleted(number!!.toLong(), offerId!!.toInt())
                                     .observe(this@Info) {
+                                        Log.i("closingInstructions" , it.toString())
+
                                         if (it == false) {
                                             info_viewModel.getInstrutionList(offerId!!)
                                                 .observe(this@Info, Observer {
@@ -222,12 +226,13 @@ finish()
                                                             if (getTimeSpent(appName) >= 0) {
                                                                 binding.offerLinkButtonInfo.text =
                                                                     " Claim Reward "
-
                                                             }
                                                         }
                                                     }
                                                 })
                                         } else {
+                                            Log.i("closingInstructions" , it.toString())
+
                                             list.add(
                                                 Step(
                                                     false,
@@ -235,12 +240,15 @@ finish()
                                                 )
                                             )
                                             info_viewModel.getClosingInstrutionList(offerId!!).observe(this@Info){
-                                                ClosingInstruction = it
+                                                ClosingInstruction.clear()
+                                                ClosingInstruction.addAll(it)
+                                                Log.i("closingInstructions" , it.toString())
+                                                adapter.updateList(list , Instruction , ClosingInstruction)
+                                                binding.offerLinkButtonInfo.text = "Completed"
+                                                binding.offerLinkButtonInfo.visibility = View.VISIBLE
                                             }
 
-                                            adapter.updateList(list , Instruction , ClosingInstruction)
-                                            binding.offerLinkButtonInfo.text = "Completed"
-                                            binding.offerLinkButtonInfo.visibility = View.VISIBLE
+
                                         }
 
 
