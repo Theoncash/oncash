@@ -30,7 +30,7 @@ class home_viewModel : ViewModel() {
      val userNumber : MutableLiveData<Long> = MutableLiveData()
      val verionInfo : MutableLiveData<Version> = MutableLiveData()
     private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
-
+    var checkingCompleted = false
 
 
     // wallet

@@ -1,5 +1,6 @@
 package `in`.oncash.oncash.Fragment
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
@@ -11,10 +12,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
@@ -217,12 +220,16 @@ class weeklyOffers : Fragment() {
                 homeViewmodel.getOffersHistory(userData.userNumber)
             }
         }
+
+        @SuppressLint("MissingInflatedId")
         fun showRewardCollectionDialog(offer: Offer) {
             val builder = AlertDialog.Builder(requireContext())
             val dialogView = layoutInflater.inflate(R.layout.reward_collection_dialog, null)
             builder.setView(dialogView)
             val rewardButton = dialogView.findViewById<Button>(R.id.btnCollectReward)
+            val rewardText = dialogView.findViewById<TextView>(R.id.textCollectReward)
             val alertDialog = builder.create()
+            rewardText.text = "Congratulations! on completing ${offer.Name} . You've won a reward! of Rs.${offer.Price} "
             alertDialog.show()
 
             rewardButton.setOnClickListener {
@@ -260,17 +267,35 @@ class weeklyOffers : Fragment() {
             offerList.addAll(OfferList.weeklyOffersList)
             if (OfferList.weeklyOffersList.isNotEmpty()) {
                 homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner) {
+                    if(!homeViewmodel.checkingCompleted){
+                        for (offer in offerList) {
+                            Log.i("offertesting" , "OfferName" + offer.Name.toString() )
 
-                    for (offer in offerList) {
-                        val isCompleted: Boolean = isCompleted(it, offer)
-                        if (!isCompleted) {
-                            if (isOfferCompleted(offer.appName!!, offer.regSMS!!)) {
-                                showRewardCollectionDialog(offer)
-                            }
+//                            val isCompleted: Boolean = isCompleted(it, offer)
+                             lifecycleScope.launch {
+                                 UserInfo_Airtable_Repo().isCompleted( userData.userNumber ,  offer.OfferId!!.toInt() ).observe(viewLifecycleOwner){
+                                     var isCompleted :Boolean = false
+                                     if(it == "Completed"){
+                                         isCompleted = true
+                                     }
+                                     Log.i("offertesting" , "Output" + isCompleted.toString() )
+
+                                     if (!isCompleted) {
+                                         if (isOfferCompleted(offer.appName!!, offer.regSMS!!)) {
+                                             Log.i("offertesting" , "Reward Output" + true.toString())
+
+                                             showRewardCollectionDialog(offer)
+                                         }
+                                     }
+                                 }
+
+
+                             }
+
                         }
-
                     }
 
+                    homeViewmodel.checkingCompleted = true
 
                     this.OfferList = OfferList
                     adapter.updateList(OfferList.weeklyOffersList, offer, it)
@@ -331,9 +356,13 @@ private fun formatTime(millis: Long): String {
  fun isCompleted(offerList :ArrayList<Fields> , offer:Offer):Boolean{
     var bool : Boolean = false
     for(offers in offerList){
-        if( offers.Status.contains("Completed") && offers.OfferId.toString() == offer.OfferId!!)
+        Log.i("offertesting" , offers.toString()  +  offer.OfferId.toString())
+        if( offers.Status == "Completed" && offers.OfferId.toString() == offer.OfferId!!)
         {
+            Log.i("offertesting" , offers.Status.toString())
+
             bool = true
+            break;
         }
     }
     return bool

@@ -142,7 +142,6 @@ finish()
             info_viewModel.getBlacklist( number!!.toLong() ,  offerId!!.toInt()).observe(this@Info) {
                 if (!it) {
                     lifecycleScope.launch {
-
                         isBeing(
                                 info_viewModel,
                                 number!!.toLong(),

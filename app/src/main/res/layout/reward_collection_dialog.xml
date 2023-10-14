@@ -6,6 +6,7 @@
 
     <!-- Add UI elements such as TextViews, Buttons, and an ImageView for the reward -->
     <TextView
+        android:id="@+id/textCollectReward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Congratulations! You've won a reward!"

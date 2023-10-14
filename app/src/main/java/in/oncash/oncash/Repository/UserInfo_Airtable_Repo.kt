@@ -83,6 +83,7 @@ class UserInfo_Airtable_Repo {
     }
 
 
+
     @SuppressLint("SimpleDateFormat")
     suspend fun getOfferTime(offerId: Int) = withContext(Dispatchers.IO) {
 
@@ -759,6 +760,21 @@ Log.i("blacklistt" , response.toString())
         referral_code.postValue(code)
         return referral_code
     }
+
+    suspend fun isCompleted(userId:Long , offerId: Int) : MutableLiveData<String>{
+        val url =
+            "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?UserId=eq.$userId&OfferId=eq.$offerId&select=Status"
+        val response = getData(url)
+        var code = ""
+        var json = JSONArray(response.body<String>().toString())
+        if (json.toString() != "[]" || json.length() > 0) {
+            code = JSONObject(json[0].toString()).getString("Status")
+        }
+        val referral_code = MutableLiveData<String>()
+        referral_code.postValue(code)
+        return referral_code
+    }
+
      suspend fun getReferralCodee(userId:Long) : Int{
         val url =
             "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referral?UserId=eq.$userId&select=*"
