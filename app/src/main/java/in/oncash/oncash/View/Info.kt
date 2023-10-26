@@ -76,7 +76,7 @@ class Info : AppCompatActivity() {
         val adapter = step_Adapter()
         val Documentsadapter = Instructions_RecylerViewAdapter()
         val OfferQueriesAdapter = offerQueries_adapter()
-        binding.offerPrice.text = "Rs." + offerPrice!!
+        binding.offerPrice.text = "₹" + offerPrice!!
 
         binding.instructionListInfo.adapter = adapter
         binding.instructionListInfo.layoutManager =
