@@ -29,6 +29,8 @@ class Info_FirebaseRepo {
     }
     suspend fun getClosingnstructionList( offerId :String) :ArrayList<Instruction>  = withContext(Dispatchers.IO){
         val response : ArrayList<Instruction> = ArrayList()
+        Log.i("closingInstructions" ,offerId)
+
         val data : DatabaseReference = FirebaseDatabase.getInstance().getReference("Offers").child(offerId).child("ClosingInstructions")
         try {
             data.get().await().children.map { snapShot ->

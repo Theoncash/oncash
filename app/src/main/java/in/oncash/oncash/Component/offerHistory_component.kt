@@ -10,16 +10,11 @@ import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
 class offerHistory_component {
 
     suspend  fun getOfferHIstory(userId : Long) : ArrayList<Fields>{
-           val list =  UserInfo_Airtable_Repo().getOfferHistory()
+           val list =  UserInfo_Airtable_Repo().getOfferHistory(userId)
         Log.i("isBeign" , list.toString())
 
-        val userOfferList : ArrayList<Fields>  = ArrayList()
-           for (record in list){
-               if (record.UserId == userId ){
-                   userOfferList.add(record)
-               }
-           }
-        return  userOfferList
+
+        return  list
 
       }
 

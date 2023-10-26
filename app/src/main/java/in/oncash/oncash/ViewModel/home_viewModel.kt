@@ -31,12 +31,13 @@ class home_viewModel : ViewModel() {
      val verionInfo : MutableLiveData<Version> = MutableLiveData()
     private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
     var checkingCompleted = false
+    val isCompleted : MutableLiveData<Boolean> = MutableLiveData(false)
 
 
     // wallet
     fun withdrawalTransaction(userNumber :Long){
         viewModelScope.launch {
-            withdrawalTransaction.value =   get_UserInfo_UseCase().getuserWithdrwalHistory(userNumber )
+            withdrawalTransaction.postValue(   get_UserInfo_UseCase().getuserWithdrwalHistory(userNumber ))
 
         }
 
@@ -60,12 +61,14 @@ class home_viewModel : ViewModel() {
     // weekly offer viewmodel
     private val offerList : MutableLiveData<OfferList> = MutableLiveData()
 
-    fun getOfferList() : MutableLiveData<OfferList> {
+    fun getOfferListData():  MutableLiveData<OfferList>{
+        return offerList
+    }
+    fun getOfferList() {
         viewModelScope.launch {
             offerList.postValue(sortingComponent().sortOfferList(Offer_FIrebase().getData()))
             offer_AirtableDatabase().getData()
         }
-        return offerList
     }
     fun getOffer():ArrayList<Offer>{
         return offerList.value!!.weeklyOffersList
@@ -118,5 +121,13 @@ private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveD
         return wallet
     }
 
+    fun getIsCompleted( offerId : Int  , userId:Long ){
+        viewModelScope.launch {
+            isCompleted.value = UserInfo_Airtable_Repo().isCompleted(userId , offerId) .contains("Completed")
+        }
+    }
+    fun getIsCompletedData():MutableLiveData<Boolean>{
+        return isCompleted
+    }
 
 }

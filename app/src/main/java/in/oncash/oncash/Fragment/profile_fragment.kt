@@ -55,8 +55,8 @@ class profile_fragment : Fragment() {
             ViewModelProvider(this!!)[home_viewModel::class.java]
         }
         try {
-            binding.currentBalance.text = homeViewmodel.getWalletPrice().value!!.currentBal.toString()
-           /* binding.totalBalance.text = homeViewmodel.getWalletPrice().value!!.totalBa.toString()*/
+            binding.currentBalance.text = homeViewmodel.getWalletPrice().value!!.totalBa.toString()
+// binding.totalBalance.text = homeViewmodel.getWalletPrice().value!!.totalBa.toString()
         }catch (e: Exception){
         }
         val phone = homeViewmodel.getuserData().value ?: userData(0)

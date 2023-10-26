@@ -178,20 +178,23 @@ class weeklyOffers : Fragment() {
     fun isOfferCompleted(appName:String , regSMS:String):Boolean{
         var isOfferCompleted = false
         lifecycleScope.launch {
-            if (isAppInstalled(requireContext(), appName!!)) {
-                if (isRegistered(
-                        requireContext(),
-                        appName,
-                        regSMS!!
-                    )
-                ) {
+            withContext(Dispatchers.Default){
+                if (isAppInstalled(requireContext(), appName!!)) {
+                    if (isRegistered(
+                            requireContext(),
+                            appName,
+                            regSMS!!
+                        )
+                    ) {
 
-                    if (getTimeSpent(appName) >= 0) {
-                        isOfferCompleted = true
+                        if (getTimeSpent(appName) >= 0) {
+                            isOfferCompleted = true
+                        }
                     }
-                }
 
+                }
             }
+
 
         }
         return isOfferCompleted
@@ -215,13 +218,10 @@ class weeklyOffers : Fragment() {
             offerRecylerview.layoutManager =
                 LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
         }
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO){
                 homeViewmodel.getOffersHistory(userData.userNumber)
-            }
-        }
 
-        @SuppressLint("MissingInflatedId")
+
+        @SuppressLint("MissingInflatedId", "SetTextI18n")
         fun showRewardCollectionDialog(offer: Offer) {
             val builder = AlertDialog.Builder(requireContext())
             val dialogView = layoutInflater.inflate(R.layout.reward_collection_dialog, null)
@@ -262,25 +262,27 @@ class weeklyOffers : Fragment() {
         }
 
         val offerList : ArrayList<Offer> = ArrayList()
-        homeViewmodel.getOfferList().observe(viewLifecycleOwner) { OfferList ->
+        homeViewmodel.getOfferList()
+        homeViewmodel.getOffersHistory(userData.userNumber)
+            homeViewmodel.getOfferListData().observe(viewLifecycleOwner) { OfferList ->
             offerList.clear()
             offerList.addAll(OfferList.weeklyOffersList)
             if (OfferList.weeklyOffersList.isNotEmpty()) {
                 homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner) {
+                    var array = it
                     if(!homeViewmodel.checkingCompleted){
                         for (offer in offerList) {
+                            homeViewmodel.getIsCompleted(offer.OfferId!!.toInt() , userData.userNumber)
+
                             Log.i("offertesting" , "OfferName" + offer.Name.toString() )
 
 //                            val isCompleted: Boolean = isCompleted(it, offer)
                              lifecycleScope.launch {
-                                 UserInfo_Airtable_Repo().isCompleted( userData.userNumber ,  offer.OfferId!!.toInt() ).observe(viewLifecycleOwner){
-                                     var isCompleted :Boolean = false
-                                     if(it == "Completed"){
-                                         isCompleted = true
-                                     }
-                                     Log.i("offertesting" , "Output" + isCompleted.toString() )
+                                 homeViewmodel.getIsCompletedData(  ).observe(viewLifecycleOwner){
 
-                                     if (!isCompleted) {
+                                     Log.i("offertesting" , "Output" + it.toString() )
+
+                                     if (!it) {
                                          if (isOfferCompleted(offer.appName!!, offer.regSMS!!)) {
                                              Log.i("offertesting" , "Reward Output" + true.toString())
 
@@ -298,7 +300,7 @@ class weeklyOffers : Fragment() {
                     homeViewmodel.checkingCompleted = true
 
                     this.OfferList = OfferList
-                    adapter.updateList(OfferList.weeklyOffersList, offer, it)
+                    adapter.updateList(OfferList.weeklyOffersList, offer, array)
 
 
                 }

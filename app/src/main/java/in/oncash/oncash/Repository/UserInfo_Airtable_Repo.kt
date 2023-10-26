@@ -54,7 +54,7 @@ class UserInfo_Airtable_Repo {
                 })
             }
         }
-        Log.i("userrepository" , userNumber.toString())
+        Log.i("userrepository" ,  userNumber.toString())
 
 
         val url =  "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?UserPhone=eq.$userNumber&select=*"
@@ -79,6 +79,8 @@ class UserInfo_Airtable_Repo {
         }catch ( e:Exception){
 
         }
+        Log.i("userrepository"  , "cb" + current_bal.toString())
+
         return@withContext walletDatatype(current_bal ,total_bal )
     }
 
@@ -130,7 +132,7 @@ class UserInfo_Airtable_Repo {
 
 
 
-    suspend fun getWithdrawTransaction(userNumber : String): MutableLiveData<JSONArray> = withContext(Dispatchers.IO) {
+    suspend fun getWithdrawTransaction(userNumber : Long): JSONArray? = withContext(Dispatchers.IO) {
         val client = HttpClient(CIO) {
             install(ContentNegotiation) {
                 json(Json {
@@ -140,8 +142,7 @@ class UserInfo_Airtable_Repo {
             }
         }
         val url ="https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/WithdrawRequest?UserNumber=eq.$userNumber&select=*"
-
-        val withdrawalTransaction: MutableLiveData<JSONArray> = MutableLiveData()
+        var data : JSONArray? = null;
         try {
             val response = client.get(url) {
                 headers {
@@ -152,11 +153,10 @@ class UserInfo_Airtable_Repo {
             Log.i("withdrawt" , response.body<String>().toString())
 
 
-            withdrawalTransaction.postValue(JSONArray(response.body<String>()))
+           data =  JSONArray(response.body<String>())
         } catch (e: Exception) {
-            withdrawalTransaction.postValue(null)
         }
-        return@withContext withdrawalTransaction
+        return@withContext data
 
     }
 
@@ -543,7 +543,7 @@ class UserInfo_Airtable_Repo {
 
         suspend fun updateCompletedOffer(     number :Long , total_bal: Int  , wallet: Int,     userData: userData ,offerId: Int , offerPrice:String  , status :String) = withContext(Dispatchers.IO){
 
-            val history = getOfferHistory()
+            val history = getOfferHistory(number)
             var completed = false
             for(offer in history){
                 if(offer.OfferId == offerId && offer.UserId == userData.userNumber && offer.Status.contains("Completed"))
@@ -570,7 +570,7 @@ class UserInfo_Airtable_Repo {
                 val offerHistory =  `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields(userData.userNumber , offerId ,  status , offerPrice.toInt() )
 
                 Log.i("offerhistory" , "userid"+userData.userNumber)
-                Log.i("offerhistory" , getOfferHistory().toString())
+                Log.i("offerhistory" , getOfferHistory(number).toString())
 
                 val status =  client.post {
                     url(url)
@@ -600,9 +600,9 @@ class UserInfo_Airtable_Repo {
 
 
 
-    suspend fun getOfferHistory() : ArrayList<`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields> = withContext(Dispatchers.IO){
+    suspend fun getOfferHistory(userId:Long) : ArrayList<`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields> = withContext(Dispatchers.IO){
 
-        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?select=*"
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?UserId=eq.$userId&select=*"
 
         val client = HttpClient(CIO) {
             install(ContentNegotiation) {
@@ -761,7 +761,7 @@ Log.i("blacklistt" , response.toString())
         return referral_code
     }
 
-    suspend fun isCompleted(userId:Long , offerId: Int) : MutableLiveData<String>{
+    suspend fun isCompleted(userId:Long , offerId: Int) : String{
         val url =
             "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?UserId=eq.$userId&OfferId=eq.$offerId&select=Status"
         val response = getData(url)
@@ -770,9 +770,8 @@ Log.i("blacklistt" , response.toString())
         if (json.toString() != "[]" || json.length() > 0) {
             code = JSONObject(json[0].toString()).getString("Status")
         }
-        val referral_code = MutableLiveData<String>()
-        referral_code.postValue(code)
-        return referral_code
+
+        return code
     }
 
      suspend fun getReferralCodee(userId:Long) : Int{

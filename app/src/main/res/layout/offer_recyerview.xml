@@ -1,86 +1,73 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-
-    <ImageView
-        android:id="@+id/offer_imageview"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/rectangle_1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.017"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/offerHistory_name"
-        android:layout_width="120dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="20dp"
-        android:gravity="top"
-        android:text="Offer Name"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/click"
-        app:layout_constraintHorizontal_bias="0.043"
-        app:layout_constraintStart_toEndOf="@+id/offer_imageview"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
 
-    <ImageView
-        android:id="@+id/click"
-        android:layout_width="50dp"
-        android:layout_height="13dp"
-        android:layout_alignParentStart="true"
-        android:layout_marginEnd="45dp"
-        android:gravity="top"
-        android:src="@drawable/click_img"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.482" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-    <TextView
-        android:id="@+id/offer_timer"
-        android:layout_width="150dp"
-        android:layout_height="19dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="24dp"
-        android:gravity="top"
-        android:text="Offer ends in 3 day's"
-        android:textColor="#969696"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/offer_imageview"
-        app:layout_constraintTop_toBottomOf="@+id/offerHistory_name"
-        app:layout_constraintVertical_bias="0.487" />
+            <ImageView
+                android:id="@+id/offer_imageview"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/rectangle_1"
+                android:contentDescription="Offer Image"
+                />
 
-    <TextView
-        android:id="@+id/offerHistory_price"
-        android:layout_width="60dp"
-        android:layout_height="19dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="24dp"
-        android:gravity="top"
-        android:text="Price"
-        android:textColor="#02A8B9"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/offer_imageview"
-        app:layout_constraintTop_toBottomOf="@+id/offerHistory_name"
-        app:layout_constraintVertical_bias="0.0" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="8dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/offerHistory_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Offer Name"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/offer_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Offer ends in 3 day's"
+                    android:textColor="#E60000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/offerHistory_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price"
+                    android:textColor="#02A8B9"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/click"
+                android:layout_width="50dp"
+                android:layout_height="13dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/click_img"
+                android:contentDescription="Click Image" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

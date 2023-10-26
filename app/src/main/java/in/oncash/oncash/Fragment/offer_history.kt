@@ -1,6 +1,7 @@
 package `in`.oncash.oncash.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -59,12 +60,19 @@ class monthlyOffers : Fragment() {
         homeViewmodel = activity?.run {
             ViewModelProvider(this)[home_viewModel::class.java]
         }!!
+        homeViewmodel.getuserData().observe(viewLifecycleOwner){
+            Log.i("offerHistory" ,  "userId" + it.toString())
 
-        homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner) { offerhistory ->
-                val offer = homeViewmodel.getOffer()
-                adapter.updateList(offerhistory , offer )
-            }
+            homeViewmodel.getOffersHistory(it.userNumber!!)
+
         }
+        homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner) { offerhistory ->
+            val offer = homeViewmodel.getOffer()
+            Log.i("offerHistory" , offerhistory.toString())
+            adapter.updateList(offerhistory , offer )
+        }
+        }
+
 
 
     companion object {

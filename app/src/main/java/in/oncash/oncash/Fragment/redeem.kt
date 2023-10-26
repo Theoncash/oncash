@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -89,34 +90,39 @@ class redeem : Fragment() {
 
 
 
-            homeViewmodel.getuserData().observe(viewLifecycleOwner){
+            homeViewmodel.getuserData().observe(viewLifecycleOwner) {
+                Log.i("userrepository", "user Number" + it.userNumber.toString())
+
                 userNumber = it.userNumber
-                homeViewmodel.withdrawalTransaction(userNumber)
+                homeViewmodel.withdrawalTransaction(it.userNumber)
 
-            }
-        lifecycleScope.launch {
-            withContext(
-                Dispatchers.IO
-            ){
-                walletBalance =   UserInfo_Airtable_Repo().getWallet(userNumber) .currentBal
 
+
+                Log.i("userrepository", "user Number - " + userNumber.toString())
+                homeViewmodel.getWallet(userNumber)
+
+                homeViewmodel.getWalletPrice().observe(viewLifecycleOwner) {
+                    walletBalance = it.currentBal
+                    Log.i("userrepository", "wb" + walletBalance.toString())
                     val formattedBalance = NumberFormat.getCurrencyInstance().apply {
                         currency = Currency.getInstance("INR")
                     }.format(walletBalance)
 
                     binding.walletBala.text = formattedBalance
+
                 }
+
+
             }
 
 
-
-            binding.withdrawalTransaction.adapter = adapter
-            binding.withdrawalTransaction.layoutManager = LinearLayoutManager(view.context , LinearLayoutManager.VERTICAL ,false)
+        binding.withdrawalTransaction.adapter = adapter
+        binding.withdrawalTransaction.layoutManager = LinearLayoutManager(view.context , LinearLayoutManager.VERTICAL ,false)
         homeViewmodel.getWithdrawalTransaction().observe(viewLifecycleOwner){
+            Log.i("userrepository", "wt" + it.toString())
             adapter.updateList(it)
         }
-            lifecycleScope.launch { getTransaction() }
-
+//        lifecycleScope.launch { getTransaction() }
         binding.withdrawButton.setOnClickListener {
         binding.withdrawButton.isClickable = false
             if (walletBalance > 20 ) {

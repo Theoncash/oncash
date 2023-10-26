@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import `in`.oncash.oncash.R
@@ -16,12 +17,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import `in`.oncash.oncash.DataType.Offer
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields
 import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.View.Info
+import `in`.oncash.oncash.ViewModel.home_viewModel
 import java.net.URL
 
 
@@ -31,17 +34,20 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
     var lastPosition = -1
     var offer = 100
     var context : Context?=null
+
     class viewholder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val name : TextView
         val price :TextView
         val DaysLeft : TextView
         val background : ImageView
         lateinit var  offerId :String
+        val card: CardView
         init {
             name = itemView.findViewById(`in`.oncash.oncash.R.id.offerHistory_name)
             price = itemView.findViewById(R.id.offerHistory_price)
             background = itemView.findViewById(R.id.offer_imageview)
             DaysLeft = itemView.findViewById(R.id.offer_timer)
+            card = itemView.findViewById(R.id.cardView1)
         }
     }
 
@@ -67,23 +73,19 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
         val text =  (offerList[position].Price!!.toInt() * offer ) /100
         holder.price.text = "₹ $text "
         Glide.with(holder.itemView.context).load(offerList[position].Image).into(holder.background)
-        holder.DaysLeft.text = "Only ${offerList[position].cap.toString()} Slots  Available "
+
         val url :URL = URL( offerList[position].Image )
         var isCompleted = false
+
+
+
         for(offer in offerHistoryList){
             if( offer.Status.contains("Completed") && offer.OfferId.toString() == offerList[position].OfferId!!)
             {
-                isCompleted = true
+                holder.DaysLeft.text = "Completed"
+                holder.DaysLeft.setTextColor(Color.GRAY)
+                Log.i("completedOfferHistory" , offer.toString() + "offerid=${offerList[position].OfferId}");
             }
-        }
-        if(isCompleted) {
-            val greenColor = 0xFF00FF00 // Light green color (0xAARRGGBB format)
-
-// Create a PorterDuffColorFilter with the green color and the mode you want (SRC_IN is a common choice)
-            val colorFilter = PorterDuffColorFilter(greenColor.toInt(), PorterDuff.Mode.SRC_IN)
-
-            holder.itemView.setBackgroundColor(Color.parseColor("#E0FFED"))
-
         }
 
 //

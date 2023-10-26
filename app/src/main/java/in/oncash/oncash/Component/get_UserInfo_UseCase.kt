@@ -1,6 +1,7 @@
 package `in`.oncash.oncash.Component
 
 import android.annotation.SuppressLint
+import android.util.Log
 import `in`.oncash.oncash.DataType.UserData1
 import `in`.oncash.oncash.DataType.withdrawalTransaction
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
@@ -44,15 +45,18 @@ class get_UserInfo_UseCase {
         val list : ArrayList<withdrawalTransaction> = ArrayList()
         try {
             withdrawalTransaction  =
-                UserInfo_Airtable_Repo().getWithdrawTransaction(userNumber.toString()).value!!
+                UserInfo_Airtable_Repo().getWithdrawTransaction(userNumber)
         }catch (e:NullPointerException){
 
         }
         try{
+            Log.i(
+                "userrepository",
+                "wt-data = ${withdrawalTransaction.toString()}"
+            )
         for (i in 0 until withdrawalTransaction!!.length()) {
             val user = JSONObject(withdrawalTransaction[i]!!.toString())
             val requestedAmount = user.getInt("WalletBalance")
-            val phone =user.getInt("UserNumber")
             val status = user.getString("Status")
                 list.add( withdrawalTransaction( requestedAmount.toString() ,  status ))
 

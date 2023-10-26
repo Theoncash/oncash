@@ -16,13 +16,17 @@ class info_viewModel : ViewModel() {
     val InstructionsList : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
     val ClosingInstructionsList : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
     val OfferQueries : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
+    val iscompleted = MutableLiveData<Boolean>(false)
+    val Blacklisted : MutableLiveData<Boolean> = MutableLiveData(false)
 
-    fun getInstrutionList(offerId: String) : MutableLiveData<ArrayList<Instruction>>{
+   fun getInstructionListData (): MutableLiveData<ArrayList<Instruction>>{
+       return InstructionsList
+   }
+    fun getInstrutionList(offerId: String) {
         viewModelScope.launch{
             InstructionsList.value = Info_FirebaseRepo().getInstructionList(offerId)
         }
 
-        return InstructionsList
     }
     fun getClosingInstrutionList(offerId: String) : MutableLiveData<ArrayList<Instruction>>{
         viewModelScope.launch{
@@ -50,8 +54,11 @@ class info_viewModel : ViewModel() {
             UserInfo_Airtable_Repo().addBlacklist(user , offerId)
         }
     }
-    fun getBlacklist(userId : Long , offerId: Int ) : MutableLiveData<Boolean>{
-        val Blacklisted : MutableLiveData<Boolean> = MutableLiveData(false)
+
+    fun getBlackListData():MutableLiveData<Boolean>{
+        return Blacklisted
+    }
+    fun getBlacklist(userId : Long , offerId: Int ){
         viewModelScope.launch {
           var Blacklist =   UserInfo_Airtable_Repo().getBlacklist()
             for (offer in Blacklist){
@@ -60,25 +67,29 @@ class info_viewModel : ViewModel() {
                 }
             }
         }
-        return Blacklisted
     }
-    fun isCompleted (userId: Long  , offerId: Int ):MutableLiveData<Boolean>{
-       var isCompleted = MutableLiveData<Boolean>(false)
+    fun getIsCompleted():MutableLiveData<Boolean>{
+        return iscompleted;
+    }
+    fun isCompleted (userId: Long  , offerId: Int ){
         viewModelScope.launch {
-           val offerHistory =  offerHistory_component().getOfferHIstory( userId )
+            Log.i("closingInstructions" ," offerHistory.toString()")
+
+            val offerHistory =  offerHistory_component().getOfferHIstory( userId )
+            Log.i("closingInstructions" , offerHistory.toString())
+
             for (offer in offerHistory ){
-               if( offer.OfferId == offerId && offer.Status == "Completed"){
-                   isCompleted.postValue(  true )
+                Log.i("closingInstructions" , "offerId" +  offerId + "Status" + offer.Status)
+
+                if( offer.OfferId == offerId && offer.Status == "Completed"){
+                    iscompleted.postValue(  true )
                }
             }
         }
-        return isCompleted
     }
  private   val isCompleted :MutableLiveData<Boolean> = MutableLiveData()
 
-    suspend fun getIsCompleted():MutableLiveData<Boolean>{
-        return isCompleted
-    }
+
    suspend fun isOfferBeign (userId: Long  , offerId : Int){
         viewModelScope.launch {
             val offerHistory =  offerHistory_component().getOfferHIstory( userId )

@@ -138,8 +138,13 @@ finish()
         info_viewModel.getOfferQueries(offerId!!).observe(this@Info){
             OfferQueriesAdapter.updateList(it)
         }
+
         lifecycleScope.launch {
-            info_viewModel.getBlacklist( number!!.toLong() ,  offerId!!.toInt()).observe(this@Info) {
+            info_viewModel.isCompleted(number!!.toLong(), offerId!!.toInt())
+            info_viewModel.getBlacklist( number!!.toLong() ,  offerId!!.toInt())
+            info_viewModel.getInstrutionList(offerId!!)
+
+            info_viewModel.getBlackListData().observe(this@Info) {
                 if (!it) {
                     lifecycleScope.launch {
                         isBeing(
@@ -154,13 +159,12 @@ finish()
                             if (!it) {
                                 Log.i("closingInstructions" , it.toString())
 
-                                info_viewModel.isCompleted(number!!.toLong(), offerId!!.toInt())
-                                    .observe(this@Info) {
-                                        Log.i("closingInstructions" , it.toString())
+
+                                    info_viewModel.getIsCompleted() .observe(this@Info) {
+                                        Log.i("closingInstructions" , "bool" +  it!!.toString())
 
                                         if (it == false) {
-                                            info_viewModel.getInstrutionList(offerId!!)
-                                                .observe(this@Info, Observer {
+                                              info_viewModel.getInstructionListData()  .observe(this@Info, Observer {
                                                     if (it.isNotEmpty()) {
                                                         Instruction.clear()
                                                         Log.i("instructionData" , it.toString())
@@ -235,14 +239,9 @@ finish()
                                                     }
                                                 })
                                         } else {
-                                            Log.i("closingInstructions" , it.toString())
+                                            Log.i("closingInstructions" , "working")
 
-                                            list.add(
-                                                Step(
-                                                    false,
-                                                    "Close your account "
-                                                )
-                                            )
+
                                             info_viewModel.getClosingInstrutionList(offerId!!).observe(this@Info){
                                                 ClosingInstruction.clear()
                                                 ClosingInstruction.addAll(it)
@@ -251,7 +250,14 @@ finish()
                                                 binding.offerLinkButtonInfo.text = "Completed"
                                                 binding.offerLinkButtonInfo.visibility = View.VISIBLE
                                             }
-
+                                        if(list.size <= 2){
+                                            list.add(
+                                                Step(
+                                                    false,
+                                                    "Close your account "
+                                                )
+                                            )
+                                        }
 
                                         }
 
