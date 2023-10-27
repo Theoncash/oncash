@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.BlackList_Fields
 import `in`.oncash.oncash.DataType.SerializedDataType.Fields1
+import `in`.oncash.oncash.DataType.SerializedDataType.OfferClaimed
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.ReferralsDataType
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferInfo
@@ -285,8 +286,44 @@ class UserInfo_Airtable_Repo {
         }
 
         return@withContext false
+    }
+    suspend fun addOfferClaimed(userId:Long  , offerId: Int ) { withContext(Dispatchers.IO)
+    {
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                })
+            }
+        }
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/ClaimOffer"
+
+        val userInfo = OfferClaimed(offerId, userId, false)
+        try {
+            val response = client.post {
+                url(url)
+                headers {
+                    append("apikey", apiKey)
+                    append("Authorization", "Bearer $apiKey")
+                }
+                contentType(ContentType.Application.Json)
+                setBody(userInfo)
+            }
+            Log.i("SMSDATA", response.body<String>().toString())
+            if (response.status.value == 201) {
+
+            }else{
+
+            }
 
 
+        } catch (e: Exception) {
+            Log.i("airtable", e.toString())
+        }
+
+
+    }
     }
     suspend fun addRefferal(userId:Long  ) { withContext(Dispatchers.IO)
     {
@@ -638,6 +675,44 @@ Log.i("blacklistt" , response.toString())
            return@withContext list
     }
 
+    suspend fun getUserOfferHistory( userId:Long) : ArrayList<`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields> = withContext(Dispatchers.IO){
+
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?UserId=eq.$userId&select=*"
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                })
+            }
+        }
+
+        val response = client.get(url) {
+            headers {
+                append("apikey", apiKey)
+                append("Authorization", "Bearer $apiKey")
+            }
+        }
+        var list :ArrayList<`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields> = ArrayList()
+        Log.i("blacklistt" , response.toString())
+        try {
+            var json = JSONArray( response.body<String>().toString())
+            Log.i("blacklistt" , response.body<String>().toString())
+
+            for(i in 0 until json.length()){
+                var offerHistory = JSONObject(json[i].toString())
+                Log.i("blacklistt" , offerHistory.getLong("UserId").toString())
+
+                list.add(`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields(offerHistory.getLong("UserId") , offerHistory.getInt("OfferId")  , offerHistory.getString("Status") , offerHistory.getInt("Payout")))
+            }
+        }catch(e:Exception){
+
+        }
+
+        return@withContext list
+    }
+
 
     suspend fun getBlacklist() : ArrayList<BlackList_Fields> = withContext(Dispatchers.IO){
 
@@ -747,7 +822,7 @@ Log.i("blacklistt" , response.toString())
         return@withContext thereExisit
     }
 
-    suspend fun getReferralCode(userId:Long) : MutableLiveData<Int>{
+    suspend fun getReferralCode(userId:Long) : MutableLiveData<Int> = withContext(Dispatchers.IO){
         val url =
             "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referral?UserId=eq.$userId&select=*"
         val response = getData(url)
@@ -758,10 +833,10 @@ Log.i("blacklistt" , response.toString())
         }
         val referral_code = MutableLiveData<Int>()
         referral_code.postValue(code)
-        return referral_code
+        return@withContext  referral_code
     }
 
-    suspend fun isCompleted(userId:Long , offerId: Int) : String{
+    suspend fun isCompleted(userId:Long , offerId: Int) : String= withContext(Dispatchers.IO){
         val url =
             "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?UserId=eq.$userId&OfferId=eq.$offerId&select=Status"
         val response = getData(url)
@@ -771,10 +846,49 @@ Log.i("blacklistt" , response.toString())
             code = JSONObject(json[0].toString()).getString("Status")
         }
 
-        return code
+        return@withContext code
     }
 
-     suspend fun getReferralCodee(userId:Long) : Int{
+    suspend fun OfferUserHistory(userId: Long) : ArrayList<`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields> = withContext(Dispatchers.IO){
+
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?UserId=eq.$userId&select=*"
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                })
+            }
+        }
+
+        val response = client.get(url) {
+            headers {
+                append("apikey", apiKey)
+                append("Authorization", "Bearer $apiKey")
+            }
+        }
+        var list :ArrayList<`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields> = ArrayList()
+        Log.i("blacklistt" , response.toString())
+        try {
+            var json = JSONArray( response.body<String>().toString())
+            Log.i("blacklistt" , response.body<String>().toString())
+
+            for(i in 0 until json.length()){
+                var offerHistory = JSONObject(json[i].toString())
+                Log.i("blacklistt" , offerHistory.getLong("UserId").toString())
+
+                list.add(`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields(offerHistory.getLong("UserId") , offerHistory.getInt("OfferId")  , offerHistory.getString("Status") , offerHistory.getInt("Payout")))
+            }
+        }catch(e:Exception){
+
+        }
+
+        return@withContext list
+    }
+
+
+    suspend fun getReferralCodee(userId:Long) : Int= withContext(Dispatchers.IO){
         val url =
             "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referral?UserId=eq.$userId&select=*"
         val response = getData(url)
@@ -783,9 +897,9 @@ Log.i("blacklistt" , response.toString())
         if (json.toString() != "[]" || json.length() > 0) {
             code = JSONObject(json[0].toString()).getInt("Referral_code")
         }
-        return code
+        return@withContext code
     }
-     suspend fun getOfferInfo(offerId:Int) : OfferInfo{
+     suspend fun getOfferInfo(offerId:Int) : OfferInfo= withContext(Dispatchers.IO){
         Log.i("fbDataa" , offerId.toString() )
 
         val url =
@@ -802,9 +916,9 @@ Log.i("blacklistt" , response.toString())
         }
         Log.i("fbDataa" ,  cap.toString())
         val referral_code = OfferInfo(offerId , name, cap , dayLeft)
-        return referral_code
+        return@withContext referral_code
     }
-    suspend fun getRefferals(userId :Long):MutableLiveData<ReferralsDataType>{
+    suspend fun getRefferals(userId :Long):MutableLiveData<ReferralsDataType> = withContext(Dispatchers.IO){
         val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Referral?UserId=eq.$userId&select=*"
         val response = getData(url)
         var json = JSONArray( response.body<String>().toString())
@@ -857,7 +971,7 @@ Log.i("blacklistt" , response.toString())
                     referral.Total_Referral_amt
                 )
             )
-            return mutableLiveData
+            return@withContext mutableLiveData
         }
         val mutableLiveData = MutableLiveData<ReferralsDataType>()
 
@@ -868,10 +982,10 @@ Log.i("blacklistt" , response.toString())
                 0
             )
         )
-        return mutableLiveData
+        return@withContext mutableLiveData
         }
 
-    suspend fun getReferralAmt(referred_users :ArrayList<Long> ,redeemed_referred_amt :Int , userId: Long , referral_code: Int):Referral{
+    suspend fun getReferralAmt(referred_users :ArrayList<Long> ,redeemed_referred_amt :Int , userId: Long , referral_code: Int):Referral= withContext(Dispatchers.IO){
 
         val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/UserInfo?select=*"
         val users_info = getData(url)
@@ -901,10 +1015,10 @@ Log.i("blacklistt" , response.toString())
         updateWallet(userId , wallet , total_bal )
         updateReferral(userId , referral_code , total_referred_amount)
 
-        return Referral(referred_users , referral_earned , total_referred_amount)
+        return@withContext Referral(referred_users , referral_earned , total_referred_amount)
     }
 
-    suspend fun getData( url:String):HttpResponse{
+    suspend fun getData( url:String):HttpResponse= withContext(Dispatchers.IO){
 
 
         val client = HttpClient(CIO){
@@ -926,12 +1040,12 @@ Log.i("blacklistt" , response.toString())
             }
         }
 
-        return response
+        return@withContext response
     }
 
-    suspend fun updateReferral(userId : Long , referral_code :Int , referral_amt :Int) {
+    suspend fun updateReferral(userId : Long , referral_code :Int , referral_amt :Int) = withContext(Dispatchers.IO){
 
-        withContext(Dispatchers.IO) {
+
             val client = HttpClient(CIO) {
                 install(ContentNegotiation) {
                     json(Json {
@@ -968,6 +1082,6 @@ Log.i("blacklistt" , response.toString())
         }
 
 
-    }}
+    }
 
 

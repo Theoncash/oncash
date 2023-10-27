@@ -261,24 +261,23 @@ class weeklyOffers : Fragment() {
             }
         }
 
-        val offerList : ArrayList<Offer> = ArrayList()
-        homeViewmodel.getOfferList()
-        homeViewmodel.getOffersHistory(userData.userNumber)
-            homeViewmodel.getOfferListData().observe(viewLifecycleOwner) { OfferList ->
+            val offerList : ArrayList<Offer> = ArrayList();
+
+            homeViewmodel!!.getOfferListData().observe(viewLifecycleOwner) { OfferList ->
             offerList.clear()
             offerList.addAll(OfferList.weeklyOffersList)
             if (OfferList.weeklyOffersList.isNotEmpty()) {
-                homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner) {
+                homeViewmodel!!.getOfferHistoryList().observe(viewLifecycleOwner) {
                     var array = it
-                    if(!homeViewmodel.checkingCompleted){
+                    if(!homeViewmodel!!.checkingCompleted){
                         for (offer in offerList) {
-                            homeViewmodel.getIsCompleted(offer.OfferId!!.toInt() , userData.userNumber)
+                            homeViewmodel!!.getIsCompleted(offer.OfferId!!.toInt() , userData.userNumber)
 
                             Log.i("offertesting" , "OfferName" + offer.Name.toString() )
 
 //                            val isCompleted: Boolean = isCompleted(it, offer)
                              lifecycleScope.launch {
-                                 homeViewmodel.getIsCompletedData(  ).observe(viewLifecycleOwner){
+                                 homeViewmodel!!.getIsCompletedData(  ).observe(viewLifecycleOwner){
 
                                      Log.i("offertesting" , "Output" + it.toString() )
 

@@ -17,6 +17,8 @@ import `in`.oncash.oncash.DataType.SerializedDataType.Version
 import `in`.oncash.oncash.Repository.Offer_FIrebase
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
 import `in`.oncash.oncash.Repository.offer_AirtableDatabase
+import `in`.oncash.oncash.RoomDb.OfferDb
+import `in`.oncash.oncash.RoomDb.OfferEntity
 import io.ktor.http.*
 import kotlinx.coroutines.*
 
@@ -38,7 +40,6 @@ class home_viewModel : ViewModel() {
     fun withdrawalTransaction(userNumber :Long){
         viewModelScope.launch {
             withdrawalTransaction.postValue(   get_UserInfo_UseCase().getuserWithdrwalHistory(userNumber ))
-
         }
 
     }
@@ -64,21 +65,40 @@ class home_viewModel : ViewModel() {
     fun getOfferListData():  MutableLiveData<OfferList>{
         return offerList
     }
-    fun getOfferList() {
+    fun getOfferList(db :OfferDb) {
         viewModelScope.launch {
-            offerList.postValue(sortingComponent().sortOfferList(Offer_FIrebase().getData()))
-            offer_AirtableDatabase().getData()
+            val data = Offer_FIrebase().getData()
+            addOffer_OfferDb(data , db)
+            val offerList_data = sortingComponent().sortOfferList(data)
+            offerList.postValue( offerList_data )
         }
     }
     fun getOffer():ArrayList<Offer>{
         return offerList.value!!.weeklyOffersList
     }
 
+
+  suspend  fun addOffer_OfferDb(offer_list : ArrayList<Offer> , db: OfferDb){
+      withContext(Dispatchers.IO){
+          for (offer in offer_list){
+              val offer_entity = OfferEntity(
+                  0,
+                  offer.regSMS!!,
+                  offer.OfferId!!.toInt(),
+                  offer.appName!!,
+                  offer.Price!!.toInt()
+              )
+              db.offerDao().insert(offer_entity)
+          }
+      }
+
+    }
+
 //offer history viewmodel
 private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveData()
     fun getOffersHistory(userId:Long){
         viewModelScope.launch {
-            offerhistoryList.postValue(offerHistory_component().getOfferHIstory(userId = userId))
+            offerhistoryList.postValue(UserInfo_Airtable_Repo().OfferUserHistory(userId = userId))
         }
     }
 

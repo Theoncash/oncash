@@ -76,8 +76,8 @@ fun showNotification(context: Context, name: String) {
 
     val notificationBuilder = NotificationCompat.Builder(context, channelId)
         .setSmallIcon(R.drawable.oncash)
-        .setContentTitle("OnCash vibes, climb the skies! High-fives!")
-        .setContentText("Good job! You just earned $name with OnCash. Keep it up and watch your earnings grow.")
+        .setContentTitle("$name Installation Completed ")
+        .setContentText("Good job! Hurry up. You are just few steps away to with OnCash.")
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setAutoCancel(true) // Removes the notification when tapped
 

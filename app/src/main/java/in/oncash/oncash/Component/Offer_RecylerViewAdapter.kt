@@ -66,27 +66,33 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: viewholder, position: Int) {
-        val price :Int = offerList[position].Price!!.toInt()
 
-        holder.offerId = offerList[position].OfferId!!
-        holder.name.text= offerList[position].Name
-        val text =  (offerList[position].Price!!.toInt() * offer ) /100
-        holder.price.text = "₹ $text "
-        Glide.with(holder.itemView.context).load(offerList[position].Image).into(holder.background)
+        if (offerList[position].cap > 0 ) {
 
-        val url :URL = URL( offerList[position].Image )
-        var isCompleted = false
+            val price: Int = offerList[position].Price!!.toInt()
+
+            holder.offerId = offerList[position].OfferId!!
+            holder.name.text = offerList[position].Name
+            val text = (offerList[position].Price!!.toInt() * offer) / 100
+            holder.price.text = "₹ $text "
+            Glide.with(holder.itemView.context).load(offerList[position].Image)
+                .into(holder.background)
+
+            val url: URL = URL(offerList[position].Image)
+            var isCompleted = false
 
 
 
-        for(offer in offerHistoryList){
-            if( offer.Status.contains("Completed") && offer.OfferId.toString() == offerList[position].OfferId!!)
-            {
-                holder.DaysLeft.text = "Completed"
-                holder.DaysLeft.setTextColor(Color.GRAY)
-                Log.i("completedOfferHistory" , offer.toString() + "offerid=${offerList[position].OfferId}");
+            for (offer in offerHistoryList) {
+                if (offer.Status.contains("Completed") && offer.OfferId.toString() == offerList[position].OfferId!!) {
+                    holder.DaysLeft.text = "Completed"
+                    holder.DaysLeft.setTextColor(Color.GRAY)
+                    Log.i(
+                        "completedOfferHistory",
+                        offer.toString() + "offerid=${offerList[position].OfferId}"
+                    );
+                }
             }
-        }
 
 //
 //        val animation = AnimationUtils.loadAnimation(
@@ -98,30 +104,31 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
 //            holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.offeranimation)
 
 
-        holder.itemView.setOnClickListener {
-            val offer_information : Offer = offerList.get(holder.offerId.toInt()-1)
-            val intent = Intent(
-                holder.itemView.context,
-                Info::class.java
-            )
-                .putExtra("OfferId",offer_information.OfferId )
-                .putExtra("OfferName",offer_information.Name)
-                .putExtra("OfferImage",offer_information.Image)
-                .putExtra("OfferPrice",offer_information.Price)
-                .putExtra("OfferLink",offer_information.Link)
-                .putExtra("subid" , offer_information.subid)
-                .putExtra("subid2" , offer_information.payout)
-                .putExtra("wallet" , userData.userNumber)
-                .putExtra("videoId" , offer_information.VideoId)
-                .putExtra("number" , userData.userNumber.toString())
-                .putExtra("noOfSteps" , offer_information.noOfSteps.toString())
-                .putExtra("appName" , offer_information.appName)
-                .putExtra("regSMS" , offer_information.regSMS)
+            holder.itemView.setOnClickListener {
+                val offer_information: Offer = offerList.get(holder.offerId.toInt() - 1)
+                val intent = Intent(
+                    holder.itemView.context,
+                    Info::class.java
+                )
+                    .putExtra("OfferId", offer_information.OfferId)
+                    .putExtra("OfferName", offer_information.Name)
+                    .putExtra("OfferImage", offer_information.Image)
+                    .putExtra("OfferPrice", offer_information.Price)
+                    .putExtra("OfferLink", offer_information.Link)
+                    .putExtra("subid", offer_information.subid)
+                    .putExtra("subid2", offer_information.payout)
+                    .putExtra("wallet", userData.userNumber)
+                    .putExtra("videoId", offer_information.VideoId)
+                    .putExtra("number", userData.userNumber.toString())
+                    .putExtra("noOfSteps", offer_information.noOfSteps.toString())
+                    .putExtra("appName", offer_information.appName)
+                    .putExtra("regSMS", offer_information.regSMS)
 
-            holder.itemView.context.startActivity(
-                intent
+                holder.itemView.context.startActivity(
+                    intent
 
-            )
+                )
+            }
         }
 
     }

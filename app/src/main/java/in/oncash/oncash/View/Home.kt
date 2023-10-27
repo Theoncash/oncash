@@ -18,6 +18,8 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Button
 import androidx.activity.viewModels
+import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.AppOpsManagerCompat
@@ -31,11 +33,11 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import `in`.oncash.oncash.Component.checkRegistration
-import `in`.oncash.oncash.Component.smsReceiver
 import `in`.oncash.oncash.DataType.OfferList
 import `in`.oncash.oncash.DataType.SerializedDataType.Version
 import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.R
+import `in`.oncash.oncash.RoomDb.OfferDb
 import `in`.oncash.oncash.RoomDb.userDb
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.databinding.ActivityHomeBinding
@@ -45,7 +47,9 @@ import kotlinx.coroutines.withContext
 
 
 class Home : AppCompatActivity() {
-     lateinit var binding: ActivityHomeBinding
+    private val PERMISSION_REQUEST_CODE = 123
+
+    lateinit var binding: ActivityHomeBinding
     val homeViewmodel: home_viewModel by viewModels()
     lateinit var OfferList : OfferList
     private  var userData: userData = userData(0)
@@ -54,12 +58,13 @@ class Home : AppCompatActivity() {
     private val version : Double = 1.2
     val  SMS_PERMISSION_REQUEST_CODE = 734973;
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          soundPool = SoundPool.Builder().setMaxStreams(1).build()
         val notificationPermission = Manifest.permission.POST_NOTIFICATIONS
          val REQUEST_NOTIFICATION_PERMISSION = 4343242 // Use any unique integer value
-
+        checkAndRequestPermissions()
         if (ContextCompat.checkSelfPermission(this, notificationPermission) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted, request it
             ActivityCompat.requestPermissions(
@@ -81,6 +86,7 @@ class Home : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS), SMS_PERMISSION_REQUEST_CODE)
         }
+
 
             homeViewmodel.getVersion().observe(this){
                 if(it.id > version){
@@ -276,11 +282,17 @@ class Home : AppCompatActivity() {
 //        registerReceiver(registrationChecker,
 //             intentFilter
 //        );
-        if (!needToUpdate) {
+
             lifecycleScope.launch {
-                homeViewmodel.getOfferList()
+                homeViewmodel.getOffersHistory(userData.userNumber)
+                val db = Room.databaseBuilder(
+                    applicationContext,
+                    OfferDb::class.java, "offers_database"
+                ).build()
+
+                homeViewmodel.getOfferList(db)
             }
-        }
+
     }
     private fun showCustomDialog(version :Version) {
         val dialog = Dialog(this)
@@ -347,6 +359,8 @@ class Home : AppCompatActivity() {
 
     }
 
+
+
     private lateinit var soundPool: SoundPool
     private var soundID: Int = 0
 
@@ -358,18 +372,70 @@ class Home : AppCompatActivity() {
         soundPool.release()
 
     }
-   override fun onRequestPermissionsResult(
-       requestCode: Int,
-       permissions: Array<out String>,
-       grantResults: IntArray
-   ) {
-       super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-       if (requestCode == SMS_PERMISSION_REQUEST_CODE.toInt()) {
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkAndRequestPermissions() {
+        val permissions = arrayOf<String>(
+            Manifest.permission.PACKAGE_USAGE_STATS,
+            Manifest.permission.READ_SMS,
+            Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.VIBRATE,
+            Manifest.permission.RECEIVE_BOOT_COMPLETED,
+            Manifest.permission.REQUEST_INSTALL_PACKAGES,
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.INTERNET
+        )
+
+        // List of permissions to request
+        val permissionsToRequest: MutableList<String> = ArrayList()
+        for (permission in permissions) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionsToRequest.add(permission)
+            }
+        }
+        if (!permissionsToRequest.isEmpty()) {
+            // Request permissions
+            ActivityCompat.requestPermissions(
+                this,
+                permissionsToRequest.toTypedArray<String>(),
+                PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    // Handle permission request result
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        @NonNull permissions: Array<String?>,
+        @NonNull grantResults: IntArray
+    ) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == SMS_PERMISSION_REQUEST_CODE.toInt()) {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 val intentFilter = IntentFilter("android.provider.Telephony.SMS_RECEIVED")
                 registerReceiver(checkRegistration() , intentFilter )
             } else {
                 // Permission denied, handle accordingly (e.g., show a message to the user)
+            }
+        }
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            for (i in permissions.indices) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        permissions,
+                        PERMISSION_REQUEST_CODE
+                    )
+                    // Permission denied
+                    // You can show a message or take action accordingly
+                }
             }
         }
     }
