@@ -283,15 +283,18 @@ class Home : AppCompatActivity() {
 //             intentFilter
 //        );
 
-            lifecycleScope.launch {
-                homeViewmodel.getOffersHistory(userData.userNumber)
-                val db = Room.databaseBuilder(
-                    applicationContext,
-                    OfferDb::class.java, "offers_database"
-                ).build()
-
-                homeViewmodel.getOfferList(db)
-            }
+//            lifecycleScope.launch {
+//                withContext(Dispatchers.IO){
+//                    homeViewmodel.getOffersHistory(userData.userNumber)
+//                    val db = Room.databaseBuilder(
+//                        applicationContext,
+//                        OfferDb::class.java, "offers_database"
+//                    ).build()
+//
+//                    homeViewmodel.getOfferList(db)
+//                }
+//
+//            }
 
     }
     private fun showCustomDialog(version :Version) {

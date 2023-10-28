@@ -2,18 +2,22 @@ package `in`.oncash.oncash.View
 
 import AppInstallReceiver
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.SoundPool
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -33,14 +37,18 @@ import `in`.oncash.oncash.Component.customLoadingDialog
 import `in`.oncash.oncash.Component.offerQueries_adapter
 import `in`.oncash.oncash.Component.step_Adapter
 import `in`.oncash.oncash.DataType.Instruction
+import `in`.oncash.oncash.DataType.Offer
 import `in`.oncash.oncash.DataType.Step
 import `in`.oncash.oncash.DataType.userData
+import `in`.oncash.oncash.R
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
 import `in`.oncash.oncash.Repository.offer_AirtableDatabase
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.ViewModel.info_viewModel
 import `in`.oncash.oncash.databinding.ActivityInfoBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.reflect.Array
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -48,6 +56,8 @@ import java.util.concurrent.TimeUnit
 
 class Info : AppCompatActivity() {
      lateinit var binding : ActivityInfoBinding
+    val home_viewModel: home_viewModel by viewModels()
+
     @SuppressLint("SetTextI18n", "InvalidPeriodicWorkRequestInterval")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,8 +145,23 @@ finish()
         //Observing the getInstructionList() in info_viewmodel (ie which gets the data from info_FirebaseRepo)
         val info_viewModel: info_viewModel by viewModels()
 
+
         info_viewModel.getOfferQueries(offerId!!).observe(this@Info){
             OfferQueriesAdapter.updateList(it)
+        }
+        lifecycleScope.launch {
+            withContext(Dispatchers.Default){
+                isOfferCompleted(
+                    appName!! ,
+                    regSMS!! ,
+                    offerId!! .toInt(),
+                    number!!.toLong() ,
+                    offerPrice!!.toInt(),
+                    offerName!!
+
+                )
+
+            }
         }
 
         lifecycleScope.launch {
@@ -366,8 +391,30 @@ finish()
             }
         }*/
     }
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    suspend fun getTimeSpent(targetPackageName : String):Int{
+
+    suspend fun isOfferCompleted(appName: String, regSMS: String  , offerId: Int , userNumber: Long , appPrice :Int  ,   Name :String){
+        withContext(Dispatchers.Default){
+
+        home_viewModel.getIsCompleted(offerId , userNumber)
+            home_viewModel.getIsCompletedData().observe(this@Info){
+                if(it == false){
+                    if(isAppInstalled(this@Info ,appName )){
+                        if(isRegistered(this@Info , appName , regSMS)){
+                            if(getTimeSpent(appName) > 8){
+                                showRewardCollectionDialog(
+                                    offerId , userNumber , appPrice , Name
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+    }
+     fun getTimeSpent(targetPackageName : String):Int{
         val targetPackageName = targetPackageName // Replace with your app's package name
         val usageStatsManager = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         val currentTime = System.currentTimeMillis()
@@ -395,6 +442,45 @@ finish()
     }
 
 
+    @SuppressLint("MissingInflatedId", "SetTextI18n")
+    fun showRewardCollectionDialog( offerId: Int , userNumber: Long ,  price:Int ,  Name :String ) {
+        val builder = AlertDialog.Builder(this@Info)
+        val dialogView = layoutInflater.inflate(R.layout.reward_collection_dialog, null)
+        builder.setView(dialogView)
+        val rewardButton = dialogView.findViewById<Button>(R.id.btnCollectReward)
+        val rewardText = dialogView.findViewById<TextView>(R.id.textCollectReward)
+        val alertDialog = builder.create()
+        rewardText.text = "Congratulations! on completing ${Name} . You've won a reward! of Rs.${price} "
+        alertDialog.show()
+
+        rewardButton.setOnClickListener {
+            // Handle the reward collection logic here
+            // For example, grant the reward and dismiss the dialog
+            // You can also dismiss the dialog without granting the reward if the user cancels
+
+            val soundPool = SoundPool.Builder().setMaxStreams(1).build()
+            val soundID = soundPool.load(this, R.raw.water_drop, 1)
+            soundPool.play(soundID, 1f, 1f, 1, 0, 1f)
+            val total_bal = home_viewModel().totalOffers.value
+
+            lifecycleScope.launch {
+                try {
+                    UserInfo_Airtable_Repo().updateCompletedOffer(
+                        userNumber!!.toLong(), total_bal!!,
+                        userNumber.toInt(),
+                        userData(userNumber.toLong()),
+                        offerId!!.toInt(), price.toString(), "Completed"
+                    )
+                    alertDialog.dismiss()
+
+                } catch (e: Exception) {
+                    Toast.makeText(this@Info, "Some Error Occurred", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
+        }
+    }
 }
 
 @SuppressLint("SuspiciousIndentation")
@@ -462,7 +548,7 @@ return false
 }
 
 
-suspend fun isRegistered(context: Context , appName : String , regSMS :String) : Boolean{
+ fun isRegistered(context: Context , appName : String , regSMS :String) : Boolean{
     val inboxSms = ArrayList<String>()
     val uri = Uri.parse("content://sms/inbox")
     val cursor = context.contentResolver.query(uri, null, null, null, null)
