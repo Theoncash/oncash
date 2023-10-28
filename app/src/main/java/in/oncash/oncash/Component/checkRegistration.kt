@@ -49,12 +49,12 @@ class checkRegistration : BroadcastReceiver() {
 
                     userdata =  userData(UserDataStoreUseCase().retrieveUserNumber(context))
                     Log.i("SMSDATA" , userdata.toString())
-                    val serviceIntent = Intent(
-                        context,
-                        completionService::class.java
-                    )
-                    serviceIntent.putExtra("regSMS" , messageBody)
-                    context.startService(serviceIntent)
+//                    val serviceIntent = Intent(
+//                        context,
+//                        completionService::class.java
+//                    )
+//                    serviceIntent.putExtra("regSMS" , messageBody)
+//                    context.startService(serviceIntent)
                 }
 
 //                GlobalScope.launch {

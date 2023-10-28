@@ -68,7 +68,7 @@ class home_viewModel : ViewModel() {
     fun getOfferList(db :OfferDb) {
         viewModelScope.launch {
             val data = Offer_FIrebase().getData()
-            addOffer_OfferDb(data , db)
+//            addOffer_OfferDb(data , db)
             val offerList_data = sortingComponent().sortOfferList(data)
             offerList.postValue( offerList_data )
         }

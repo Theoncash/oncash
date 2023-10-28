@@ -94,111 +94,13 @@ class weeklyOffers : Fragment() {
         binding =  FragmentWeeklyOffersBinding.inflate(inflater , container, false)
         return binding.root
     }
-    fun isAppInstalled(context: Context, appName: String): Boolean {
-        // get list of all the apps installed
-        // get list of all the apps installed
-        val pm: PackageManager = context.packageManager
-        try {
-            val packageInfo = pm.getInstalledApplications(0)
-
-            for(app in packageInfo){
-                if(app.packageName == appName){
-                    return true
-                }
-            }
-
-        } catch (e: PackageManager.NameNotFoundException) {
-            // The app is not installed.
-            Toast.makeText(context , "packageInfo.applicationInfo.packageName" , Toast.LENGTH_LONG).show()
-
-            return false
-        }
-        return false
-    }
 
 
-    suspend fun isRegistered(context: Context, appName : String, regSMS :String) : Boolean{
-        val inboxSms = ArrayList<String>()
-        val uri = Uri.parse("content://sms/inbox")
-        val cursor = context.contentResolver.query(uri, null, null, null, null)
-
-        if (cursor != null && cursor.moveToFirst()) {
-            val bodyIndex = cursor.getColumnIndex("body")
-            do {
-                val smsBody = cursor.getString(bodyIndex)
-                inboxSms.add(smsBody)
-            } while (cursor.moveToNext())
-            cursor.close()
-        }
-        // Assuming you have already retrieved SMS messages and stored them in the 'inboxSms' list
-        var messageFound = false
-
-        for (smsBody in inboxSms) {
-
-            if (smsBody.lowercase() .contains(regSMS.toString().lowercase(), ignoreCase = true)) {
-                // The message contains the search string
-                messageFound = true
-                break  // Exit the loop once a matching message is found
-            }
-        }
-
-        return messageFound
 
 
-// Now, 'inboxSms' contains a list of SMS message bodies from the inbox.
-
-    }
-    fun getTimeSpent(targetPackageName : String):Int{
-        val targetPackageName = targetPackageName // Replace with your app's package name
-        val usageStatsManager =  requireActivity().getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-        val currentTime = System.currentTimeMillis()
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.WEEK_OF_MONTH, -1) // Subtract 1 month from the current time
-        val startTime = calendar.timeInMillis
-        var timeSpentInMin = 0
-        val stats: List<UsageStats> = usageStatsManager.queryUsageStats(
-            UsageStatsManager.INTERVAL_DAILY,
-            startTime,
-            currentTime
-        )
-
-        for (usageStats in stats) {
-            if (usageStats.packageName == targetPackageName) {
-                Toast.makeText(requireContext(), usageStats.packageName , Toast.LENGTH_LONG).show()
-                val timeInMilis  = usageStats.totalTimeInForeground
-                timeSpentInMin = (timeInMilis / 60000).toInt()
-                Toast.makeText(requireContext() , timeSpentInMin.toString() , Toast.LENGTH_LONG).show()
-                // Convert timeSpentInMillis to hours, minutes, seconds, etc. as needed.
-                break
-            }
-        }
-        return timeSpentInMin
-    }
-
-    fun isOfferCompleted(appName:String , regSMS:String):Boolean{
-        var isOfferCompleted = false
-        lifecycleScope.launch {
-            withContext(Dispatchers.Default){
-                if (isAppInstalled(requireContext(), appName!!)) {
-                    if (isRegistered(
-                            requireContext(),
-                            appName,
-                            regSMS!!
-                        )
-                    ) {
-
-                        if (getTimeSpent(appName) >= 0) {
-                            isOfferCompleted = true
-                        }
-                    }
-
-                }
-            }
 
 
-        }
-        return isOfferCompleted
-    }
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -221,45 +123,7 @@ class weeklyOffers : Fragment() {
                 homeViewmodel.getOffersHistory(userData.userNumber)
 
 
-        @SuppressLint("MissingInflatedId", "SetTextI18n")
-        fun showRewardCollectionDialog(offer: Offer) {
-            val builder = AlertDialog.Builder(requireContext())
-            val dialogView = layoutInflater.inflate(R.layout.reward_collection_dialog, null)
-            builder.setView(dialogView)
-            val rewardButton = dialogView.findViewById<Button>(R.id.btnCollectReward)
-            val rewardText = dialogView.findViewById<TextView>(R.id.textCollectReward)
-            val alertDialog = builder.create()
-            rewardText.text = "Congratulations! on completing ${offer.Name} . You've won a reward! of Rs.${offer.Price} "
-            alertDialog.show()
 
-            rewardButton.setOnClickListener {
-                // Handle the reward collection logic here
-                // For example, grant the reward and dismiss the dialog
-                // You can also dismiss the dialog without granting the reward if the user cancels
-
-                val soundPool = SoundPool.Builder().setMaxStreams(1).build()
-                val soundID = soundPool.load(requireContext(), R.raw.water_drop, 1)
-                soundPool.play(soundID, 1f, 1f, 1, 0, 1f)
-                val total_bal = home_viewModel().totalOffers.value
-
-                lifecycleScope.launch {
-                    try {
-                        UserInfo_Airtable_Repo().updateCompletedOffer(
-                            userData.userNumber!!.toLong(), total_bal!!,
-                            userData.userNumber.toInt(),
-                            userData(userData.userNumber.toLong()),
-                            offer.OfferId!!.toInt(), offer.Price.toString(), "Completed"
-                        )
-                        alertDialog.dismiss()
-
-                    } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "Some Error Occurred", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-
-            }
-        }
 
             val offerList : ArrayList<Offer> = ArrayList();
 
@@ -269,32 +133,6 @@ class weeklyOffers : Fragment() {
             if (OfferList.weeklyOffersList.isNotEmpty()) {
                 homeViewmodel!!.getOfferHistoryList().observe(viewLifecycleOwner) {
                     var array = it
-                    if(!homeViewmodel!!.checkingCompleted){
-                        for (offer in offerList) {
-                            homeViewmodel!!.getIsCompleted(offer.OfferId!!.toInt() , userData.userNumber)
-
-                            Log.i("offertesting" , "OfferName" + offer.Name.toString() )
-
-//                            val isCompleted: Boolean = isCompleted(it, offer)
-                             lifecycleScope.launch {
-                                 homeViewmodel!!.getIsCompletedData(  ).observe(viewLifecycleOwner){
-
-                                     Log.i("offertesting" , "Output" + it.toString() )
-
-                                     if (!it) {
-                                         if (isOfferCompleted(offer.appName!!, offer.regSMS!!)) {
-                                             Log.i("offertesting" , "Reward Output" + true.toString())
-
-                                             showRewardCollectionDialog(offer)
-                                         }
-                                     }
-                                 }
-
-
-                             }
-
-                        }
-                    }
 
                     homeViewmodel.checkingCompleted = true
 
@@ -305,12 +143,12 @@ class weeklyOffers : Fragment() {
                 }
 
             }
-
-            homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner) {
-                var totalOffers = OfferList.weeklyOffersList.size + OfferList.monthlyOfferList.size
-                var completedOffers = it.size
-                homeViewmodel.setProgressBar(completedOffers, totalOffers)
-            }
+//
+//            homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner) {
+//                var totalOffers = OfferList.weeklyOffersList.size + OfferList.monthlyOfferList.size
+//                var completedOffers = it.size
+//                homeViewmodel.setProgressBar(completedOffers, totalOffers)
+//            }
         }
 
         val phone = homeViewmodel.getuserData().value ?: userData(0)
@@ -324,6 +162,7 @@ class weeklyOffers : Fragment() {
 
 
     }
+
 
     companion object {
         /**
@@ -345,29 +184,5 @@ class weeklyOffers : Fragment() {
             }
     }
 }
-private fun formatTime(millis: Long): String {
-    val days = TimeUnit.MILLISECONDS.toDays(millis)
-    val hours = TimeUnit.MILLISECONDS.toHours(millis) % 24
-    val minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60
-    val seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60
-
-    return String.format("%02d Day : %02d H : %02d M : %02d S", days, hours, minutes, seconds)
-}
-
- fun isCompleted(offerList :ArrayList<Fields> , offer:Offer):Boolean{
-    var bool : Boolean = false
-    for(offers in offerList){
-        Log.i("offertesting" , offers.toString()  +  offer.OfferId.toString())
-        if( offers.Status == "Completed" && offers.OfferId.toString() == offer.OfferId!!)
-        {
-            Log.i("offertesting" , offers.Status.toString())
-
-            bool = true
-            break;
-        }
-    }
-    return bool
-}
-
 
 
