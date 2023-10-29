@@ -59,7 +59,15 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
+        <receiver
+            android:name=".Component.ClaimedOfferBroadcast"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+            </intent-filter>
+        </receiver>
         <service
             android:name=".Component.FirebaseMessagingService"
             android:exported="true">
@@ -68,6 +76,7 @@
 
         <service android:name=".Component.service" />
 
+        <service android:name=".Component.completionService" />
 
         <activity
             android:name=".View.onboarding"

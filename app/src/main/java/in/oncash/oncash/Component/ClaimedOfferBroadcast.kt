@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.util.Log
 
 
 class ClaimedOfferBroadcast : BroadcastReceiver() {
@@ -13,6 +14,7 @@ class ClaimedOfferBroadcast : BroadcastReceiver() {
             val connectivityManager =
                 context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            Log.i("SMSDATA", "internet")
 
             if (networkInfo != null && networkInfo!!.isConnected) {
                 val serviceIntent = Intent(

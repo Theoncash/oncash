@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class completionService(): Service()  {
-    val offerData : CompletedOfferEntity? = null
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
             // Create a background thread or use coroutines to perform database operations
 
@@ -32,8 +31,11 @@ class completionService(): Service()  {
 //        context.startService(serviceOfferDbIntent)
 
 
+
+
+        CoroutineScope(Dispatchers.IO).launch {
             val smsBody = intent!!.getStringExtra("regSMS")
-            CoroutineScope(Dispatchers.IO).launch {
+            Log.i("SMSDATA", "${smsBody}")
 
                 val claimedDb = Room.databaseBuilder(
                     applicationContext,
@@ -41,31 +43,41 @@ class completionService(): Service()  {
                     "User"
                 ).fallbackToDestructiveMigration() // Add this line for destructive migration
                     .build()
+            Log.i("SMSDATA", "DB1")
 
                 val userDb = Room.databaseBuilder(
                     applicationContext,
                     userDb::class.java,
-                    "User"
+                    "User2"
                 ).fallbackToDestructiveMigration() // Add this line for destructive migration
                     .build()
+            Log.i("SMSDATA", "DB2")
 
 
                 val roomDb = Room.databaseBuilder(
                     applicationContext,
                     OfferDb::class.java,
-                    "User"
+                    "User1"
                 ).fallbackToDestructiveMigration() // Add this line for destructive migration
                     .build()
 
                 val user = userDb.userQuery().getUserNumber()
-                val offers = roomDb.offerDao().getAllOffers()
-                for (offer in offers) {
+            Log.i("SMSDATA", "user->$user")
+
+            val offers = roomDb.offerDao().getAllOffers()
+            Log.i("SMSDATA", "offers->$offers")
+
+            for (offer in offers) {
+                    Log.i("SMSDATA", "DB->${offer.regSms}")
+
                     if (smsBody!!.contains(offer.regSms)) {
+
+                        Log.i("SMSDATA", "DB->${offer.regSms}")
+
                         claimedDb.completedOfferDao().insert(
                             CompletedOfferEntity(
-                            offer.id,
-                            user,
-                            offer.offerId,
+                                offer.offerId,
+                                user,
                             false
                         )
                         )

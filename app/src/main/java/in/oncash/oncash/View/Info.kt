@@ -46,6 +46,7 @@ import `in`.oncash.oncash.Repository.offer_AirtableDatabase
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.ViewModel.info_viewModel
 import `in`.oncash.oncash.databinding.ActivityInfoBinding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,7 +60,6 @@ class Info : AppCompatActivity() {
     val home_viewModel: home_viewModel by viewModels()
 
     @SuppressLint("SetTextI18n", "InvalidPeriodicWorkRequestInterval")
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInfoBinding.inflate(layoutInflater)
@@ -150,7 +150,6 @@ finish()
             OfferQueriesAdapter.updateList(it)
         }
         lifecycleScope.launch {
-            withContext(Dispatchers.Default){
                 isOfferCompleted(
                     appName!! ,
                     regSMS!! ,
@@ -161,7 +160,7 @@ finish()
 
                 )
 
-            }
+
         }
 
         lifecycleScope.launch {
@@ -393,16 +392,18 @@ finish()
     }
 
     suspend fun isOfferCompleted(appName: String, regSMS: String  , offerId: Int , userNumber: Long , appPrice :Int  ,   Name :String){
-        withContext(Dispatchers.Default){
 
-        home_viewModel.getIsCompleted(offerId , userNumber)
-            home_viewModel.getIsCompletedData().observe(this@Info){
-                if(it == false){
-                    if(isAppInstalled(this@Info ,appName )){
-                        if(isRegistered(this@Info , appName , regSMS)){
-                            if(getTimeSpent(appName) > 8){
+
+            home_viewModel.getIsCompleted(offerId, userNumber)
+
+            home_viewModel.getIsCompletedData().observe(this@Info) {
+                if (it == false) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                    if (isAppInstalled(this@Info, appName)) {
+                        if (isRegistered(this@Info, appName, regSMS)) {
+                            if (getTimeSpent(appName) > 8) {
                                 showRewardCollectionDialog(
-                                    offerId , userNumber , appPrice , Name
+                                    offerId, userNumber, appPrice, Name
                                 )
                             }
                         }
@@ -410,10 +411,11 @@ finish()
                 }
             }
 
+        }
 
         }
 
-    }
+
      fun getTimeSpent(targetPackageName : String):Int{
         val targetPackageName = targetPackageName // Replace with your app's package name
         val usageStatsManager = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
@@ -495,7 +497,8 @@ suspend fun isBeing(
     callback: (Boolean) -> Unit
 
 )
-{
+= withContext(Dispatchers.Default){
+
     var isB : Boolean = false
 
 
@@ -525,57 +528,61 @@ suspend fun isBeing(
 
 }
 
- fun isAppInstalled(context: Context , appName: String): Boolean {
-    // get list of all the apps installed
-    // get list of all the apps installed
-    val pm: PackageManager = context.packageManager
-    try {
-        val packageInfo = pm.getInstalledApplications(0)
+  suspend fun isAppInstalled(context: Context , appName: String): Boolean = withContext(Dispatchers.Default) {
 
-        for(app in packageInfo){
-            if(app.packageName == appName){
-                return true
-            }
-        }
+         // get list of all the apps installed
+         // get list of all the apps installed
+         val pm: PackageManager = context.packageManager
+         try {
+             val packageInfo = pm.getInstalledApplications(0)
 
-    } catch (e: PackageManager.NameNotFoundException) {
-        // The app is not installed.
-        Toast.makeText(context , "packageInfo.applicationInfo.packageName" , Toast.LENGTH_LONG).show()
+             for (app in packageInfo) {
+                 if (app.packageName == appName) {
+                     return@withContext true
+                 }
+             }
 
-        return false
-    }
-return false
-}
+         } catch (e: PackageManager.NameNotFoundException) {
+             // The app is not installed.
+             Toast.makeText(context, "packageInfo.applicationInfo.packageName", Toast.LENGTH_LONG)
+                 .show()
+
+             return@withContext false
+         }
+         return@withContext false
+     }
 
 
- fun isRegistered(context: Context , appName : String , regSMS :String) : Boolean{
-    val inboxSms = ArrayList<String>()
-    val uri = Uri.parse("content://sms/inbox")
-    val cursor = context.contentResolver.query(uri, null, null, null, null)
 
-    if (cursor != null && cursor.moveToFirst()) {
-        val bodyIndex = cursor.getColumnIndex("body")
-        do {
-            val smsBody = cursor.getString(bodyIndex)
-            inboxSms.add(smsBody)
-        } while (cursor.moveToNext())
-        cursor.close()
-    }
-    // Assuming you have already retrieved SMS messages and stored them in the 'inboxSms' list
-    var messageFound = false
+ suspend fun isRegistered(context: Context, appName : String, regSMS :String) : Boolean = withContext(Dispatchers.Default) {
 
-    for (smsBody in inboxSms) {
+         val inboxSms = ArrayList<String>()
+         val uri = Uri.parse("content://sms/inbox")
+         val cursor = context.contentResolver.query(uri, null, null, null, null)
 
-        if (smsBody.lowercase() .contains(regSMS.toString().lowercase(), ignoreCase = true)) {
-            // The message contains the search string
-            messageFound = true
-            break  // Exit the loop once a matching message is found
-        }
-    }
+         if (cursor != null && cursor.moveToFirst()) {
+             val bodyIndex = cursor.getColumnIndex("body")
+             do {
+                 val smsBody = cursor.getString(bodyIndex)
+                 inboxSms.add(smsBody)
+             } while (cursor.moveToNext())
+             cursor.close()
+         }
+         // Assuming you have already retrieved SMS messages and stored them in the 'inboxSms' list
+         var messageFound = false
 
-  return messageFound
+         for (smsBody in inboxSms) {
+
+             if (smsBody.lowercase().contains(regSMS.toString().lowercase(), ignoreCase = true)) {
+                 // The message contains the search string
+                 messageFound = true
+                 break  // Exit the loop once a matching message is found
+             }
+         }
+
+         return@withContext messageFound
 
 
 // Now, 'inboxSms' contains a list of SMS message bodies from the inbox.
+     }
 
-}

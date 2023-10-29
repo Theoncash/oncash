@@ -13,7 +13,7 @@ interface CompletedOfferDao {
     @Query("SELECT * FROM completed_offers")
     suspend fun getCompletedOffersByUser(): List<CompletedOfferEntity>
 
-    @Query("DELETE FROM completed_offers WHERE id = :offerId")
+    @Query("DELETE FROM completed_offers WHERE offerId = :offerId")
     suspend fun removeCompletedOffer(offerId: Int)
 }
 

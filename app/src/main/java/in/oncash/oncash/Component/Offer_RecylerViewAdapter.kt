@@ -77,7 +77,8 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
             holder.price.text = "₹ $text "
             Glide.with(holder.itemView.context).load(offerList[position].Image)
                 .into(holder.background)
-
+            holder.DaysLeft.text = "Offer ends in ${offerList[position].dayLeft} Days"
+            holder.DaysLeft.setTextColor(Color.RED)
             val url: URL = URL(offerList[position].Image)
             var isCompleted = false
 
@@ -86,7 +87,7 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
             for (offer in offerHistoryList) {
                 if (offer.Status.contains("Completed") && offer.OfferId.toString() == offerList[position].OfferId!!) {
                     holder.DaysLeft.text = "Completed"
-                    holder.DaysLeft.setTextColor(Color.GRAY)
+                    holder.DaysLeft.setTextColor(Color.GREEN)
                     Log.i(
                         "completedOfferHistory",
                         offer.toString() + "offerid=${offerList[position].OfferId}"
@@ -129,6 +130,17 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
 
                 )
             }
+        }else{
+            val price: Int = offerList[position].Price!!.toInt()
+
+            holder.offerId = offerList[position].OfferId!!
+            holder.name.text = offerList[position].Name + " - Over"
+            val text = (offerList[position].Price!!.toInt() * offer) / 100
+            holder.price.text = "₹ $text "
+            Glide.with(holder.itemView.context).load(offerList[position].Image)
+                .into(holder.background)
+            holder.DaysLeft.text = "Offer Ended"
+            holder.DaysLeft.setTextColor(Color.GRAY)
         }
 
     }

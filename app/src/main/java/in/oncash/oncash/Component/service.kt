@@ -56,11 +56,11 @@ class service : Service() {
                     val offerData = offerDb.offerDao().getOfferById(offer.offerId)
 
                     val min = getTimeSpent(offerData!!.appName!!, context)
-                    if (min >= 7) {
+                    if (min >= 1) {
                         val completedOffer = CompletedOfferEntity(
-                            0,
-                            offer.userId,
                             offer!!.offerId!!.toInt(),
+
+                            offer.userId,
                             false
                         )
 

@@ -65,7 +65,7 @@ class home_viewModel : ViewModel() {
     fun getOfferListData():  MutableLiveData<OfferList>{
         return offerList
     }
-    fun getOfferList(db :OfferDb) {
+    fun getOfferList() {
         viewModelScope.launch {
             val data = Offer_FIrebase().getData()
 //            addOffer_OfferDb(data , db)
@@ -73,18 +73,21 @@ class home_viewModel : ViewModel() {
             offerList.postValue( offerList_data )
         }
     }
-    fun getOffer():ArrayList<Offer>{
-        return offerList.value!!.weeklyOffersList
+    fun getOffer(): ArrayList<Offer>? {
+
+        return offerList.value?.weeklyOffersList
     }
 
 
   suspend  fun addOffer_OfferDb(offer_list : ArrayList<Offer> , db: OfferDb){
+      var count = 0
       withContext(Dispatchers.IO){
           for (offer in offer_list){
+              count += 1
               val offer_entity = OfferEntity(
-                  0,
-                  offer.regSMS!!,
                   offer.OfferId!!.toInt(),
+
+                  offer.regSMS!!,
                   offer.appName!!,
                   offer.Price!!.toInt()
               )

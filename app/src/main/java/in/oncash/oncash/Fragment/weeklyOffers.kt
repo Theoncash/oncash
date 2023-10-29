@@ -106,62 +106,55 @@ class weeklyOffers : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val homeViewmodel = activity.run{
+        val homeViewmodel = activity.run {
             this?.let { ViewModelProvider(it).get(home_viewModel::class.java) }
         }
-         var adapter:Offer_RecylerViewAdapter = Offer_RecylerViewAdapter(userData)
 
-        homeViewmodel!!.getUserData(view.context)
-        homeViewmodel!!.getuserData().observe(viewLifecycleOwner){
+        var adapter: Offer_RecylerViewAdapter = Offer_RecylerViewAdapter(userData)
+
+        homeViewmodel!!.getuserData().observe(viewLifecycleOwner) {
             userData = it
             val offerRecylerview: RecyclerView = view.findViewById(R.id.weeklyOffer_recylerview)
-             adapter = Offer_RecylerViewAdapter(userData )
+            adapter = Offer_RecylerViewAdapter(userData)
             offerRecylerview.adapter = adapter
             offerRecylerview.layoutManager =
                 LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
-        }
-                homeViewmodel.getOffersHistory(userData.userNumber)
 
 
-
-
-            val offerList : ArrayList<Offer> = ArrayList();
 
             homeViewmodel!!.getOfferListData().observe(viewLifecycleOwner) { OfferList ->
-            offerList.clear()
-            offerList.addAll(OfferList.weeklyOffersList)
-            if (OfferList.weeklyOffersList.isNotEmpty()) {
-                homeViewmodel!!.getOfferHistoryList().observe(viewLifecycleOwner) {
-                    var array = it
+                if (OfferList.weeklyOffersList.isNotEmpty()) {
+                    homeViewmodel!!.getOfferHistoryList().observe(viewLifecycleOwner) {
+                        var array = it
 
-                    homeViewmodel.checkingCompleted = true
+                        homeViewmodel.checkingCompleted = true
 
-                    this.OfferList = OfferList
-                    adapter.updateList(OfferList.weeklyOffersList, offer, array)
+                        this.OfferList = OfferList
+                        adapter.updateList(OfferList.weeklyOffersList, offer, array)
 
+
+                    }
 
                 }
 
+
+                val phone = homeViewmodel.getuserData().value ?: userData(0)
+                binding.continueBut.setOnClickListener {
+                    startActivity(
+                        Intent(
+                            requireActivity().application,
+                            ReferalActivity::class.java
+                        ).putExtra("number", userData.userNumber)
+                    )
+                }
+
             }
-//
-//            homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner) {
-//                var totalOffers = OfferList.weeklyOffersList.size + OfferList.monthlyOfferList.size
-//                var completedOffers = it.size
-//                homeViewmodel.setProgressBar(completedOffers, totalOffers)
-//            }
         }
-
-        val phone = homeViewmodel.getuserData().value ?: userData(0)
-        binding.continueBut.setOnClickListener{
-            startActivity(Intent(requireActivity().application, ReferalActivity::class.java).putExtra("number" , userData.userNumber ))
-        }
-
-
-
-
-
 
     }
+
+
+
 
 
     companion object {

@@ -12,10 +12,8 @@ import androidx.room.RoomDatabase
 // Define the entity for your table
 @Entity(tableName = "offers")
 data class OfferEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey() val offerId: Int,
     val regSms: String,
-    val offerId: Int,
     val appName: String,
     val appPrice : Int
 )
@@ -23,6 +21,7 @@ data class OfferEntity(
 // Create a DAO (Data Access Object) to define database operations
 @Dao
 interface OfferDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(offer: OfferEntity)
 
@@ -34,7 +33,7 @@ interface OfferDao {
 }
 
 // Define your Room database
-@Database(entities = [OfferEntity::class], version = 1)
+@Database(entities = [OfferEntity::class], version = 3)
 abstract class OfferDb : RoomDatabase() {
     abstract fun offerDao(): OfferDao
 }

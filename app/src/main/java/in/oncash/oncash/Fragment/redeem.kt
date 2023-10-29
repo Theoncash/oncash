@@ -80,8 +80,7 @@ class redeem : Fragment() {
         return  binding.root
     }
 
-    @SuppressLint("SuspiciousIndentation")
-    @RequiresApi(Build.VERSION_CODES.N)
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         homeViewmodel = activity.run{
@@ -104,11 +103,8 @@ class redeem : Fragment() {
                 homeViewmodel.getWalletPrice().observe(viewLifecycleOwner) {
                     walletBalance = it.currentBal
                     Log.i("userrepository", "wb" + walletBalance.toString())
-                    val formattedBalance = NumberFormat.getCurrencyInstance().apply {
-                        currency = Currency.getInstance("INR")
-                    }.format(walletBalance)
 
-                    binding.walletBala.text = formattedBalance
+                    binding.walletBala.text = "₹ "+ walletBalance
 
                 }
 

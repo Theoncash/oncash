@@ -51,253 +51,209 @@ class Home : AppCompatActivity() {
 
     lateinit var binding: ActivityHomeBinding
     val homeViewmodel: home_viewModel by viewModels()
-    lateinit var OfferList : OfferList
-    private  var userData: userData = userData(0)
-    lateinit var roomDb:userDb
+    lateinit var OfferList: OfferList
+    private var userData: userData = userData(0)
+    lateinit var roomDb: userDb
     var needToUpdate = false
-    private val version : Double = 1.2
-    val  SMS_PERMISSION_REQUEST_CODE = 734973;
+    private val version: Double = 1.2
+    val SMS_PERMISSION_REQUEST_CODE = 734973;
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         soundPool = SoundPool.Builder().setMaxStreams(1).build()
-        val notificationPermission = Manifest.permission.POST_NOTIFICATIONS
-         val REQUEST_NOTIFICATION_PERMISSION = 4343242 // Use any unique integer value
+        soundPool = SoundPool.Builder().setMaxStreams(1).build()
+        val REQUEST_NOTIFICATION_PERMISSION = 4343242 // Use any unique integer value
         checkAndRequestPermissions()
-        if (ContextCompat.checkSelfPermission(this, notificationPermission) != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted, request it
-            ActivityCompat.requestPermissions(
-                this,  // Pass your activity reference
-                arrayOf(notificationPermission),
-                REQUEST_NOTIFICATION_PERMISSION
-            )
-        } else {
-            // Permission is already granted, you can proceed to show notifications
-            // You may call your notification code here
-        }
-         soundID = soundPool.load(this, R.raw.water_drop, 1)
+
+        soundID = soundPool.load(this, R.raw.water_drop, 1)
 //        if (!isNetworkConnected(this)) {
 //            setContentView(R.layout.no_internet) // Load the layout for no internet
 //
 //        }else{
 //            setContentView(R.layout.activity_home) // Load the layout for no internet
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS), SMS_PERMISSION_REQUEST_CODE)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECEIVE_SMS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECEIVE_SMS),
+                SMS_PERMISSION_REQUEST_CODE
+            )
         }
 
 
-            homeViewmodel.getVersion().observe(this){
-                if(it.id > version){
-                    needToUpdate = true
-                    showCustomDialog(it)
+        homeViewmodel.getVersion().observe(this) {
+            if (it.id > version) {
+                needToUpdate = true
+                showCustomDialog(it)
 //                   startActivity( Intent(this , update::class.java) )
-                }else{
+            } else {
+                binding = ActivityHomeBinding.inflate(layoutInflater)
+                setContentView(binding.root)
+                val REQUEST_SMS_PERMISSION = 734973 // Use any unique integer value
 
-                    val REQUEST_SMS_PERMISSION = 734973 // Use any unique integer value
+
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.READ_SMS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.READ_SMS),
+                        REQUEST_SMS_PERMISSION
+                    )
+                }
+                if (!hasUsageStatsPermission()) {
+                    requestUsageStatsPermission()
+                }
 
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_SMS), REQUEST_SMS_PERMISSION)
-                        }
+                lifecycleScope.launch {
+                    withContext(Dispatchers.Default)
+                    {
+                        roomDb = Room.databaseBuilder(
+                            applicationContext,
+                            userDb::class.java,
+                            "User"
+                        )
+                            .fallbackToDestructiveMigration() // Add this line for destructive migration
+                            .build()
+                        userData.userNumber = roomDb.userQuery().getUserNumber()
                     }
-                    if (!hasUsageStatsPermission()) {
-                        requestUsageStatsPermission()
+
+                    if (userData.userNumber.toInt() == 0) {
+                        getUserData()
+                    } else {
+                        homeViewmodel.getOfferList()
+                        homeViewmodel.getOffersHistory(userData.userNumber!!)
+                        homeViewmodel.setUserData(userData)
+//                            homeViewmodel.withdrawalTransaction(userData.userNumber)
+//                            homeViewmodel.getOffersHistory(userData.userNumber)
+                        homeViewmodel.getWallet(userData.userNumber)
                     }
-
-
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO)
-                        {
-                            roomDb = Room.databaseBuilder(
-                                applicationContext,
-                                userDb::class.java,
-                                "User"
-                            ).fallbackToDestructiveMigration() // Add this line for destructive migration
-                                .build()
-                            userData.userNumber = roomDb.userQuery().getUserNumber()
-                        }
-
-                        if(userData.userNumber.toInt() == 0){
-                            getUserData()
-                        }else{
-                            homeViewmodel.setUserData(userData)
-                            homeViewmodel.withdrawalTransaction(userData.userNumber)
-                            homeViewmodel.getOffersHistory(userData.userNumber)
-                            homeViewmodel.getWallet(userData.userNumber)
-                        }
-                    }
+                }
 
 //        lifecycleScope.launch {
 //            getUserData()
 //        }
-                    FirebaseMessaging.getInstance().isAutoInitEnabled = true
-                    FirebaseMessaging.getInstance().subscribeToTopic("Referral")
-                        .addOnCompleteListener(object : OnCompleteListener<Void> {
-                            override fun onComplete(task: Task<Void>) {
-                                if (task.isSuccessful) {
-                                    // User is successfully subscribed to the topic
-                                    // You can handle success here, e.g., show a success message
-                                    Log.i("FirebaseData" , "Subscribed to 'new_entries' topic successfully.")
-                                } else {
-                                    // Subscription failed
-                                    // You can handle the failure here, e.g., show an error message
-                                    Log.i("FirebaseData" ,"Failed to subscribe to 'new_entries' topic: ${task.exception?.message}")
-                                }
-                            }
-                        })
-                    FirebaseApp.initializeApp(this)
-                    FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-                        if (!task.isSuccessful) {
-                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                            return@OnCompleteListener
-                        }
-
-                        // Get new FCM registration token
-                        val token = task.result
-
-                        // Log and toast
-                    })
-                    binding = ActivityHomeBinding.inflate(layoutInflater)
-                    setContentView(binding.root)
 
 
+                val navHostFragment =
+                    supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+                val navController = navHostFragment.navController
+                binding.bottomNavigation.setOnItemSelectedListener {
+                    // Play sound
+                    soundPool.play(soundID, 1f, 1f, 1, 0, 1f)
 
-                    val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-                    val navController = navHostFragment.navController
-                    binding.bottomNavigation.setOnItemSelectedListener {
-                        // Play sound
-                        soundPool.play(soundID, 1f, 1f, 1, 0, 1f)
-
-                        // Handle item click logic here
-                        if (it.itemId == R.id.home) {
-                            if (navController.currentDestination!!.id == R.id.monthlyOffers) {
-                                navController.navigate(R.id.action_monthlyOffers_to_weeklyOffers)
-                            }
-                            if (navController.currentDestination!!.id == R.id.redeem2) {
-                                navController.navigate(R.id.action_redeem2_to_weeklyOffers)
-                            }
-                            if (navController.currentDestination!!.id == R.id.profile2) {
-                                navController.navigate(R.id.action_profile2_to_weeklyOffers)
-                            }
-                            if (navController.currentDestination!!.id == R.id.contactFragment) {
-                                navController.navigate(R.id.action_contactFragment_to_weeklyOffers)
-                            }
+                    // Handle item click logic here
+                    if (it.itemId == R.id.home) {
+                        if (navController.currentDestination!!.id == R.id.monthlyOffers) {
+                            navController.navigate(R.id.action_monthlyOffers_to_weeklyOffers)
                         }
-                        if (it.itemId == R.id.history) {
-                            if (navController.currentDestination!!.id == R.id.weeklyOffers) {
-                                navController.navigate(R.id.action_weeklyOffers_to_monthlyOffers)
-                            }
-                            if (navController.currentDestination!!.id == R.id.redeem2) {
-                                navController.navigate(R.id.action_redeem2_to_monthlyOffers)
-                            }
-                            if (navController.currentDestination!!.id == R.id.profile2) {
-                                navController.navigate(R.id.action_profile2_to_monthlyOffers)
-                            }
-                            if (navController.currentDestination!!.id == R.id.contactFragment) {
-                                navController.navigate(R.id.action_contactFragment_to_monthlyOffers)
-                            }
+                        if (navController.currentDestination!!.id == R.id.redeem2) {
+                            navController.navigate(R.id.action_redeem2_to_weeklyOffers)
                         }
-                        if (it.itemId == R.id.redeem) {
-                            if (navController.currentDestination!!.id == R.id.weeklyOffers) {
-                                navController.navigate(R.id.action_weeklyOffers_to_redeem2)
-                            }
-                            if (navController.currentDestination!!.id == R.id.monthlyOffers) {
-                                navController.navigate(R.id.action_monthlyOffers_to_redeem2)
-                            }
-                            if (navController.currentDestination!!.id == R.id.profile2) {
-                                navController.navigate(R.id.action_profile2_to_redeem2)
-                            }
-                            if (navController.currentDestination!!.id == R.id.contactFragment) {
-                                navController.navigate(R.id.action_contactFragment_to_redeem2)
-                            }
+                        if (navController.currentDestination!!.id == R.id.profile2) {
+                            navController.navigate(R.id.action_profile2_to_weeklyOffers)
                         }
-                        if (it.itemId == R.id.profile) {
-                            if (navController.currentDestination!!.id == R.id.weeklyOffers) {
-                                navController.navigate(R.id.action_weeklyOffers_to_profile2)
-                            }
-                            if (navController.currentDestination!!.id == R.id.monthlyOffers) {
-                                navController.navigate(R.id.action_monthlyOffers_to_profile2)
-                            }
-                            if (navController.currentDestination!!.id == R.id.redeem2) {
-                                navController.navigate(R.id.action_redeem2_to_profile2)
-                            }
-                            if (navController.currentDestination!!.id == R.id.contactFragment) {
-                                navController.navigate(R.id.action_contactFragment_to_profile2)
-                            }
+                        if (navController.currentDestination!!.id == R.id.contactFragment) {
+                            navController.navigate(R.id.action_contactFragment_to_weeklyOffers)
                         }
-                        if (it.itemId == R.id.contact) {
-                            if (navController.currentDestination!!.id == R.id.weeklyOffers) {
-                                navController.navigate(R.id.action_weeklyOffers_to_contactFragment)
-                            }
-                            if (navController.currentDestination!!.id == R.id.monthlyOffers) {
-                                navController.navigate(R.id.action_monthlyOffers_to_contactFragment)
-                            }
-                            if (navController.currentDestination!!.id == R.id.redeem2) {
-                                navController.navigate(R.id.action_redeem2_to_contactFragment)
-                            }
-                            if (navController.currentDestination!!.id == R.id.profile2) {
-                                navController.navigate(R.id.action_profile2_to_contactFragment)
-                            }
-                        }
-                        true
                     }
-
-
-
-                    binding.walletTextView.setOnClickListener {
-                        startActivity(
-                            Intent(this, Wallet::class.java).putExtra(
-                                "walletBalance",
-                                binding.walletTextView.text
-                            ).putExtra("userNumber", userData.userNumber.toString()).putExtra("userRecordId", userData.userNumber))
-
+                    if (it.itemId == R.id.history) {
+                        if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                            navController.navigate(R.id.action_weeklyOffers_to_monthlyOffers)
+                        }
+                        if (navController.currentDestination!!.id == R.id.redeem2) {
+                            navController.navigate(R.id.action_redeem2_to_monthlyOffers)
+                        }
+                        if (navController.currentDestination!!.id == R.id.profile2) {
+                            navController.navigate(R.id.action_profile2_to_monthlyOffers)
+                        }
+                        if (navController.currentDestination!!.id == R.id.contactFragment) {
+                            navController.navigate(R.id.action_contactFragment_to_monthlyOffers)
+                        }
                     }
+                    if (it.itemId == R.id.redeem) {
+                        if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                            navController.navigate(R.id.action_weeklyOffers_to_redeem2)
+                        }
+                        if (navController.currentDestination!!.id == R.id.monthlyOffers) {
+                            navController.navigate(R.id.action_monthlyOffers_to_redeem2)
+                        }
+                        if (navController.currentDestination!!.id == R.id.profile2) {
+                            navController.navigate(R.id.action_profile2_to_redeem2)
+                        }
+                        if (navController.currentDestination!!.id == R.id.contactFragment) {
+                            navController.navigate(R.id.action_contactFragment_to_redeem2)
+                        }
+                    }
+                    if (it.itemId == R.id.profile) {
+                        if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                            navController.navigate(R.id.action_weeklyOffers_to_profile2)
+                        }
+                        if (navController.currentDestination!!.id == R.id.monthlyOffers) {
+                            navController.navigate(R.id.action_monthlyOffers_to_profile2)
+                        }
+                        if (navController.currentDestination!!.id == R.id.redeem2) {
+                            navController.navigate(R.id.action_redeem2_to_profile2)
+                        }
+                        if (navController.currentDestination!!.id == R.id.contactFragment) {
+                            navController.navigate(R.id.action_contactFragment_to_profile2)
+                        }
+                    }
+                    if (it.itemId == R.id.contact) {
+                        if (navController.currentDestination!!.id == R.id.weeklyOffers) {
+                            navController.navigate(R.id.action_weeklyOffers_to_contactFragment)
+                        }
+                        if (navController.currentDestination!!.id == R.id.monthlyOffers) {
+                            navController.navigate(R.id.action_monthlyOffers_to_contactFragment)
+                        }
+                        if (navController.currentDestination!!.id == R.id.redeem2) {
+                            navController.navigate(R.id.action_redeem2_to_contactFragment)
+                        }
+                        if (navController.currentDestination!!.id == R.id.profile2) {
+                            navController.navigate(R.id.action_profile2_to_contactFragment)
+                        }
+                    }
+                    true
+                }
+
+
+
+                binding.walletTextView.setOnClickListener {
+                    startActivity(
+                        Intent(this, Wallet::class.java).putExtra(
+                            "walletBalance",
+                            binding.walletTextView.text
+                        ).putExtra("userNumber", userData.userNumber.toString())
+                            .putExtra("userRecordId", userData.userNumber)
+                    )
+
                 }
             }
-
-
         }
 
 
-
-
-
+    }
 
 
     override fun onResume() {
         super.onResume()
-//
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
-//            // Request the RECEIVE_SMS permission
-//            val REQUEST_SMS_PERMISSION = 734973 // Use any unique integer value
-//
-//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_SMS), REQUEST_SMS_PERMISSION)
-//        }
-//        val registrationChecker = smsReceiver( )
-//        val intentFilter = IntentFilter()
-//        intentFilter.addAction(packageName + "android.provider.Telephony.SMS_RECEIVED")
-//        registerReceiver(registrationChecker,
-//             intentFilter
-//        );
+        homeViewmodel.getuserData().observe(this){
+            Log.i("offerHistory" ,  "userId" + it.toString())
+//            homeViewmodel.getOfferList()
+//            homeViewmodel.getOffersHistory(userData.userNumber!!)
+        }
 
-//            lifecycleScope.launch {
-//                withContext(Dispatchers.IO){
-//                    homeViewmodel.getOffersHistory(userData.userNumber)
-//                    val db = Room.databaseBuilder(
-//                        applicationContext,
-//                        OfferDb::class.java, "offers_database"
-//                    ).build()
-//
-//                    homeViewmodel.getOfferList(db)
-//                }
-//
-//            }
+
 
     }
-    private fun showCustomDialog(version :Version) {
+
+    private fun showCustomDialog(version: Version) {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.custom_dialog)
         dialog.setCancelable(true) // Allow the user to dismiss the dialog by tapping outside
@@ -323,6 +279,7 @@ class Home : AppCompatActivity() {
         }
         win.attributes = winParams
     }
+
     private fun hasUsageStatsPermission(): Boolean {
         val appOpsManager = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         val mode = AppOpsManagerCompat.noteOpNoThrow(
@@ -330,8 +287,10 @@ class Home : AppCompatActivity() {
         )
         return mode == AppOpsManager.MODE_ALLOWED
     }
+
     fun isNetworkConnected(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
         return activeNetwork != null && activeNetwork.isConnected
     }
@@ -340,6 +299,7 @@ class Home : AppCompatActivity() {
         val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
         startActivity(intent)
     }
+
     private fun getUserData() {
         homeViewmodel.getUserData(this)
         homeViewmodel.getuserData().observe(this, Observer { data ->
@@ -356,12 +316,12 @@ class Home : AppCompatActivity() {
             binding.walletTextView.text = wallet.currentBal.toString()
         })
     }
+
     override fun onBackPressed() {
         super.onBackPressed()
-       finish()
+        finish()
 
     }
-
 
 
     private lateinit var soundPool: SoundPool
@@ -369,16 +329,15 @@ class Home : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        val registrationChecker = checkRegistration( )
+        val registrationChecker = checkRegistration()
         unregisterReceiver(registrationChecker);
 
         soundPool.release()
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun checkAndRequestPermissions() {
-        val permissions = arrayOf<String>(
+        val permissions = arrayOf(
             Manifest.permission.PACKAGE_USAGE_STATS,
             Manifest.permission.READ_SMS,
             Manifest.permission.RECEIVE_SMS,
@@ -389,8 +348,8 @@ class Home : AppCompatActivity() {
             Manifest.permission.INTERNET
         )
 
-        // List of permissions to request
         val permissionsToRequest: MutableList<String> = ArrayList()
+
         for (permission in permissions) {
             if (ContextCompat.checkSelfPermission(
                     this,
@@ -400,11 +359,11 @@ class Home : AppCompatActivity() {
                 permissionsToRequest.add(permission)
             }
         }
+
         if (!permissionsToRequest.isEmpty()) {
-            // Request permissions
             ActivityCompat.requestPermissions(
                 this,
-                permissionsToRequest.toTypedArray<String>(),
+                permissionsToRequest.toTypedArray(),
                 PERMISSION_REQUEST_CODE
             )
         }
@@ -413,33 +372,27 @@ class Home : AppCompatActivity() {
     // Handle permission request result
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        @NonNull permissions: Array<String?>,
-        @NonNull grantResults: IntArray
+        permissions: Array<String>,
+        grantResults: IntArray
     ) {
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == SMS_PERMISSION_REQUEST_CODE.toInt()) {
-            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val intentFilter = IntentFilter("android.provider.Telephony.SMS_RECEIVED")
-                registerReceiver(checkRegistration() , intentFilter )
-            } else {
-                // Permission denied, handle accordingly (e.g., show a message to the user)
-            }
-        }
+
         if (requestCode == PERMISSION_REQUEST_CODE) {
             for (i in permissions.indices) {
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted
                 } else {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        permissions,
-                        PERMISSION_REQUEST_CODE
-                    )
-                    // Permission denied
-                    // You can show a message or take action accordingly
+                    if (shouldShowRequestPermissionRationale(permissions[i])) {
+                        // Explain why the permission is needed
+                        // Show a message to the user
+                    } else {
+                        // Permission denied, user may have selected "Don't ask again"
+                        // Show a message and guide the user to app settings
+                        // so they can manually enable the permission
+                    }
                 }
             }
         }
     }
+
 }
