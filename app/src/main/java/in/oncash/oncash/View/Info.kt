@@ -26,6 +26,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import androidx.work.Data
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
@@ -44,6 +45,8 @@ import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.R
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
 import `in`.oncash.oncash.Repository.offer_AirtableDatabase
+import `in`.oncash.oncash.RoomDb.notification_checker
+import `in`.oncash.oncash.RoomDb.userDb
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.ViewModel.info_viewModel
 import `in`.oncash.oncash.databinding.ActivityInfoBinding
@@ -389,6 +392,7 @@ finish()
                         val inputData = Data.Builder()
                             .putString("appName", appName!!)
                             .putString("name", offerName!!)
+                            .putString("offerId" , offerId!!)
                             .build()
                         val periodicWorkRequest = PeriodicWorkRequest.Builder(
                             AppInstallReceiver::class.java,
@@ -398,7 +402,24 @@ finish()
 
                             .build()
 
-                        WorkManager.getInstance(this).enqueue(periodicWorkRequest)
+                        lifecycleScope.launch {
+                            withContext(Dispatchers.Default)
+
+                            {
+                              var  roomDb = Room.databaseBuilder(
+                                    applicationContext,
+                                    notification_checker::class.java,
+                                    "notification"
+                                )
+                                    .fallbackToDestructiveMigration() // Add this line for destructive migration
+                                    .build()
+                               var bool = roomDb.notificationCheckerDao().getNotificationCheckerById(offerId!!.toInt())
+                                if(bool == null){
+                                    WorkManager .getInstance(this@Info).enqueue(periodicWorkRequest)
+                                }
+                            }
+                        }
+
                         val serviceIntent = Intent(this, TimerService::class.java)
                         startService(serviceIntent)
                         try {

@@ -96,7 +96,8 @@ class info_viewModel : ViewModel() {
         viewModelScope.launch {
 
 
-            var isOffer= UserInfo_Airtable_Repo().isOfferStarted(userId , offerId)
+            var isOffer= UserInfo_Airtable_Repo().isOfferStarted(userId , offerId);
+
                             Log.i("blacklisttt" ,"userStarted" +  isOffer.toString())
             isOfferCompleted.postValue(isOffer)
         }
