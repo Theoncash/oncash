@@ -18,6 +18,7 @@ class info_viewModel : ViewModel() {
     val OfferQueries : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
     val iscompleted = MutableLiveData<Boolean>(false)
     val Blacklisted : MutableLiveData<Boolean> = MutableLiveData(false)
+    val isWebData : MutableLiveData<Boolean> = MutableLiveData()
 
    fun getInstructionListData (): MutableLiveData<ArrayList<Instruction>>{
        return InstructionsList
@@ -93,16 +94,7 @@ class info_viewModel : ViewModel() {
 
     fun isOfferBeign (userId: Long  , offerId : Int){
         viewModelScope.launch {
-//            val offerHistory =  offerHistory_component().getOfferHIstory( userId )
-//            for (offer in offerHistory ){
-//                Log.i("blacklisttt" , offer.toString())
-//
-//                if( offer.OfferId == offerId && offer.Status.contains( "Being Reviewed")){
-//                    isCompleted.postValue(   true )
-//                    Log.i("blacklisttt" , isCompleted.toString())
-//
-//                }
-//            }
+
 
             var isOffer= UserInfo_Airtable_Repo().isOfferStarted(userId , offerId)
                             Log.i("blacklisttt" ,"userStarted" +  isOffer.toString())
@@ -114,4 +106,16 @@ class info_viewModel : ViewModel() {
         return isOfferCompleted
     }
 
+    fun getIsWebData(): MutableLiveData<Boolean>{
+        return isWebData
+    }
+    fun getIsWeb (  offerId : Int){
+        viewModelScope.launch {
+
+
+            var isWeb= UserInfo_Airtable_Repo().getIsWeb( offerId)
+            Log.i("blacklisttt" ,"userStarted" +  isWeb.toString())
+            isWebData.postValue(isWeb)
+        }
+    }
 }

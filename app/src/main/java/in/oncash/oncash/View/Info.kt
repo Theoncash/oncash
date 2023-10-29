@@ -33,6 +33,7 @@ import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import `in`.oncash.oncash.Component.Instructions_RecylerViewAdapter
 import `in`.oncash.oncash.Component.Instructions_detail_RecylerViewAdapter
+import `in`.oncash.oncash.Component.TimerService
 import `in`.oncash.oncash.Component.customLoadingDialog
 import `in`.oncash.oncash.Component.offerQueries_adapter
 import `in`.oncash.oncash.Component.step_Adapter
@@ -58,6 +59,7 @@ import java.util.concurrent.TimeUnit
 class Info : AppCompatActivity() {
      lateinit var binding : ActivityInfoBinding
     val home_viewModel: home_viewModel by viewModels()
+    val info_viewModel: info_viewModel by viewModels()
 
     @SuppressLint("SetTextI18n", "InvalidPeriodicWorkRequestInterval")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,8 +150,7 @@ finish()
         adapter.updateList(list , Instruction , ClosingInstruction)
         binding.offerLinkButtonInfo.visibility = View.VISIBLE
         //Observing the getInstructionList() in info_viewmodel (ie which gets the data from info_FirebaseRepo)
-        val info_viewModel: info_viewModel by viewModels()
-
+        info_viewModel.getIsWeb(offerId!!.toInt())
 
         info_viewModel.getOfferQueries(offerId!!).observe(this@Info){
             OfferQueriesAdapter.updateList(it)
@@ -195,36 +196,62 @@ finish()
                                                         Log.i("instructionData" , it.toString())
                                                         Instruction.addAll(it )
 
+                                                        info_viewModel.getIsWebData().observe(this@Info){
+                                                            if(it){
+                                                                for (i in 0 until noOfSteps!!.toInt()) {
 
+                                                                    if (i == 1) {
+                                                                        list.add(
+                                                                            Step(
+                                                                                false,
+                                                                                "Register in the App"
+                                                                            )
+                                                                        )
 
-                                                        for (i in 0 until noOfSteps!!.toInt()) {
-                                                            if (i == 0) {
-                                                                list.add(
-                                                                    Step(
-                                                                        false,
-                                                                        "Install the App"
-                                                                    )
-                                                                )
-                                                            }
-                                                            if (i == 1) {
-                                                                list.add(
-                                                                    Step(
-                                                                        false,
-                                                                        "Register in the App"
-                                                                    )
-                                                                )
+                                                                    }
+                                                                    if (i == 2) {
+                                                                        list.add(
+                                                                            Step(
+                                                                                false,
+                                                                                "Completed 1st Trade "
+                                                                            )
+                                                                        )
 
-                                                            }
-                                                            if (i == 2) {
-                                                                list.add(
-                                                                    Step(
-                                                                        false,
-                                                                        "Completed 1st Trade "
-                                                                    )
-                                                                )
+                                                                    }
+                                                                }
+                                                            }else{
+                                                                for (i in 0 until noOfSteps!!.toInt()) {
+                                                                    if (i == 0) {
+                                                                        list.add(
+                                                                            Step(
+                                                                                false,
+                                                                                "Install the App"
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                    if (i == 1) {
+                                                                        list.add(
+                                                                            Step(
+                                                                                false,
+                                                                                "Register in the App"
+                                                                            )
+                                                                        )
 
+                                                                    }
+                                                                    if (i == 2) {
+                                                                        list.add(
+                                                                            Step(
+                                                                                false,
+                                                                                "Completed 1st Trade "
+                                                                            )
+                                                                        )
+
+                                                                    }
+                                                                }
                                                             }
                                                         }
+
+
 
 
                                                     }
@@ -233,17 +260,35 @@ finish()
                                                         View.VISIBLE
 
                                                     lifecycleScope.launch {
-                                                        if (isAppInstalled(this@Info, appName!!)) {
-                                                            list[0] =
-                                                                Step(true, list[0].instruction)
-                                                            Toast.makeText(
-                                                                this@Info,
-                                                                list[0].instruction.toString(),
-                                                                Toast.LENGTH_LONG
-                                                            ).show()
+                                                        info_viewModel.getIsWebData().observe(this@Info) {
+                                                            if (!it) {
+                                                                lifecycleScope.launch {
+                                                                    if (isAppInstalled(
+                                                                            this@Info,
+                                                                            appName!!
+                                                                        )
+                                                                    ) {
+                                                                        list[0] =
+                                                                            Step(
+                                                                                true,
+                                                                                list[0].instruction
+                                                                            )
+                                                                        Toast.makeText(
+                                                                            this@Info,
+                                                                            list[0].instruction.toString(),
+                                                                            Toast.LENGTH_LONG
+                                                                        ).show()
 
-                                                            adapter.updateList(list , Instruction , ClosingInstruction)
+                                                                        adapter.updateList(
+                                                                            list,
+                                                                            Instruction,
+                                                                            ClosingInstruction
+                                                                        )
 
+                                                                    }
+                                                                }
+
+                                                            }
                                                         }
                                                         if (isRegistered(
                                                                 this@Info,
@@ -354,7 +399,8 @@ finish()
                             .build()
 
                         WorkManager.getInstance(this).enqueue(periodicWorkRequest)
-
+                        val serviceIntent = Intent(this, TimerService::class.java)
+                        startService(serviceIntent)
                         try {
                             this.startActivity(intent)
                         } catch (ex: ActivityNotFoundException) {
@@ -397,15 +443,36 @@ finish()
             home_viewModel.getIsCompletedData().observe(this@Info) {
                 if (it == false) {
                     CoroutineScope(Dispatchers.Main).launch {
-                    if (isAppInstalled(this@Info, appName)) {
-                        if (isRegistered(this@Info, appName, regSMS)) {
-                            if (getTimeSpent(appName) >= 7) {
-                                showRewardCollectionDialog(
-                                    offerId, userNumber, appPrice, Name
-                                )
+                        info_viewModel.getIsWebData().observe(this@Info) {
+                            CoroutineScope(Dispatchers.Main).launch {
+
+                                if (!it) {
+
+                                    if (isRegistered(this@Info, appName, regSMS)) {
+
+                                        showRewardCollectionDialog(
+                                            offerId, userNumber, appPrice, Name
+                                        )
+
+                                    }
+                                } else {
+                                    if (isAppInstalled(this@Info, appName)) {
+                                        if (isRegistered(this@Info, appName, regSMS)) {
+                                            if (getTimeSpent(appName) >= 7) {
+                                                showRewardCollectionDialog(
+                                                    offerId, userNumber, appPrice, Name
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+
+
                             }
                         }
-                    }
+
+
+
                 }
             }else{
                     binding.offerLinkButtonInfo.text = "Completed"
