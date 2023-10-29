@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -70,6 +69,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="15sp"
+            android:shadowRadius="@integer/material_motion_duration_long_1"
             app:cornerRadius="59dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.483"

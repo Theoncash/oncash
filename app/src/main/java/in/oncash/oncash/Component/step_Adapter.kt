@@ -2,6 +2,7 @@ package `in`.oncash.oncash.Component
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,8 @@ import `in`.oncash.oncash.R
     class viewholder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val status : ImageView
         val description :TextView
+        val up :ImageView
+        val down :ImageView
         var isClicked :Boolean = false
         val instruction :CardView
         val recyclerView :RecyclerView
@@ -35,12 +38,13 @@ import `in`.oncash.oncash.R
             status = itemView.findViewById(R.id.stepImage)
             instruction = itemView.findViewById(R.id.instructions_expandable)
             recyclerView = itemView.findViewById(R.id.instruction_recyclerview)
+            up =itemView.findViewById(R.id.expandalbe_up)
+            down =itemView.findViewById(R.id.expandalbe_down)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):viewholder {
         context = parent.context
-
 
         val v = LayoutInflater.from(parent.context).inflate(R.layout.custom_step,parent,false)
 
@@ -65,6 +69,8 @@ import `in`.oncash.oncash.R
 
         holder.itemView.setOnClickListener{
             if (!holder.isClicked){
+                holder.up.visibility = View.GONE
+                holder.down.visibility = View.VISIBLE
                 Log.i("instructionData" , Instruction.toString())
                 holder.instruction.visibility = View.VISIBLE
                 holder.isClicked = true
@@ -86,6 +92,8 @@ import `in`.oncash.oncash.R
 
 
             }else{
+                holder.up.visibility = View.VISIBLE
+                holder.down.visibility = View.GONE
                 holder.instruction.visibility = View.GONE
                 holder.isClicked = false
             }

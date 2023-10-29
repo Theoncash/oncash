@@ -71,18 +71,7 @@ class contactFragment : Fragment() {
         }
 
 
-        binding.gmail.setOnClickListener {
-            val url = "mailto:onbread.assist@gmail.com"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.setPackage("com.android.chrome")
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            } else {
-                Toast.makeText(requireContext(), "No email client found", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
 

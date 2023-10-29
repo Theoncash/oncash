@@ -38,6 +38,34 @@
         app:navGraph="@navigation/navigation"
         tools:layout="@layout/fragment_weekly_offers" />
 
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/nav"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:cardCornerRadius="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/leaderboard_icon"
+            android:layout_gravity="center"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground" />
+
+    </androidx.cardview.widget.CardView>
+
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"

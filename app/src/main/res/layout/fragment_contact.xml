@@ -8,45 +8,66 @@
     android:background="@drawable/contact_background">
 
 
+    <TextView
+        android:id="@+id/feedbackTextView"
+        android:layout_width="325dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="Join WhatsApp and Share Your Valuable Feedback"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:fontFamily="@font/poppinsextrabold"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.287"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ic"
+        app:layout_constraintVertical_bias="0.0" />
+
     <ImageView
-        android:id="@+id/whatspp"
+        android:id="@+id/ic"
         android:layout_width="80dp"
-        android:layout_height="70dp"
+        android:layout_height="80dp"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:background="@drawable/whatsapp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.564" />
+        app:layout_constraintVertical_bias="0.425" />
 
-
-    <ImageView
-        android:id="@+id/telegram"
-        android:layout_width="80dp"
+    <Button
+        android:id="@+id/whatspp"
+        android:layout_width="190dp"
         android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="140dp"
+        android:backgroundTint="@color/white"
+        android:elevation="6dp"
+        android:letterSpacing="0.1"
+        android:text="Join Our Family"
 
-        android:background="@drawable/telegram"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:textColor="@color/lightblack"
+        android:textSize="18sp"
+        app:cornerRadius="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.414"
+        app:layout_constraintHorizontal_bias="0.458"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.564" />
-
-    <ImageView
-        android:id="@+id/gmail"
-        android:layout_width="80dp"
-        android:layout_height="70dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/gmail"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.797"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.564" />
+        app:layout_constraintTop_toBottomOf="@+id/feedbackTextView"
+        app:layout_constraintVertical_bias="0.117" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

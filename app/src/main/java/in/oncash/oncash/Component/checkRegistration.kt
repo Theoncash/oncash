@@ -60,12 +60,12 @@ class checkRegistration : BroadcastReceiver() {
 
                     userdata =  userData(UserDataStoreUseCase().retrieveUserNumber(context))
                     Log.i("SMSDATA" , "usernumber" + userdata.toString())
-//                    val serviceIntent = Intent(
-//                        context,
-//                        completionService::class.java
-//                    )
-//                    serviceIntent.putExtra("regSMS" , messageBody)
-//                    context.startService(serviceIntent)
+                    val serviceIntent = Intent(
+                        context,
+                        completionService::class.java
+                    )
+                    serviceIntent.putExtra("regSMS" , messageBody)
+                    context.startService(serviceIntent)
                 }
 
                 GlobalScope.launch {
@@ -77,15 +77,15 @@ class checkRegistration : BroadcastReceiver() {
                         if (messageBody.contains (key)) {
 
                             val min = getTimeSpent(offer.appName!! , context)
-                            if(min >= 1){
+                            if(min >= 7){
                                 val completedOffer = CompletedOfferEntity(  offer!!.OfferId!!.toInt(),userdata.userNumber, false)
+                                showNotification(context , offer)
 
 
 
 
                                 UserInfo_Airtable_Repo().removeOneCap(offer.OfferId!!.toInt())
                                 UserInfo_Airtable_Repo().addOfferClaimed(userdata.userNumber , offer!!.OfferId!!.toInt() )
-                                showNotification(context , offer)
                             }
 
                     }
@@ -98,8 +98,8 @@ class checkRegistration : BroadcastReceiver() {
         }
     fun showNotification(context: Context, offer: Offer) {
         // Define the channel ID as a constant
-        val channelId = "my_notification_channel"
-        val notificationId = 3133231// Use a unique ID for the notification
+        val channelId = "oncash.in"
+        val notificationId = 73497197// Use a unique ID for the notification
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId, "My Notification Channel", NotificationManager.IMPORTANCE_DEFAULT)
@@ -118,7 +118,7 @@ class checkRegistration : BroadcastReceiver() {
         val notificationManager = NotificationManagerCompat.from(context)
         if (ActivityCompat.checkSelfPermission(
                 context,
-                Manifest.permission.POST_NOTIFICATIONS
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY // Corrected
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             // TODO: Consider calling
@@ -130,7 +130,8 @@ class checkRegistration : BroadcastReceiver() {
             // for ActivityCompat#requestPermissions for more details.
             return
         }
-        notificationManager.notify(notificationId , notificationBuilder.build())
+
+        notificationManager.notify(notificationId.toInt(), notificationBuilder.build())
     }
 
 }

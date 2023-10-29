@@ -12,7 +12,6 @@
         android:layout_height="47dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/ic_curve"
         app:layout_constraintBottom_toBottomOf="parent"

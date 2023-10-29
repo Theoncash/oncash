@@ -54,16 +54,31 @@
 
 
             <ImageView
-                android:id="@+id/expandalbe_btn"
+                android:id="@+id/expandalbe_up"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
+                android:src="@drawable/up"
                 android:contentDescription="TODO"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
               />
+
+            <ImageView
+                android:id="@+id/expandalbe_down"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/down"
+                android:visibility="gone"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

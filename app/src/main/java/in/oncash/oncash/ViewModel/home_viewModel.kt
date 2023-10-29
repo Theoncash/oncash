@@ -7,22 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import `in`.oncash.oncash.Component.UserDataStoreUseCase
 import `in`.oncash.oncash.Component.get_UserInfo_UseCase
-import `in`.oncash.oncash.Component.offerHistory_component
 import `in`.oncash.oncash.Component.sortingComponent
 import `in`.oncash.oncash.DataType.*
-import `in`.oncash.oncash.DataType.SerializedDataType.Blacklist.Blacklist
 import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields
-import `in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.OfferHistoryRecord
 import `in`.oncash.oncash.DataType.SerializedDataType.Version
 import `in`.oncash.oncash.Repository.Offer_FIrebase
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
-import `in`.oncash.oncash.Repository.offer_AirtableDatabase
 import `in`.oncash.oncash.RoomDb.OfferDb
 import `in`.oncash.oncash.RoomDb.OfferEntity
-import io.ktor.http.*
 import kotlinx.coroutines.*
 
-@OptIn(DelicateCoroutinesApi::class)
 class home_viewModel : ViewModel() {
 
     private val wallet : MutableLiveData<walletDatatype> = MutableLiveData()
@@ -33,7 +27,7 @@ class home_viewModel : ViewModel() {
      val verionInfo : MutableLiveData<Version> = MutableLiveData()
     private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
     var checkingCompleted = false
-    val isCompleted : MutableLiveData<Boolean> = MutableLiveData(false)
+    val isCompleted : MutableLiveData<Boolean> = MutableLiveData()
 
     val isWeb : MutableLiveData<Boolean> = MutableLiveData()
 
@@ -147,7 +141,9 @@ private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveD
 
     fun getIsCompleted( offerId : Int  , userId:Long ){
         viewModelScope.launch {
-            isCompleted.value = UserInfo_Airtable_Repo().isCompleted(userId , offerId) .contains("Completed")
+            var bool = UserInfo_Airtable_Repo().isCompleted(userId , offerId) .contains("Completed")
+            Log.i("isCompletedOffer" , bool.toString())
+            isCompleted.postValue( bool )
         }
     }
 
