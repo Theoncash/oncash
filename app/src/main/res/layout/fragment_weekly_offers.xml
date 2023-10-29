@@ -6,33 +6,41 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
-            android:layout_width="410dp"
-            android:layout_height="637dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="1dp"
-            app:cardCornerRadius="38dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/Poster"
+            android:layout_width="wrap_content"
+            android:layout_height="210dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/poster"
+            android:elevation="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView2"
+            android:layout_width="415dp"
+            android:layout_height="363dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/weeklyOffer_recylerview"
-                android:layout_width="397dp"
-                android:layout_height="517dp"
+                android:layout_width="wrap_content"
+                android:layout_height="360dp"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.89"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/offerListButtons" />
@@ -41,18 +49,17 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="206dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="90dp"
-            android:layout_marginBottom="18dp"
+            android:layout_width="162dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="50dp"
+            android:gravity="center"
             android:text="Top Offers "
             android:textAppearance="@style/top_offers"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/cardView2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.952"
+            app:layout_constraintHorizontal_bias="0.429"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/continueBut" />
 
@@ -60,21 +67,20 @@
             android:id="@+id/continueBut"
             android:layout_width="330dp"
             android:layout_height="80dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginEnd="80dp"
+            android:layout_marginEnd="10dp"
             android:backgroundTint="#2479E9"
+            android:elevation="@dimen/text_xx_medium"
             android:gravity="center"
+            android:shadowRadius="@integer/material_motion_duration_long_1"
             android:text="@string/get"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:shadowRadius="@integer/material_motion_duration_long_1"
             app:cornerRadius="59dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintHorizontal_bias="0.358"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/Poster" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
