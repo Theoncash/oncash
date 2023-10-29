@@ -811,6 +811,41 @@ Log.i("blacklistt" , response.toString())
 
 
 
+    suspend fun getIsWeb(offerId: Int) : Boolean = withContext(Dispatchers.IO){
+
+
+        val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OfferInfo?OfferId=eq.$offerId&select=*"
+
+        val client = HttpClient(CIO){
+            install(ContentNegotiation){
+                Gson()
+                json(
+                    Json{
+                        isLenient = true
+                        prettyPrint = true
+                    }
+                )
+            }
+        }
+
+        val response = client.get(url) {
+            headers {
+                append("apikey", apiKey)
+                append("Authorization", "Bearer $apiKey")
+            }
+        }
+
+        Log.i("supabase" , response.body<String>().toString())
+        var isWeb = false
+        val json = JSONArray( response.body<String>().toString())
+        if (json.toString() != "[]" || json.length() > 0) {
+            isWeb = JSONObject(json[0].toString()).getBoolean("isWeb")
+        }
+
+        return@withContext isWeb
+    }
+
+
 
     suspend fun thereExists(list:kotlin.collections.ArrayList<OfferHistoryRecord>, element :OfferHistoryRecord):Boolean = withContext(Dispatchers.IO){
         var thereExisit = false

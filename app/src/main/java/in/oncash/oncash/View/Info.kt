@@ -138,6 +138,7 @@ finish()
         Documentsadapter.updateList(Documents)
         var ClosingInstruction: ArrayList<Instruction> = ArrayList()
         Log.i("closingInstructions" , "it.toString()")
+        home_viewModel.getIsWeb(offerId!!.toInt())
 
 
         adapter.updateList(list , Instruction , ClosingInstruction)
@@ -193,36 +194,62 @@ finish()
                                                         Instruction.clear()
                                                         Log.i("instructionData" , it.toString())
                                                         Instruction.addAll(it )
+                                                        home_viewModel.getIsWebData().observe(this@Info){
+                                                            if(it){
+                                                                for (i in 0 until noOfSteps!!.toInt()) {
 
+                                                                    if (i == 1) {
+                                                                        list.add(
+                                                                            Step(
+                                                                                false,
+                                                                                "Register in the App"
+                                                                            )
+                                                                        )
 
+                                                                    }
+                                                                    if (i == 2) {
+                                                                        list.add(
+                                                                            Step(
+                                                                                false,
+                                                                                "Completed 1st Trade "
+                                                                            )
+                                                                        )
 
-                                                        for (i in 0 until noOfSteps!!.toInt()) {
-                                                            if (i == 0) {
-                                                                list.add(
-                                                                    Step(
-                                                                        false,
-                                                                        "Install the App"
-                                                                    )
-                                                                )
+                                                                    }
+                                                                }
+                                                            }else{
+                                                                for (i in 0 until noOfSteps!!.toInt()) {
+                                                                    if (i == 0) {
+                                                                        list.add(
+                                                                            Step(
+                                                                                false,
+                                                                                "Install the App"
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                    if (i == 1) {
+                                                                        list.add(
+                                                                            Step(
+                                                                                false,
+                                                                                "Register in the App"
+                                                                            )
+                                                                        )
+
+                                                                    }
+                                                                    if (i == 2) {
+                                                                        list.add(
+                                                                            Step(
+                                                                                false,
+                                                                                "Completed 1st Trade "
+                                                                            )
+                                                                        )
+
+                                                                    }
                                                             }
-                                                            if (i == 1) {
-                                                                list.add(
-                                                                    Step(
-                                                                        false,
-                                                                        "Register in the App"
-                                                                    )
-                                                                )
+                                                        }
 
-                                                            }
-                                                            if (i == 2) {
-                                                                list.add(
-                                                                    Step(
-                                                                        false,
-                                                                        "Completed 1st Trade "
-                                                                    )
-                                                                )
 
-                                                            }
+
                                                         }
 
 
@@ -255,10 +282,10 @@ finish()
                                                             adapter.updateList(list , Instruction , ClosingInstruction)
 
 
-                                                            if (getTimeSpent(appName) >= 0) {
-                                                                binding.offerLinkButtonInfo.text =
-                                                                    " Claim Reward "
-                                                            }
+//                                                            if (getTimeSpent(appName) >= 0) {
+//                                                                binding.offerLinkButtonInfo.text =
+//                                                                    " Claim Reward "
+//                                                            }
                                                         }
                                                     }
                                                 })
@@ -393,22 +420,37 @@ finish()
 
     suspend fun isOfferCompleted(appName: String, regSMS: String  , offerId: Int , userNumber: Long , appPrice :Int  ,   Name :String){
 
+        home_viewModel.getIsWeb(offerId)
 
             home_viewModel.getIsCompleted(offerId, userNumber)
 
             home_viewModel.getIsCompletedData().observe(this@Info) {
                 if (it == false) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                    if (isAppInstalled(this@Info, appName)) {
-                        if (isRegistered(this@Info, appName, regSMS)) {
-                            if (getTimeSpent(appName) > 8) {
-                                showRewardCollectionDialog(
-                                    offerId, userNumber, appPrice, Name
-                                )
+                    home_viewModel.getIsWebData().observe(this@Info) {
+                            if(it){
+                                CoroutineScope(Dispatchers.Main).launch {
+                                        if (isRegistered(this@Info, appName, regSMS)) {
+                                                showRewardCollectionDialog(
+                                                    offerId, userNumber, appPrice, Name
+                                                )
+                                            }
+                                }
+                            }else{
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    if (isAppInstalled(this@Info, appName)) {
+                                        if (isRegistered(this@Info, appName, regSMS)) {
+                                            if (getTimeSpent(appName) > 8) {
+                                                showRewardCollectionDialog(
+                                                    offerId, userNumber, appPrice, Name
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                        }
+
+
                     }
-                }
             }
 
         }

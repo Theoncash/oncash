@@ -35,6 +35,7 @@ class home_viewModel : ViewModel() {
     var checkingCompleted = false
     val isCompleted : MutableLiveData<Boolean> = MutableLiveData(false)
 
+    val isWeb : MutableLiveData<Boolean> = MutableLiveData()
 
     // wallet
     fun withdrawalTransaction(userNumber :Long){
@@ -148,6 +149,16 @@ private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveD
         viewModelScope.launch {
             isCompleted.value = UserInfo_Airtable_Repo().isCompleted(userId , offerId) .contains("Completed")
         }
+    }
+
+    fun getIsWeb( offerId : Int  ){
+        viewModelScope.launch {
+            isWeb.value = UserInfo_Airtable_Repo().getIsWeb( offerId)
+        }
+    }
+
+    fun getIsWebData():MutableLiveData<Boolean>{
+        return  isWeb
     }
     fun getIsCompletedData():MutableLiveData<Boolean>{
         return isCompleted
