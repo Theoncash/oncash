@@ -18,7 +18,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.Gravity
 import android.widget.Button
 import android.widget.PopupMenu
 import androidx.activity.viewModels
@@ -234,8 +233,24 @@ class Home : AppCompatActivity() {
 
                 // Set click listener for the button
                 binding.nav.setOnClickListener {
-                    soundPool.play(soundID, 2f, 2f, 1, 0, 1f)
-                    startActivity(Intent(this, LeaderBoard::class.java))
+                    val popup = PopupMenu(this, it)
+                    popup.menuInflater.inflate(R.menu.nav_menu, popup.menu)
+
+                    popup.setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.menu_leaderboard -> {
+                                // Handle Leaderboard Click
+                                true
+                            }
+                            R.id.menu_refer_and_earn -> {
+                                // Handle Refer and Earn Click
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+
+                    popup.show()
                 }
 
 

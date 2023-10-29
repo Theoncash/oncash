@@ -3,6 +3,7 @@ package `in`.oncash.oncash.View
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -33,7 +34,7 @@ class ReferalActivity : AppCompatActivity() {
 
         var userData : userData = userData(0)
         userData.userNumber = intent.getLongExtra("number" , 0)
-
+//        Toast.makeText(this , userData.userNumber.toString() , Toast.LENGTH_LONG).show()
         referralViewmodel.userData.postValue(userData)
         class MainPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
             override fun getCount(): Int = 2
