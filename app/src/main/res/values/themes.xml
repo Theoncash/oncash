@@ -274,7 +274,7 @@
     <style name="offer_price">
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">0.07</item>
-        <item name="android:textColor">#02A8B9</item>
+        <item name="android:textColor">#BF3026</item>
     </style>
 
     <style name="description">

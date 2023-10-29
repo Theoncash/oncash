@@ -89,19 +89,29 @@ class info_viewModel : ViewModel() {
     }
  private   val isCompleted :MutableLiveData<Boolean> = MutableLiveData()
 
+    private   val isOfferCompleted :MutableLiveData<Boolean> = MutableLiveData()
 
-   suspend fun isOfferBeign (userId: Long  , offerId : Int){
+    fun isOfferBeign (userId: Long  , offerId : Int){
         viewModelScope.launch {
-            val offerHistory =  offerHistory_component().getOfferHIstory( userId )
-            for (offer in offerHistory ){
-                Log.i("blacklisttt" , offer.toString())
+//            val offerHistory =  offerHistory_component().getOfferHIstory( userId )
+//            for (offer in offerHistory ){
+//                Log.i("blacklisttt" , offer.toString())
+//
+//                if( offer.OfferId == offerId && offer.Status.contains( "Being Reviewed")){
+//                    isCompleted.postValue(   true )
+//                    Log.i("blacklisttt" , isCompleted.toString())
+//
+//                }
+//            }
 
-                if( offer.OfferId == offerId && offer.Status.contains( "Being Reviewed")){
-                    isCompleted.postValue(   true )
-                    Log.i("blacklisttt" , isCompleted.toString())
-
-                }
-            }
+            var isOffer= UserInfo_Airtable_Repo().isOfferStarted(userId , offerId)
+                            Log.i("blacklisttt" ,"userStarted" +  isOffer.toString())
+            isOfferCompleted.postValue(isOffer)
         }
     }
+
+    fun getisOfferCompleted(): MutableLiveData<Boolean>{
+        return isOfferCompleted
+    }
+
 }

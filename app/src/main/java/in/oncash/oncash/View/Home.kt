@@ -3,6 +3,8 @@ package `in`.oncash.oncash.View
 import android.Manifest
 import android.app.AppOpsManager
 import android.app.Dialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -17,12 +19,15 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.widget.Button
+import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.AppOpsManagerCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -70,7 +75,6 @@ class Home : AppCompatActivity() {
 //
 //        }else{
 //            setContentView(R.layout.activity_home) // Load the layout for no internet
-
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.RECEIVE_SMS
@@ -82,6 +86,9 @@ class Home : AppCompatActivity() {
                 SMS_PERMISSION_REQUEST_CODE
             )
         }
+
+
+
 
 
         homeViewmodel.getVersion().observe(this) {
@@ -224,6 +231,29 @@ class Home : AppCompatActivity() {
 
 
 
+                // Set click listener for the button
+                binding.nav.setOnClickListener {
+                    val popup = PopupMenu(this, it)
+                    popup.menuInflater.inflate(R.menu.nav_menu, popup.menu)
+
+                    popup.setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.menu_leaderboard -> {
+                                // Handle Leaderboard Click
+                                true
+                            }
+                            R.id.menu_refer_and_earn -> {
+                                // Handle Refer and Earn Click
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+
+                    popup.show()
+                }
+
+
                 binding.walletTextView.setOnClickListener {
                     startActivity(
                         Intent(this, Wallet::class.java).putExtra(
@@ -241,6 +271,7 @@ class Home : AppCompatActivity() {
     }
 
 
+
     override fun onResume() {
         super.onResume()
         homeViewmodel.getuserData().observe(this){
@@ -248,10 +279,12 @@ class Home : AppCompatActivity() {
 //            homeViewmodel.getOfferList()
 //            homeViewmodel.getOffersHistory(userData.userNumber!!)
         }
+        }
 
 
 
-    }
+
+
 
     private fun showCustomDialog(version: Version) {
         val dialog = Dialog(this)
@@ -336,6 +369,7 @@ class Home : AppCompatActivity() {
 
     }
 
+
     private fun checkAndRequestPermissions() {
         val permissions = arrayOf(
             Manifest.permission.PACKAGE_USAGE_STATS,
@@ -370,6 +404,7 @@ class Home : AppCompatActivity() {
     }
 
     // Handle permission request result
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -394,5 +429,8 @@ class Home : AppCompatActivity() {
             }
         }
     }
+
+    // Assuming you have a button called `optionsButton`
+
 
 }

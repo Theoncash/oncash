@@ -38,6 +38,23 @@
         app:navGraph="@navigation/navigation"
         tools:layout="@layout/fragment_weekly_offers" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/nav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:src="@drawable/leaderboard_icon"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/bottom_navigation_background"
+        app:layout_constraintVertical_bias="1.0"
+        android:contentDescription="submit" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"

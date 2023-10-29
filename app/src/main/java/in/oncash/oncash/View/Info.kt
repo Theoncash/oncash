@@ -82,11 +82,16 @@ class Info : AppCompatActivity() {
         val wallet : Int = intent.getIntExtra("wallet" , 0)
         val noOfSteps: String? = intent.getStringExtra("noOfSteps")
         val regSMS = intent.getStringExtra("regSMS")
+        val offerDate = intent.getStringExtra("offerDate")
         //Initilizing the recylerview adapter
         val adapter = step_Adapter()
         val Documentsadapter = Instructions_RecylerViewAdapter()
         val OfferQueriesAdapter = offerQueries_adapter()
-        binding.offerPrice.text = "₹" + offerPrice!!
+
+
+        binding.offerDate.text = "Offer Ends in $offerDate"
+
+            binding.offerPrice.text = "₹" + offerPrice!!
 
         binding.instructionListInfo.adapter = adapter
         binding.instructionListInfo.layoutManager =
@@ -138,7 +143,6 @@ finish()
         Documentsadapter.updateList(Documents)
         var ClosingInstruction: ArrayList<Instruction> = ArrayList()
         Log.i("closingInstructions" , "it.toString()")
-        home_viewModel.getIsWeb(offerId!!.toInt())
 
 
         adapter.updateList(list , Instruction , ClosingInstruction)
@@ -151,7 +155,7 @@ finish()
             OfferQueriesAdapter.updateList(it)
         }
         lifecycleScope.launch {
-                isOfferCompleted(
+               isOfferCompleted(
                     appName!! ,
                     regSMS!! ,
                     offerId!! .toInt(),
@@ -161,10 +165,6 @@ finish()
 
                 )
 
-
-        }
-
-        lifecycleScope.launch {
             info_viewModel.isCompleted(number!!.toLong(), offerId!!.toInt())
             info_viewModel.getBlacklist( number!!.toLong() ,  offerId!!.toInt())
             info_viewModel.getInstrutionList(offerId!!)
@@ -194,62 +194,36 @@ finish()
                                                         Instruction.clear()
                                                         Log.i("instructionData" , it.toString())
                                                         Instruction.addAll(it )
-                                                        home_viewModel.getIsWebData().observe(this@Info){
-                                                            if(it){
-                                                                for (i in 0 until noOfSteps!!.toInt()) {
 
-                                                                    if (i == 1) {
-                                                                        list.add(
-                                                                            Step(
-                                                                                false,
-                                                                                "Register in the App"
-                                                                            )
-                                                                        )
 
-                                                                    }
-                                                                    if (i == 2) {
-                                                                        list.add(
-                                                                            Step(
-                                                                                false,
-                                                                                "Completed 1st Trade "
-                                                                            )
-                                                                        )
 
-                                                                    }
-                                                                }
-                                                            }else{
-                                                                for (i in 0 until noOfSteps!!.toInt()) {
-                                                                    if (i == 0) {
-                                                                        list.add(
-                                                                            Step(
-                                                                                false,
-                                                                                "Install the App"
-                                                                            )
-                                                                        )
-                                                                    }
-                                                                    if (i == 1) {
-                                                                        list.add(
-                                                                            Step(
-                                                                                false,
-                                                                                "Register in the App"
-                                                                            )
-                                                                        )
-
-                                                                    }
-                                                                    if (i == 2) {
-                                                                        list.add(
-                                                                            Step(
-                                                                                false,
-                                                                                "Completed 1st Trade "
-                                                                            )
-                                                                        )
-
-                                                                    }
+                                                        for (i in 0 until noOfSteps!!.toInt()) {
+                                                            if (i == 0) {
+                                                                list.add(
+                                                                    Step(
+                                                                        false,
+                                                                        "Install the App"
+                                                                    )
+                                                                )
                                                             }
-                                                        }
+                                                            if (i == 1) {
+                                                                list.add(
+                                                                    Step(
+                                                                        false,
+                                                                        "Register in the App"
+                                                                    )
+                                                                )
 
+                                                            }
+                                                            if (i == 2) {
+                                                                list.add(
+                                                                    Step(
+                                                                        false,
+                                                                        "Completed 1st Trade "
+                                                                    )
+                                                                )
 
-
+                                                            }
                                                         }
 
 
@@ -282,10 +256,6 @@ finish()
                                                             adapter.updateList(list , Instruction , ClosingInstruction)
 
 
-//                                                            if (getTimeSpent(appName) >= 0) {
-//                                                                binding.offerLinkButtonInfo.text =
-//                                                                    " Claim Reward "
-//                                                            }
                                                         }
                                                     }
                                                 })
@@ -330,7 +300,7 @@ finish()
         //Redirecting user to chrome after the event of button accurs
         binding.offerLinkButtonInfo.setOnClickListener{
 
-            if(binding.offerLinkButtonInfo.text.contains( "Claim") && !isClicked){
+            if(binding.offerLinkButtonInfo.text.contains( "0000000") && !isClicked){
                 isClicked  = true
                 val total_bal =  home_viewModel().totalOffers.value
                 val loadingDialog = customLoadingDialog(this)
@@ -377,7 +347,7 @@ finish()
                             .build()
                         val periodicWorkRequest = PeriodicWorkRequest.Builder(
                             AppInstallReceiver::class.java,
-                            20, TimeUnit.SECONDS
+                            15, TimeUnit.SECONDS
                         )       .setInputData(inputData)
 
 
@@ -418,40 +388,29 @@ finish()
         }*/
     }
 
-    suspend fun isOfferCompleted(appName: String, regSMS: String  , offerId: Int , userNumber: Long , appPrice :Int  ,   Name :String){
+    @SuppressLint("SetTextI18n")
+    suspend fun isOfferCompleted(appName: String, regSMS: String, offerId: Int, userNumber: Long, appPrice :Int, Name :String){
 
-        home_viewModel.getIsWeb(offerId)
 
             home_viewModel.getIsCompleted(offerId, userNumber)
 
             home_viewModel.getIsCompletedData().observe(this@Info) {
                 if (it == false) {
-                    home_viewModel.getIsWebData().observe(this@Info) {
-                            if(it){
-                                CoroutineScope(Dispatchers.Main).launch {
-                                        if (isRegistered(this@Info, appName, regSMS)) {
-                                                showRewardCollectionDialog(
-                                                    offerId, userNumber, appPrice, Name
-                                                )
-                                            }
-                                }
-                            }else{
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    if (isAppInstalled(this@Info, appName)) {
-                                        if (isRegistered(this@Info, appName, regSMS)) {
-                                            if (getTimeSpent(appName) > 8) {
-                                                showRewardCollectionDialog(
-                                                    offerId, userNumber, appPrice, Name
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
+                    CoroutineScope(Dispatchers.Main).launch {
+                    if (isAppInstalled(this@Info, appName)) {
+                        if (isRegistered(this@Info, appName, regSMS)) {
+                            if (getTimeSpent(appName) >= 7) {
+                                showRewardCollectionDialog(
+                                    offerId, userNumber, appPrice, Name
+                                )
                             }
-
-
+                        }
                     }
-            }
+                }
+            }else{
+                    binding.offerLinkButtonInfo.text = "Completed"
+                    binding.offerLinkButtonInfo.visibility = View.VISIBLE
+                }
 
         }
 
@@ -506,7 +465,8 @@ finish()
             val soundID = soundPool.load(this, R.raw.water_drop, 1)
             soundPool.play(soundID, 1f, 1f, 1, 0, 1f)
             val total_bal = home_viewModel().totalOffers.value
-
+            binding.offerLinkButtonInfo.text = "Completed"
+            binding.offerLinkButtonInfo.visibility = View.VISIBLE
             lifecycleScope.launch {
                 try {
                     UserInfo_Airtable_Repo().updateCompletedOffer(
@@ -539,14 +499,14 @@ suspend fun isBeing(
     callback: (Boolean) -> Unit
 
 )
-= withContext(Dispatchers.Default){
+= withContext(Dispatchers.Main){
 
     var isB : Boolean = false
 
 
     infoViewModel.isOfferBeign(userId, offerId)
-     infoViewModel.getIsCompleted().observe(lifecycleOwner){ bool ->
-        Log.i("blacklisttt", bool.toString())
+     infoViewModel.getisOfferCompleted().observe(lifecycleOwner){ bool ->
+         Log.i("blacklisttt", bool.toString())
         if (!bool) {
             lifecycleOwner.lifecycleScope.launch {
                 val regSMS = isRegistered(context , appName , appName)

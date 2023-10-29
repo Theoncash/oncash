@@ -66,7 +66,7 @@
             android:layout_marginTop="140dp"
             android:layout_marginEnd="113dp"
             android:layout_marginBottom="17dp"
-            android:text="My Wallet"
+            android:text="Total Earning"
             android:textColor="@color/white"
             android:textSize="@dimen/text_x_large"
             app:layout_constraintBottom_toTopOf="@+id/current_balance"

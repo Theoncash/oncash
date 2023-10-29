@@ -77,7 +77,7 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
             holder.price.text = "₹ $text "
             Glide.with(holder.itemView.context).load(offerList[position].Image)
                 .into(holder.background)
-            holder.DaysLeft.text = "Offer ends in ${offerList[position].dayLeft} Days"
+            holder.DaysLeft.text = "Only ${offerList[position].cap} available"
             holder.DaysLeft.setTextColor(Color.RED)
             val url: URL = URL(offerList[position].Image)
             var isCompleted = false
@@ -124,6 +124,7 @@ class Offer_RecylerViewAdapter(val userData :userData ) : RecyclerView.Adapter<O
                     .putExtra("noOfSteps", offer_information.noOfSteps.toString())
                     .putExtra("appName", offer_information.appName)
                     .putExtra("regSMS", offer_information.regSMS)
+                    .putExtra("offerDate"  , offer_information.dayLeft.toString())
 
                 holder.itemView.context.startActivity(
                     intent

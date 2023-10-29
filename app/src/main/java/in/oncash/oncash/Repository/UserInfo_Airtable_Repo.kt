@@ -884,6 +884,23 @@ Log.i("blacklistt" , response.toString())
         return@withContext code
     }
 
+    suspend fun isOfferStarted(userId:Long , offerId: Int) : Boolean= withContext(Dispatchers.IO){
+        val url =
+            "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?UserId=eq.$userId&OfferId=eq.$offerId&select=Status"
+        val response = getData(url)
+        var code = ""
+        var isOfferStarted = false
+        var json = JSONArray(response.body<String>().toString())
+        if (json.toString() != "[]" || json.length() > 0) {
+            code = JSONObject(json[0].toString()).getString("Status")
+            isOfferStarted = true
+        }
+        Log.i("blacklisttt" ,"userStarted" +  isOfferStarted.toString())
+
+
+        return@withContext isOfferStarted
+    }
+
     suspend fun OfferUserHistory(userId: Long) : ArrayList<`in`.oncash.oncash.DataType.SerializedDataType.OfferHistory.Fields> = withContext(Dispatchers.IO){
 
         val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/OffersHistory?UserId=eq.$userId&select=*"
