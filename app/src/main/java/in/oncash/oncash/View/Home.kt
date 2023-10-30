@@ -18,7 +18,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.Gravity
 import android.widget.Button
 import android.widget.PopupMenu
 import androidx.activity.viewModels
@@ -37,7 +36,13 @@ import androidx.room.Room
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
+import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.RemoteConfigConstants
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import `in`.oncash.oncash.Component.checkRegistration
 import `in`.oncash.oncash.DataType.OfferList
 import `in`.oncash.oncash.DataType.SerializedDataType.Version
@@ -231,15 +236,56 @@ class Home : AppCompatActivity() {
                     true
                 }
 
+                val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
+                val configSettings = remoteConfigSettings {
+                    minimumFetchIntervalInSeconds = 3600
+                }
+                remoteConfig.setConfigSettingsAsync(configSettings)
 
+                remoteConfig.fetchAndActivate().addOnCompleteListener(this) { task ->
+                        if(task.isSuccessful){
 
-                // Set click listener for the button
-                binding.nav.setOnClickListener {
-                    soundPool.play(soundID, 2f, 2f, 1, 0, 1f)
-                    startActivity(Intent(this, LeaderBoard::class.java))
+                        }else{
+
+                        }
                 }
 
+                val forceRefresh = true
+                FirebaseInstallations.getInstance().getToken(forceRefresh)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d("Installations", "Installation auth token: " + task.result?.token)
 
+                          val showBanner :Boolean =   Firebase.remoteConfig.getBoolean("show_banner")
+                            homeViewmodel.setShowBanner(showBanner)
+
+
+                        } else {
+                            Log.e("Installations", "Unable to get Installation auth token")
+                        }
+                    }
+                // Set click listener for the button
+
+                binding.nav.setOnClickListener {
+                    val popup = PopupMenu(this, it)
+                    popup.menuInflater.inflate(R.menu.nav_menu, popup.menu)
+
+                    popup.setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.menu_leaderboard -> {
+                                // Handle Leaderboard Click
+                                true
+                            }
+                            R.id.menu_refer_and_earn -> {
+                                // Handle Refer and Earn Click
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+
+                    popup.show()
+                }
                 binding.walletTextView.setOnClickListener {
                     startActivity(
                         Intent(this, Wallet::class.java).putExtra(

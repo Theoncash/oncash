@@ -64,42 +64,46 @@ class InviteFragment : Fragment() {
         val homeViewmodel  : home_viewModel = activity.run{
             ViewModelProvider(this!!)[home_viewModel::class.java]
         }
-        val userId = referralViewmodel.userData.value
+        val userId = referralViewmodel.userData.observe(viewLifecycleOwner){
+            var wallet = walletDatatype( 0, 0)
+            homeViewmodel.getWalletPrice().observe(viewLifecycleOwner){
+                wallet = it
+            }
 
-        var wallet = walletDatatype( 0, 0)
-        homeViewmodel.getWalletPrice().observe(viewLifecycleOwner){
-            wallet = it
-        }
+            binding.share.setOnClickListener{
+                val message = " Guess what? I stumbled upon this cool app, OnCash – it's been a money-making game-changer for me! I've pocketed ${wallet.totalBa} already. Check it out using my link: http://www.oncash.in. Let's earn together! "
+                val urlToShare = "http://www.oncash.in" // Replace with the URL or content you want to share
 
-        binding.share.setOnClickListener{
-            val message = " Guess what? I stumbled upon this cool app, OnCash – it's been a money-making game-changer for me! I've pocketed ${wallet.totalBa} already. Check it out using my link: http://www.oncash.in. Let's earn together! "
-            val urlToShare = "http://www.oncash.in" // Replace with the URL or content you want to share
-
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.setPackage("com.whatsapp") // Specify WhatsApp package to ensure it's shared on WhatsApp
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.type = "text/plain"
+                intent.setPackage("com.whatsapp") // Specify WhatsApp package to ensure it's shared on WhatsApp
 
 // Add the message and content to the intent
-            intent.putExtra(Intent.EXTRA_TEXT, "$message\n$urlToShare")
+                intent.putExtra(Intent.EXTRA_TEXT, "$message\n$urlToShare")
 
-            try {
-                startActivity(intent)
-            } catch (e: ActivityNotFoundException) {
-                // Handle the case where WhatsApp is not installed on the device
-                Toast.makeText(view.context, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
-            }
-
-        }
-        lifecycleScope.launch {
-            try {
-                UserInfo_Airtable_Repo().getReferralCode(userId!!.userNumber).observe(viewLifecycleOwner){
-                    binding.referalCode.text =  "Referral code : $it"
+                try {
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    // Handle the case where WhatsApp is not installed on the device
+                    Toast.makeText(view.context, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
                 }
-            }catch (e:Exception){
 
             }
+            lifecycleScope.launch {
+                try {
+                    UserInfo_Airtable_Repo().getReferralCode(it.userNumber).observe(viewLifecycleOwner){
 
+                        binding.referalCode.text =  "Referral code : $it"
+                    }
+                }catch (e:Exception){
+        Toast.makeText(requireContext()  , "error" , Toast.LENGTH_LONG).show()
+
+                }
+
+            }
         }
+
+
 
     }
     companion object {

@@ -14,23 +14,40 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import `in`.oncash.oncash.DataType.Offer
 import `in`.oncash.oncash.R
+import `in`.oncash.oncash.RoomDb.NotificationChecker
+import `in`.oncash.oncash.RoomDb.notification_checker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AppInstallReceiver (appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
 
-    override fun doWork(): Result {
+    override  fun doWork(): Result {
 
         Log.i("pwe" , "Periodic work executed!")
 
         val appName = inputData.getString("appName")
+        val offerId = inputData.getString("offerId")
         val name = inputData.getString("name")
         if(isAppInstalled(applicationContext , appName !!))
         {
             showNotification(applicationContext , name!!)
+
+                    var  roomDb = Room.databaseBuilder(
+                        applicationContext,
+                        notification_checker::class.java,
+                        "notification"
+                    )
+                        .fallbackToDestructiveMigration() // Add this line for destructive migration
+                        .build()
+            roomDb.notificationCheckerDao().insert( NotificationChecker( offerId!!.toInt() , true))
             return Result.success()
 
         }

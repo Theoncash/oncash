@@ -115,7 +115,7 @@ class weeklyOffers : Fragment() {
         var adapter: Offer_RecylerViewAdapter = Offer_RecylerViewAdapter(userData)
 
         homeViewmodel!!.getuserData().observe(viewLifecycleOwner) {
-            userData = it
+            userData.userNumber =  it.userNumber
             val offerRecylerview: RecyclerView = view.findViewById(R.id.weeklyOffer_recylerview)
             adapter = Offer_RecylerViewAdapter(userData)
             offerRecylerview.adapter = adapter
@@ -140,15 +140,17 @@ class weeklyOffers : Fragment() {
                 }
 
 
-                val phone = homeViewmodel.getuserData().value ?: userData(0)
-                binding.continueBut.setOnClickListener {
-                    startActivity(
-                        Intent(
-                            requireActivity().application,
-                            ReferalActivity::class.java
-                        ).putExtra("number", userData.userNumber)
-                    )
+              homeViewmodel.getuserData().observe(viewLifecycleOwner){ userDATA ->
+                    binding.continueBut.setOnClickListener {
+                        startActivity(
+                            Intent(
+                                view.context,
+                                ReferalActivity::class.java
+                            ).putExtra("number", userDATA.userNumber)
+                        )
+                    }
                 }
+
 
             }
         }
