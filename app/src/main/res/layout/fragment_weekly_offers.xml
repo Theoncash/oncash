@@ -11,34 +11,50 @@
         android:layout_height="match_parent">
 
 
-        <ImageView
+        <androidx.cardview.widget.CardView
             android:id="@+id/Poster"
-            android:layout_width="wrap_content"
-            android:layout_height="210dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginEnd="5dp"
-            android:src="@drawable/poster"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/poster"
+            android:scaleType="centerCrop"
             android:elevation="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <Button
+                android:id="@+id/continueBut"
+                android:layout_width="330dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2479E9"
+                android:elevation="@dimen/text_xx_medium"
+                android:gravity="center"
+                android:shadowRadius="@integer/material_motion_duration_long_1"
+                android:text="@string/get"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:cornerRadius="59dp" />
+        </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
-            android:layout_width="415dp"
-            android:layout_height="363dp"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Poster">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/weeklyOffer_recylerview"
-                android:layout_width="wrap_content"
-                android:layout_height="360dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.89"
@@ -52,33 +68,14 @@
             android:layout_width="162dp"
             android:layout_height="35dp"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="50dp"
             android:gravity="center"
             android:text="Top Offers "
+            android:visibility="gone"
             android:textAppearance="@style/top_offers"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.429"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/continueBut" />
-
-        <Button
-            android:id="@+id/continueBut"
-            android:layout_width="330dp"
-            android:layout_height="80dp"
-            android:layout_marginEnd="10dp"
-            android:backgroundTint="#2479E9"
-            android:elevation="@dimen/text_xx_medium"
-            android:gravity="center"
-            android:shadowRadius="@integer/material_motion_duration_long_1"
-            android:text="@string/get"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            app:cornerRadius="59dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.358"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Poster" />
 

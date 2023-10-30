@@ -109,7 +109,9 @@ class weeklyOffers : Fragment() {
         val homeViewmodel = activity.run {
             this?.let { ViewModelProvider(it).get(home_viewModel::class.java) }
         }
-
+        val cardView = binding.Poster
+        val drawable = resources.getDrawable(R.drawable.poster) // Replace with your image resource
+        cardView.background = drawable
         var adapter: Offer_RecylerViewAdapter = Offer_RecylerViewAdapter(userData)
 
         homeViewmodel!!.getuserData().observe(viewLifecycleOwner) {

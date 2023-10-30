@@ -8,10 +8,10 @@
     <color name="black">#1B1717</color>
     <color name="white">#FFFFFF</color>
     <color name="lightblack">#2B2730</color>
-
+    <color name="colorPrimaryDark">#5151D8</color>
     <!--  frame_17 colors  -->
     <color name="colorPrimary">#FFFFFFFF</color>
-    <color name="colorPrimaryDark">#00574B</color>
+
 
     <color name="_bg__frame_17_color">#FFFFFF</color>
     <color name="__400_75_color">#000000</color>
@@ -19,7 +19,7 @@
     <color name="rectangle_11_color">#0F5858</color>
 
     <!-- profile colors -->
-        <color name="blue">#0083D6</color>
+        <color name="blue">#438EDF</color>
         <color name="gray">#EFEFEF</color>
 
     <!--  -->
@@ -30,5 +30,9 @@
     <color name="colorGreenDarker">#002626</color>
     <color name="colorAccentAlpha_10">#1A95C623</color>
     <color name="colorGreenDarkerAlpha_10">#1A002626</color>
+
+
+
+
 
 </resources>

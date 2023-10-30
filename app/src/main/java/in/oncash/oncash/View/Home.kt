@@ -148,6 +148,7 @@ class Home : AppCompatActivity() {
 //            getUserData()
 //        }
 
+                window.statusBarColor = ContextCompat.getColor(this, R.color.blue)
 
                 val navHostFragment =
                     supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
