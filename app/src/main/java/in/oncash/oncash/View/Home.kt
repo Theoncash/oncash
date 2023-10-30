@@ -36,6 +36,7 @@ import androidx.room.Room
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
+import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import `in`.oncash.oncash.Component.checkRegistration
 import `in`.oncash.oncash.DataType.OfferList
@@ -117,7 +118,15 @@ class Home : AppCompatActivity() {
                     requestUsageStatsPermission()
                 }
 
-
+                val forceRefresh = true
+                FirebaseInstallations.getInstance().getToken(forceRefresh)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d("Installations", "Installation auth token: " + task.result?.token)
+                        } else {
+                            Log.e("Installations", "Unable to get Installation auth token")
+                        }
+                    }
                 lifecycleScope.launch {
                     withContext(Dispatchers.Default)
                     {
