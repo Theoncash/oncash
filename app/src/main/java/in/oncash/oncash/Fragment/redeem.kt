@@ -151,13 +151,16 @@ class redeem : Fragment() {
 
                                     //    walletBalance = wallet
                                     binding.walletBala.text = 0.toString()
+
+                                    val params = Bundle()
+                                    params.putDouble(FirebaseAnalytics.Param.VALUE, walletBalance.toDouble()) // Replace with the actual revenue amount
+// Log the purchase event with revenue
+                                    FirebaseAnalytics.getInstance(view.context).logEvent(FirebaseAnalytics.Event.PURCHASE, params)
                                     val bundle = Bundle()
-                                    bundle.putInt("earned_amount", walletBalance) // Replace 50.0 with the actual amount earned
+                                    bundle.putInt("event_name", walletBalance) // Replace 50.0 with the actual amount earned
 
                                     val analytics = FirebaseAnalytics.getInstance(view.context)
-                                    analytics.logEvent("revenue" , bundle )
-                                    analytics.logEvent(FirebaseAnalytics.Event.PURCHASE , bundle )
-
+                                    analytics.logEvent("per_user_revenue" , bundle )
 
 
                                     withdrawalList.add(status.withdrawalTransaction)
