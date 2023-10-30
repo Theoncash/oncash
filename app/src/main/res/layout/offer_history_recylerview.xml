@@ -13,7 +13,7 @@
         android:id="@+id/offer_imageview"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/rectangle_1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,9 +37,10 @@
         app:layout_constraintStart_toEndOf="@+id/offer_imageview"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/offer_status"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:layout_alignParentStart="true"
         android:gravity="top"
@@ -47,10 +48,10 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.786"
         app:layout_constraintStart_toEndOf="@+id/offerHistory_price"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.506" />
 
     <TextView
         android:id="@+id/offerHistory_price"

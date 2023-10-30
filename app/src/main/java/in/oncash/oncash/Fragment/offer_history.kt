@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import `in`.oncash.oncash.Component.OfferHistory_RecylerViewAdapter
 import `in`.oncash.oncash.R
 import `in`.oncash.oncash.ViewModel.home_viewModel
@@ -64,7 +65,11 @@ class monthlyOffers : Fragment() {
         homeViewmodel.getOfferHistoryList().observe(viewLifecycleOwner) { offerhistory ->
             val offer = homeViewmodel.getOffer()
             Log.i("offerHistory" , offerhistory.toString())
-            adapter.updateList(offerhistory , offer!! )
+      try{
+          adapter.updateList(offerhistory , offer!! )
+      }catch (e: NullPointerException){
+          Snackbar.make(view, "Loading..",Snackbar.LENGTH_LONG).show()
+      }
         }
         }
 

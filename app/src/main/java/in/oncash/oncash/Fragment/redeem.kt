@@ -87,7 +87,9 @@ class redeem : Fragment() {
             ViewModelProvider(this!!).get(home_viewModel::class.java)
         }
 
-
+        val cardView = binding.Poster
+        val drawable = resources.getDrawable(R.drawable.poster_wallet) // Replace with your image resource
+        cardView.background = drawable
 
             homeViewmodel.getuserData().observe(viewLifecycleOwner) {
                 Log.i("userrepository", "user Number" + it.userNumber.toString())
@@ -120,7 +122,8 @@ class redeem : Fragment() {
         }
 //        lifecycleScope.launch { getTransaction() }
         binding.withdrawButton.setOnClickListener {
-        binding.withdrawButton.isClickable = false
+        binding.withdrawButton.isClickable = false;
+
             if (walletBalance > 20 ) {
                 val loadingDialog = customLoadingDialog(view.context)
 

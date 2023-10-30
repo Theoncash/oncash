@@ -24,10 +24,10 @@
 
             <Button
                 android:id="@+id/continueBut"
-                android:layout_width="330dp"
-                android:layout_height="80dp"
+                android:layout_width="300dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="#2479E9"
                 android:elevation="@dimen/text_xx_medium"
                 android:gravity="center"
