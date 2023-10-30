@@ -30,6 +30,7 @@ class home_viewModel : ViewModel() {
     val isCompleted : MutableLiveData<Boolean> = MutableLiveData()
 
     val isWeb : MutableLiveData<Boolean> = MutableLiveData()
+    val showBanner : MutableLiveData<Boolean> = MutableLiveData()
 
     // wallet
     fun withdrawalTransaction(userNumber :Long){
@@ -155,6 +156,12 @@ private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveD
 
     fun getIsWebData():MutableLiveData<Boolean>{
         return  isWeb
+    }
+    fun setShowBanner(boolean: Boolean){
+        showBanner.value = boolean
+    }
+    fun getShowBanner():MutableLiveData<Boolean>{
+        return  showBanner
     }
     fun getIsCompletedData():MutableLiveData<Boolean>{
         return isCompleted
