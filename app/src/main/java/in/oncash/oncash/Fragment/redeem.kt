@@ -32,6 +32,7 @@ import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.ViewModel.wallet_viewModel
 import `in`.oncash.oncash.databinding.FragmentRedeemBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
 import `in`.oncash.oncash.Component.customLoadingDialog
 import `in`.oncash.oncash.R
 import `in`.oncash.oncash.Repository.UserInfo_Airtable_Repo
@@ -150,6 +151,14 @@ class redeem : Fragment() {
 
                                     //    walletBalance = wallet
                                     binding.walletBala.text = 0.toString()
+                                    val bundle = Bundle()
+                                    bundle.putInt("earned_amount", walletBalance) // Replace 50.0 with the actual amount earned
+
+                                    val analytics = FirebaseAnalytics.getInstance(view.context)
+                                    analytics.logEvent("revenue" , bundle )
+                                    analytics.logEvent(FirebaseAnalytics.Event.PURCHASE , bundle )
+
+
 
                                     withdrawalList.add(status.withdrawalTransaction)
                                     adapter.updateList(withdrawalList)

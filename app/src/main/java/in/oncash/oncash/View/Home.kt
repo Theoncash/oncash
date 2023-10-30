@@ -267,24 +267,12 @@ class Home : AppCompatActivity() {
                 // Set click listener for the button
 
                 binding.nav.setOnClickListener {
-                    val popup = PopupMenu(this, it)
-                    popup.menuInflater.inflate(R.menu.nav_menu, popup.menu)
-
-                    popup.setOnMenuItemClickListener { item ->
-                        when (item.itemId) {
-                            R.id.menu_leaderboard -> {
-                                // Handle Leaderboard Click
-                                true
-                            }
-                            R.id.menu_refer_and_earn -> {
-                                // Handle Refer and Earn Click
-                                true
-                            }
-                            else -> false
-                        }
-                    }
-
-                    popup.show()
+                   startActivity(
+                       Intent(
+                           this,
+                           LeaderBoard::class.java
+                       )
+                   )
                 }
                 binding.walletTextView.setOnClickListener {
                     startActivity(

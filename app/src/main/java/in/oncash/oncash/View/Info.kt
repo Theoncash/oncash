@@ -291,20 +291,32 @@ finish()
                                                                     }
                                                                 }
 
+                                                            }else {
+                                                                lifecycleScope.launch {
+
+                                                                    if (isRegistered(
+                                                                            this@Info,
+                                                                            appName,
+                                                                            regSMS!!
+                                                                        )
+                                                                    ) {
+                                                                        list[1] =
+                                                                            Step(
+                                                                                true,
+                                                                                list[1].instruction
+                                                                            )
+                                                                        adapter.updateList(
+                                                                            list,
+                                                                            Instruction,
+                                                                            ClosingInstruction
+                                                                        )
+
+
+                                                                    }
+                                                                }
                                                             }
                                                         }
-                                                        if (isRegistered(
-                                                                this@Info,
-                                                                appName,
-                                                                regSMS!!
-                                                            )
-                                                        ) {
-                                                            list[1] =
-                                                                Step(true, list[1].instruction)
-                                                            adapter.updateList(list , Instruction , ClosingInstruction)
 
-
-                                                        }
                                                     }
                                                 })
                                         } else {

@@ -3,11 +3,6 @@ package `in`.oncash.oncash.RoomDb
 import android.content.Context
 import androidx.room.*
 
-@Entity(tableName = "notification_checker")
-data class NotificationChecker(
-    @PrimaryKey val offerId: Int,
-    val isNotificationSent: Boolean
-)
 
 @Dao
 interface NotificationCheckerDao {
