@@ -91,7 +91,7 @@ class redeem : Fragment() {
         val cardView = binding.Poster
         val drawable = resources.getDrawable(R.drawable.poster_wallet) // Replace with your image resource
         cardView.background = drawable
-
+            homeViewmodel.getMinimumAmount()
             homeViewmodel.getuserData().observe(viewLifecycleOwner) {
                 Log.i("userrepository", "user Number" + it.userNumber.toString())
 
@@ -125,102 +125,105 @@ class redeem : Fragment() {
         binding.withdrawButton.setOnClickListener {
         binding.withdrawButton.isClickable = false;
 
-            if (walletBalance > 20 ) {
-                val loadingDialog = customLoadingDialog(view.context)
+            homeViewmodel.getMinimumAmountData().observe(viewLifecycleOwner){
+                if (walletBalance > it ) {
+                    val loadingDialog = customLoadingDialog(view.context)
 
 // To show the dialog
-                loadingDialog.show()
-                loadingDialog.setMessage("Loading data...")
+                    loadingDialog.show()
+                    loadingDialog.setMessage("Loading data...")
 // Simulate some background work (replace this with your actual work)
-                                Handler().postDelayed({
-                                    // Dismiss the dialog when the work is done
-                                    loadingDialog.dismiss()
-                                }, 3000) // Replace 3000 with the actual duration of your background work
+                    Handler().postDelayed({
+                        // Dismiss the dialog when the work is done
+                        loadingDialog.dismiss()
+                    }, 3000) // Replace 3000 with the actual duration of your background work
 
 
 
-                            viewModel.withdrawRequest(
-                                userNumber,
-                                walletBalance,
-                                walletBalance,
-                            )
-                            viewModel.getWithdrawalRequest().observe(viewLifecycleOwner) { status ->
-                                if (status.response == "201") {
-                                    // viewModel.getWallet(userRecordId)
-                                    //viewModel.getWalletPrice().observe(this, Observer { wallet ->
+                    viewModel.withdrawRequest(
+                        userNumber,
+                        walletBalance,
+                        walletBalance,
+                    )
+                    viewModel.getWithdrawalRequest().observe(viewLifecycleOwner) { status ->
+                        if (status.response == "201") {
+                            // viewModel.getWallet(userRecordId)
+                            //viewModel.getWalletPrice().observe(this, Observer { wallet ->
 
-                                    //    walletBalance = wallet
-                                    binding.walletBala.text = 0.toString()
+                            //    walletBalance = wallet
+                            binding.walletBala.text = 0.toString()
 
-                                    val params = Bundle()
-                                    params.putDouble(FirebaseAnalytics.Param.VALUE, walletBalance.toDouble()) // Replace with the actual revenue amount
+                            val params = Bundle()
+                            params.putDouble(FirebaseAnalytics.Param.VALUE, walletBalance.toDouble()) // Replace with the actual revenue amount
 // Log the purchase event with revenue
-                                    FirebaseAnalytics.getInstance(view.context).logEvent(FirebaseAnalytics.Event.PURCHASE, params)
-                                    val bundle = Bundle()
-                                    bundle.putInt("event_name", walletBalance) // Replace 50.0 with the actual amount earned
+                            FirebaseAnalytics.getInstance(view.context).logEvent(FirebaseAnalytics.Event.PURCHASE, params)
+                            val bundle = Bundle()
+                            bundle.putInt("event_name", walletBalance) // Replace 50.0 with the actual amount earned
 
-                                    val analytics = FirebaseAnalytics.getInstance(view.context)
-                                    analytics.logEvent("per_user_revenue" , bundle )
-
-
-                                    withdrawalList.add(status.withdrawalTransaction)
-                                    adapter.updateList(withdrawalList)
-                                    binding.withdrawButton.isClickable = true
-                                    walletBalance = 0
-
-                                    val channelId = "ONCASH_CANNEL"
-                                    val channelName = "ONCASH"
-                                    val notificationManager =  NotificationManagerCompat.from(view.context)
-
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
-                                        notificationManager.createNotificationChannel(channel)
-                                    }
-                                    val notificationId = 1 // Unique ID for the notification
-
-                                    val notificationBuilder = NotificationCompat.Builder(view.context, channelId)
-                                        .setSmallIcon(R.drawable.oncash)
-                                        .setContentTitle("Withdraw Successfully")
-                                        .setContentText("Good job! You just earned ${status.withdrawalTransaction.WithdrawalAmount} with OnCash. Keep it up and watch your earnings grow. ")
-                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                        .setAutoCancel(true) // Removes the notification when tapped
+                            val analytics = FirebaseAnalytics.getInstance(view.context)
+                            analytics.logEvent("per_user_revenue" , bundle )
 
 
-                                    if (ActivityCompat.checkSelfPermission(
-                                            view.context,
-                                            Manifest.permission.POST_NOTIFICATIONS
-                                        ) != PackageManager.PERMISSION_GRANTED
-                                    ) {
-                                        // TODO: Consider calling
-                                        //    ActivityCompat#requestPermissions
-                                        // here to request the missing permissions, and then overriding
-                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                        //                                          int[] grantResults)
-                                        // to handle the case where the user grants the permission. See the documentation
-                                        // for ActivityCompat#requestPermissions for more details.
-                                    }
-                                    notificationManager.notify(notificationId, notificationBuilder.build())
+                            withdrawalList.add(status.withdrawalTransaction)
+                            adapter.updateList(withdrawalList)
+                            binding.withdrawButton.isClickable = true
+                            walletBalance = 0
 
+                            val channelId = "ONCASH_CANNEL"
+                            val channelName = "ONCASH"
+                            val notificationManager =  NotificationManagerCompat.from(view.context)
 
-                                    Snackbar.make(
-                                        binding.root,
-                                        "Withdraw Successful",
-                                        Snackbar.LENGTH_LONG
-                                    ).show()
-
-                                }
-
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+                                notificationManager.createNotificationChannel(channel)
                             }
+                            val notificationId = 1 // Unique ID for the notification
 
-                        } else {
-                binding.withdrawButton.isClickable = true
+                            val notificationBuilder = NotificationCompat.Builder(view.context, channelId)
+                                .setSmallIcon(R.drawable.oncash)
+                                .setContentTitle("Withdraw Successfully")
+                                .setContentText("Good job! You just earned ${status.withdrawalTransaction.WithdrawalAmount} with OnCash. Keep it up and watch your earnings grow. ")
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .setAutoCancel(true) // Removes the notification when tapped
 
-                Snackbar.make(
+
+                            if (ActivityCompat.checkSelfPermission(
+                                    view.context,
+                                    Manifest.permission.POST_NOTIFICATIONS
+                                ) != PackageManager.PERMISSION_GRANTED
+                            ) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                            }
+                            notificationManager.notify(notificationId, notificationBuilder.build())
+
+
+                            Snackbar.make(
                                 binding.root,
-                                "Requested Amount Should Be More Then 20 Rs",
-                                Snackbar.LENGTH_SHORT
+                                "Withdraw Successful",
+                                Snackbar.LENGTH_LONG
                             ).show()
+
                         }
+
+                    }
+
+                } else {
+                    binding.withdrawButton.isClickable = true
+
+                    Snackbar.make(
+                        binding.root,
+                        "Requested Amount Should Be More Then 20 Rs",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
 
                 }
             }

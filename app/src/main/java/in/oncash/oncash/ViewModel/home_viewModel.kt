@@ -28,6 +28,7 @@ class home_viewModel : ViewModel() {
     private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
     var checkingCompleted = false
     val isCompleted : MutableLiveData<Boolean> = MutableLiveData()
+    val minimumPaymentAmount : MutableLiveData<Int> = MutableLiveData(0)
 
     val isWeb : MutableLiveData<Boolean> = MutableLiveData()
     val show_Banner : MutableLiveData<Boolean> = MutableLiveData()
@@ -153,7 +154,14 @@ private val offerhistoryList : MutableLiveData<ArrayList<Fields>> = MutableLiveD
             isWeb.value = UserInfo_Airtable_Repo().getIsWeb( offerId)
         }
     }
-
+    fun getMinimumAmount(  ){
+        viewModelScope.launch {
+            minimumPaymentAmount.value = UserInfo_Airtable_Repo().getMinimumAmount( )
+        }
+    }
+    fun getMinimumAmountData():MutableLiveData<Int>{
+        return  minimumPaymentAmount
+    }
     fun getIsWebData():MutableLiveData<Boolean>{
         return  isWeb
     }

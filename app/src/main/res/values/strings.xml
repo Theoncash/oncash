@@ -12,7 +12,12 @@
     <string name="your_earnings_string">Your earnings</string>
     <string name="payments_string">Payments</string>
     <string name="withdraw_earnings_string">withdraw earnings</string>
-
+    <string name="john_doe">
+John Doe
+</string>
+    <string name="withdrawn_2">
+Withdrawn \u00E2\u0082\u00B9200
+</string>
     <!-- profile strings -->
     <string name="splash_message">Welcome to My App</string>
     <string name="profile_name">John Doe</string>

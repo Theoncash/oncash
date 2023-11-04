@@ -951,6 +951,18 @@ Log.i("blacklistt" , response.toString())
         }
         return@withContext code
     }
+
+    suspend fun getMinimumAmount() : Int= withContext(Dispatchers.IO){
+        val url =
+            "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Payout?select=*"
+        val response = getData(url)
+        var code = 0
+        var json = JSONArray(response.body<String>().toString())
+        if (json.toString() != "[]" || json.length() > 0) {
+            code = JSONObject(json[0].toString()).getInt("Minimum_Amount")
+        }
+        return@withContext code
+    }
      suspend fun getOfferInfo(offerId:Int) : OfferInfo= withContext(Dispatchers.IO){
         Log.i("fbDataa" , offerId.toString() )
 

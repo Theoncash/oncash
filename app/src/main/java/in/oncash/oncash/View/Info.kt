@@ -32,6 +32,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import `in`.oncash.oncash.Component.Instructions_RecylerViewAdapter
 import `in`.oncash.oncash.Component.Instructions_detail_RecylerViewAdapter
 import `in`.oncash.oncash.Component.TimerService
@@ -289,10 +290,6 @@ finish()
                                                                         )
 
                                                                     }
-                                                                }
-
-                                                            }else {
-                                                                lifecycleScope.launch {
 
                                                                     if (isRegistered(
                                                                             this@Info,
@@ -300,6 +297,7 @@ finish()
                                                                             regSMS!!
                                                                         )
                                                                     ) {
+
                                                                         list[1] =
                                                                             Step(
                                                                                 true,
@@ -311,6 +309,38 @@ finish()
                                                                             ClosingInstruction
                                                                         )
 
+                                                                    }
+                                                                }
+
+                                                            } else {
+                                                                lifecycleScope.launch {
+                                                                    try {
+                                                                        if (isRegistered(
+                                                                                this@Info,
+                                                                                appName,
+                                                                                regSMS!!
+                                                                            )
+                                                                        ) {
+                                                                            list[0] =
+                                                                                Step(
+                                                                                    true,
+                                                                                    list[0].instruction
+                                                                                )
+                                                                            adapter.updateList(
+                                                                                list,
+                                                                                Instruction,
+                                                                                ClosingInstruction
+                                                                            )
+
+
+                                                                        }
+
+                                                                    } catch (e: ArrayIndexOutOfBoundsException) {
+                                                                        Toast.makeText(
+                                                                           this@Info ,
+                                                                            "Something Went Wrong.....",
+                                                                            Toast.LENGTH_LONG
+                                                                        ).show()
 
                                                                     }
                                                                 }
