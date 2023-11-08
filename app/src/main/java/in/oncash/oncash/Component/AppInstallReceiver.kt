@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
+import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import `in`.oncash.oncash.DataType.Offer
@@ -29,30 +30,35 @@ import kotlinx.coroutines.withContext
 class AppInstallReceiver (appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
 
-    override  fun doWork(): Result {
+    override fun doWork(): Result {
 
-        Log.i("pwe" , "Periodic work executed!")
+        Log.i("pwe", "Periodic work executed!")
 
         val appName = inputData.getString("appName")
         val offerId = inputData.getString("offerId")
         val name = inputData.getString("name")
-        if(isAppInstalled(applicationContext , appName !!))
-        {
-            showNotification(applicationContext , name!!)
+        if (isAppInstalled(applicationContext, appName!!)) {
+            showNotification(applicationContext, name!!)
 
-                    var  roomDb = Room.databaseBuilder(
-                        applicationContext,
-                        notification_checker::class.java,
-                        "notification"
-                    )
-                        .fallbackToDestructiveMigration() // Add this line for destructive migration
-                        .build()
-            roomDb.notificationCheckerDao().insert( NotificationChecker( offerId!!.toInt() , true))
+            var roomDb = Room.databaseBuilder(
+                applicationContext,
+                notification_checker::class.java,
+                "notification"
+            )
+                .fallbackToDestructiveMigration() // Add this line for destructive migration
+                .build()
+            roomDb.notificationCheckerDao().insert(NotificationChecker(offerId!!.toInt(), true))
+            cancelWork()
             return Result.success()
 
         }
         return Result.retry()
 
+    }
+
+    private fun cancelWork() {
+        val workManager = WorkManager.getInstance(applicationContext)
+        workManager.cancelWorkById(id)
     }
 }
 

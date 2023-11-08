@@ -123,9 +123,9 @@ class redeem : Fragment() {
         }
 //        lifecycleScope.launch { getTransaction() }
         binding.withdrawButton.setOnClickListener {
-        binding.withdrawButton.isClickable = false;
+        binding.withdrawButton.isClickable = false
 
-            homeViewmodel.getMinimumAmountData().observe(viewLifecycleOwner){
+        homeViewmodel.getMinimumAmountData().observe(viewLifecycleOwner){
                 if (walletBalance > it ) {
                     val loadingDialog = customLoadingDialog(view.context)
 
@@ -145,6 +145,12 @@ class redeem : Fragment() {
                         walletBalance,
                         walletBalance,
                     )
+                    viewModel.withdrawRequestAirtable(
+                        userNumber,
+                        walletBalance,
+                        walletBalance,
+                    )
+
                     viewModel.getWithdrawalRequest().observe(viewLifecycleOwner) { status ->
                         if (status.response == "201") {
                             // viewModel.getWallet(userRecordId)
@@ -153,17 +159,19 @@ class redeem : Fragment() {
                             //    walletBalance = wallet
                             binding.walletBala.text = 0.toString()
 
-                            val params = Bundle()
-                            params.putDouble(FirebaseAnalytics.Param.VALUE, walletBalance.toDouble()) // Replace with the actual revenue amount
-// Log the purchase event with revenue
-                            FirebaseAnalytics.getInstance(view.context).logEvent(FirebaseAnalytics.Event.PURCHASE, params)
+
                             val bundle = Bundle()
-                            bundle.putInt("event_name", walletBalance) // Replace 50.0 with the actual amount earned
+                            bundle.putInt("offer_completed", walletBalance) // Replace 50.0 with the actual amount earned
 
                             val analytics = FirebaseAnalytics.getInstance(view.context)
-                            analytics.logEvent("per_user_revenue" , bundle )
+                            analytics.logEvent("offer_completed" , bundle )
 
+                            val parameters = Bundle().apply {
+                                this.putString(FirebaseAnalytics.Param.VALUE , walletBalance.toString())
+                                this.putString(FirebaseAnalytics.Param.CURRENCY ,"INR")
+                            }
 
+                            analytics.logEvent(FirebaseAnalytics.Event.PURCHASE , parameters)
                             withdrawalList.add(status.withdrawalTransaction)
                             adapter.updateList(withdrawalList)
                             binding.withdrawButton.isClickable = true

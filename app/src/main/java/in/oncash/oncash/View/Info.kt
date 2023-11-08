@@ -331,8 +331,6 @@ finish()
                                                                                 Instruction,
                                                                                 ClosingInstruction
                                                                             )
-
-
                                                                         }
 
                                                                     } catch (e: ArrayIndexOutOfBoundsException) {
@@ -457,7 +455,8 @@ finish()
                                     .build()
                                var bool = roomDb.notificationCheckerDao().getNotificationCheckerById(offerId!!.toInt())
                                 if(bool == null){
-                                    WorkManager .getInstance(this@Info).enqueue(periodicWorkRequest)
+                                   val worker = WorkManager .getInstance(this@Info).enqueue(periodicWorkRequest)
+
                                 }
                             }
                         }
@@ -509,7 +508,7 @@ finish()
                         info_viewModel.getIsWebData().observe(this@Info) {
                             CoroutineScope(Dispatchers.Main).launch {
 
-                                if (!it) {
+                                if (it) {
 
                                     if (isRegistered(this@Info, appName, regSMS)) {
 

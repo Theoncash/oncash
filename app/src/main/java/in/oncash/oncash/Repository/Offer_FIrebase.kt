@@ -26,6 +26,9 @@ class Offer_FIrebase  {
         try {
             data.get().await().children.map { snapShot ->
 
+                val isWeb = snapShot.child("isWeb").getValue(String::class.java)
+
+
                 val name = snapShot.child("Name").getValue(String::class.java)
                 val description = snapShot.child("Description").getValue(String::class.java)
                 val image = snapShot.child("Image").getValue(String::class.java)
@@ -39,6 +42,7 @@ class Offer_FIrebase  {
                 val payout = snapShot.child("payout").getValue(String::class.java)
                 val type = snapShot.child("Type").getValue(String::class.java)
                 val videoId = snapShot.child("VideoId").getValue(String::class.java)
+
                 Log.i("fbData", "offer"+offerId.toString())
 
 
@@ -63,6 +67,7 @@ class Offer_FIrebase  {
                     Type = type,
                     VideoId = videoId,
                     cap = offerInfo.Cap,
+                    isWeb = isWeb.toBoolean(),
                    dayLeft =  offerInfo.DayLeft
                 )
 

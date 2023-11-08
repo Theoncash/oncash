@@ -15,5 +15,6 @@ public final data class Offer(
     val regSMS: String? = " ",
     val subid: String? = "",
     val cap :Int ,
+    val isWeb:Boolean ,
     val dayLeft :Int
 )

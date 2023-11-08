@@ -73,19 +73,39 @@ class checkRegistration : BroadcastReceiver() {
                     for (offer in offers){
                         val key = offer.regSMS!!
                         Log.i("SMSDATA" , key)
-
+                        val isWeb = offer.isWeb
                         if (messageBody.contains (key)) {
-
-                            val min = getTimeSpent(offer.appName!! , context)
-                            if(min >= 7){
-                                val completedOffer = CompletedOfferEntity(  offer!!.OfferId!!.toInt(),userdata.userNumber, false)
-                                showNotification(context , offer)
+                            if(!isWeb) {
+                                val min = getTimeSpent(offer.appName!!, context)
+                                if (min >= 7) {
+                                    val completedOffer = CompletedOfferEntity(
+                                        offer!!.OfferId!!.toInt(),
+                                        userdata.userNumber,
+                                        false
+                                    )
+                                    showNotification(context, offer)
+                                    UserInfo_Airtable_Repo().removeOneCap(offer.OfferId!!.toInt())
+                                    UserInfo_Airtable_Repo().addOfferClaimed(
+                                        userdata.userNumber,
+                                        offer!!.OfferId!!.toInt()
+                                    )
+                                }
+                            }else{
+                                val completedOffer = CompletedOfferEntity(
+                                    offer!!.OfferId!!.toInt(),
+                                    userdata.userNumber,
+                                    false
+                                )
+                                showNotification(context, offer)
 
 
 
 
                                 UserInfo_Airtable_Repo().removeOneCap(offer.OfferId!!.toInt())
-                                UserInfo_Airtable_Repo().addOfferClaimed(userdata.userNumber , offer!!.OfferId!!.toInt() )
+                                UserInfo_Airtable_Repo().addOfferClaimed(
+                                    userdata.userNumber,
+                                    offer!!.OfferId!!.toInt()
+                                )
                             }
 
                     }

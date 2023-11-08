@@ -10,7 +10,13 @@ class sortingComponent {
         val monthlyOffersList : ArrayList<Offer> =ArrayList()
 
         for (offer in offerList){
-            if (offer.Type == "weekly"){
+            if (offer.Price!!.toInt() <= 20){
+                weeklyOffersList.add(offer)
+            }
+        }
+
+        for (offer in offerList){
+            if (offer.Type == "weekly" && offer.Price!!.toInt() > 20){
                 weeklyOffersList.add(offer)
             }else{
                 monthlyOffersList.add(offer)

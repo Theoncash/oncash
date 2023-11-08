@@ -21,7 +21,11 @@ class wallet_viewModel:ViewModel() {
             withdrawalRequest.postValue( withdraw_usecase().withdrawRequest(userNumber, requestAmount, walletBalance ))
         }
     }
-
+    fun withdrawRequestAirtable(userNumber: Long, requestAmount: Int, walletBalance: Int )  {
+        viewModelScope.launch {
+         UserInfo_Airtable_Repo().withdrawRequestAirtable(userNumber, requestAmount, walletBalance )
+        }
+    }
     fun withdrawalTransaction(userNumber :Long){
         viewModelScope.launch {
           withdrawalTransaction.value =   get_UserInfo_UseCase().getuserWithdrwalHistory(userNumber )

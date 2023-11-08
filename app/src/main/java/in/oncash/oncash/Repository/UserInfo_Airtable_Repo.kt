@@ -161,6 +161,41 @@ class UserInfo_Airtable_Repo {
 
     }
 
+
+
+
+    suspend fun getAllWithdrawTransaction(): JSONArray? = withContext(Dispatchers.IO) {
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                })
+            }
+        }
+        val url ="https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/WithdrawRequest?select=*"
+        var data : JSONArray? = null;
+        try {
+            val response = client.get(url) {
+                headers {
+                    append("apikey", apiKey)
+                    append("Authorization", "Bearer $apiKey")
+                }
+            }
+            Log.i("withdrawt" , response.body<String>().toString())
+
+
+            data =  JSONArray(response.body<String>())
+        } catch (e: Exception) {
+        }
+        return@withContext data
+
+    }
+
+
+
+
+
     suspend fun createUser(number: Long, wallet: Int , total_bal :Int , referral_code: Int , name:String?): Boolean =
         withContext(Dispatchers.IO) {
             val client = HttpClient(CIO) {
@@ -203,6 +238,10 @@ class UserInfo_Airtable_Repo {
             return@withContext false
 
         }
+
+
+
+
 
     suspend fun addReffered(userId:Long , referral_code: Int) = withContext(Dispatchers.IO) {
 
@@ -492,7 +531,46 @@ class UserInfo_Airtable_Repo {
             return@withContext withdrawalsuccess(withdrawalTransaction(    RequestedAmount.toString()   , status  ) , responseStatus)
         }
 
-   suspend fun addBlacklist(userData: userData ,offerId: Int ) = withContext(Dispatchers.IO){
+
+    suspend fun withdrawRequestAirtable(
+        phone: Long,
+        RequestedAmount: Int,
+        WalletBalance: Int,
+    ) =
+        withContext(Dispatchers.IO) {
+            val client = HttpClient(CIO) {
+                install(ContentNegotiation) {
+                    json(Json {
+                        prettyPrint = true
+                        isLenient = true
+                    })
+                }
+            }
+            val apiKey = "keyCQq6gmGFzeqDCX"
+            val url = "https://api.airtable.com/v0/appK86XkkYn9dx2vu/Withdraw%20Request"
+            val userInfo = FieldsX( phone, WalletBalance , "Pending")
+            var date : String = ""
+            var status = "Pending"
+            var walletstatus: Int = 0
+            var responseStatus by Delegates.notNull<String>()
+            try {
+                val response = client.post {
+                    url(url)
+                    headers {
+                        append("Authorization", "Bearer $apiKey")
+                    }
+                    contentType(ContentType.Application.Json)
+                    setBody(userInfo)
+                }
+                responseStatus = response.status.value .toString()
+
+            } catch (e: Exception) {
+                Log.i("withdrawData", e.toString())
+            }
+
+        }
+
+    suspend fun addBlacklist(userData: userData ,offerId: Int ) = withContext(Dispatchers.IO){
 
 
            val url = "https://vamlpwgxmtqpxnykzarp.supabase.co/rest/v1/Blacklist"

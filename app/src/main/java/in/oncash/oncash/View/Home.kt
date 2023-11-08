@@ -20,6 +20,7 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Button
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
@@ -48,7 +49,9 @@ import `in`.oncash.oncash.DataType.OfferList
 import `in`.oncash.oncash.DataType.SerializedDataType.Version
 import `in`.oncash.oncash.DataType.userData
 import `in`.oncash.oncash.R
+import `in`.oncash.oncash.Repository.RoomRepo
 import `in`.oncash.oncash.RoomDb.OfferDb
+import `in`.oncash.oncash.RoomDb.WithdrawalRequestEntity
 import `in`.oncash.oncash.RoomDb.userDb
 import `in`.oncash.oncash.ViewModel.home_viewModel
 import `in`.oncash.oncash.databinding.ActivityHomeBinding
@@ -274,6 +277,39 @@ class Home : AppCompatActivity() {
                        )
                    )
                 }
+
+          try {
+              lifecycleScope.launch {
+                  val withdrawRequests = RoomRepo().getTransaction(this@Home)
+                  for (request in withdrawRequests) {
+                      if (!request.isDisplayed) {
+                          Toast.makeText(
+                              this@Home,
+                              request.WalletBalance.toString(),
+                              Toast.LENGTH_SHORT
+                          ).show()
+
+                          withContext(Dispatchers.Default) {
+                              val withdrawalRequest = WithdrawalRequestEntity(
+                                  UserNumber = request.UserNumber,
+                                  WalletBalance = request.WalletBalance,
+                                  Status = "Success",
+                                  isDisplayed = true
+                              )
+                              RoomRepo().updateWithdrawRequest(withdrawalRequest, this@Home)
+                          }
+
+                      }
+                  }
+              }
+          }catch (e:Exception){
+              Toast.makeText(
+                  this ,
+                  e.message + "cause "+e.cause,
+                  Toast.LENGTH_LONG
+              ).show()
+          }
+
                 binding.walletTextView.setOnClickListener {
                     startActivity(
                         Intent(this, Wallet::class.java).putExtra(
