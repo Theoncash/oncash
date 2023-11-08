@@ -278,29 +278,35 @@ class Home : AppCompatActivity() {
                    )
                 }
 
+
           try {
               lifecycleScope.launch {
-                  val withdrawRequests = RoomRepo().getTransaction(this@Home)
-                  for (request in withdrawRequests) {
-                      if (!request.isDisplayed) {
-                          Toast.makeText(
-                              this@Home,
-                              request.WalletBalance.toString(),
-                              Toast.LENGTH_SHORT
-                          ).show()
+                RoomRepo().getTransaction(this@Home).observe(this@Home){
+                      for (request in it) {
+                          if (!request.isDisplayed) {
+                              Toast.makeText(
+                                  this@Home,
+                                  request.WalletBalance.toString(),
+                                  Toast.LENGTH_SHORT
+                              ).show()
 
-                          withContext(Dispatchers.Default) {
+
                               val withdrawalRequest = WithdrawalRequestEntity(
+                                  id = request.id,
                                   UserNumber = request.UserNumber,
                                   WalletBalance = request.WalletBalance,
                                   Status = "Success",
                                   isDisplayed = true
                               )
-                              RoomRepo().updateWithdrawRequest(withdrawalRequest, this@Home)
+                              lifecycleScope.launch {
+                                  RoomRepo().updateWithdrawRequest(withdrawalRequest, this@Home)
+                              }
                           }
+
 
                       }
                   }
+
               }
           }catch (e:Exception){
               Toast.makeText(

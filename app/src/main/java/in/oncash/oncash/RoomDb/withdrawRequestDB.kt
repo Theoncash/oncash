@@ -8,6 +8,7 @@ import androidx.room.*
 @Entity(tableName = "withdrawal_request_table")
 data class WithdrawalRequestEntity(
     @PrimaryKey
+    val id:Int ,
     val UserNumber: Long,
     val WalletBalance: Int,
     val Status: String,
