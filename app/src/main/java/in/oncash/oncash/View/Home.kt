@@ -279,42 +279,42 @@ class Home : AppCompatActivity() {
                 }
 
 
-          try {
-              lifecycleScope.launch {
-                RoomRepo().getTransaction(this@Home).observe(this@Home){
-                      for (request in it) {
-                          if (!request.isDisplayed) {
-                              Toast.makeText(
-                                  this@Home,
-                                  request.WalletBalance.toString(),
-                                  Toast.LENGTH_SHORT
-                              ).show()
-
-
-                              val withdrawalRequest = WithdrawalRequestEntity(
-                                  id = request.id,
-                                  UserNumber = request.UserNumber,
-                                  WalletBalance = request.WalletBalance,
-                                  Status = "Success",
-                                  isDisplayed = true
-                              )
-                              lifecycleScope.launch {
-                                  RoomRepo().updateWithdrawRequest(withdrawalRequest, this@Home)
-                              }
-                          }
-
-
-                      }
-                  }
-
-              }
-          }catch (e:Exception){
-              Toast.makeText(
-                  this ,
-                  e.message + "cause "+e.cause,
-                  Toast.LENGTH_LONG
-              ).show()
-          }
+//          try {
+//              lifecycleScope.launch {
+//                RoomRepo().getTransaction(this@Home).observe(this@Home){
+//                      for (request in it) {
+//                          if (!request.isDisplayed) {
+//                              Toast.makeText(
+//                                  this@Home,
+//                                  request.WalletBalance.toString(),
+//                                  Toast.LENGTH_SHORT
+//                              ).show()
+//
+//
+//                              val withdrawalRequest = WithdrawalRequestEntity(
+//                                  id = request.id,
+//                                  UserNumber = request.UserNumber,
+//                                  WalletBalance = request.WalletBalance,
+//                                  Status = "Success",
+//                                  isDisplayed = true
+//                              )
+//                              lifecycleScope.launch {
+//                                  RoomRepo().updateWithdrawRequest(withdrawalRequest, this@Home)
+//                              }
+//                          }
+//
+//
+//                      }
+//                  }
+//
+//              }
+//          }catch (e:Exception){
+//              Toast.makeText(
+//                  this ,
+//                  e.message + "cause "+e.cause,
+//                  Toast.LENGTH_LONG
+//              ).show()
+//          }
 
                 binding.walletTextView.setOnClickListener {
                     startActivity(
