@@ -1,5 +1,6 @@
 package `in`.oncash.oncash.Repository
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +16,7 @@ import org.json.JSONArray
 
 class RoomRepo {
 
+    @SuppressLint("SuspiciousIndentation")
     suspend fun getTransaction(context: Context): MutableLiveData<ArrayList<WithdrawalRequestEntity>> = withContext(Dispatchers.IO) {
          var withdrawRequestsJson: JSONArray;
                try {
@@ -58,8 +60,6 @@ class RoomRepo {
                }
 
         }
-
-
     suspend fun updateWithdrawRequest(request : WithdrawalRequestEntity , context: Context) {
         val database = withdrawRequestDB.getDatabase(context)
         withContext(Dispatchers.IO) {
