@@ -70,6 +70,7 @@ class Info : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val loadingDialog = customLoadingDialog(this)
 
         var isClicked = false
         //Getting Data from the intent form home(Activity)
@@ -123,17 +124,13 @@ finish()
                     youTubePlayer.loadVideo(viewUri!! , 0F)
             }
         })*/
-        val loadingDialog = customLoadingDialog(this)
 
 // To show the dialog
         loadingDialog.show()
         loadingDialog.setMessage("Good things take time...")
 
 // Simulate some background work (replace this with your actual work)
-        Handler().postDelayed({
-            // Dismiss the dialog when the work is done
-            loadingDialog.dismiss()
-        }, 4000)
+
 
         var list: ArrayList<Step> = ArrayList()
         var Instruction: ArrayList<Instruction> = ArrayList()
@@ -160,21 +157,21 @@ finish()
             OfferQueriesAdapter.updateList(it)
         }
         lifecycleScope.launch {
-               isOfferCompleted(
-                    appName!! ,
-                    regSMS!! ,
-                    offerId!! .toInt(),
-                    number!!.toLong() ,
-                    offerPrice!!.toInt(),
-                    offerName!!
-
-                )
-
             info_viewModel.isCompleted(number!!.toLong(), offerId!!.toInt())
             info_viewModel.getBlacklist( number!!.toLong() ,  offerId!!.toInt())
             info_viewModel.getInstrutionList(offerId!!)
 
-            info_viewModel.getBlackListData().observe(this@Info) {
+//               isOfferCompleted(
+//                    appName!! ,
+//                    regSMS!! ,
+//                    offerId!! .toInt(),
+//                    number!!.toLong() ,
+//                    offerPrice!!.toInt(),
+//                    offerName!!,
+//                    loadingDialog
+//                )
+
+            info_viewModel.getBlackListData().observe(this@Info) { it ->
                 if (!it) {
                     lifecycleScope.launch {
                         isBeing(
@@ -187,21 +184,23 @@ finish()
                                 this@Info
                             ) {
                             if (!it) {
-                                Log.i("closingInstructions" , it.toString())
+                                Log.i("closingInstructionss" , "bool" +  it!!.toString())
 
 
-                                    info_viewModel.getIsCompleted() .observe(this@Info) {
-                                        Log.i("closingInstructions" , "bool" +  it!!.toString())
+                                    info_viewModel.getisOfferCompleted().observe(this@Info) {
+                                        Log.i("closingInstructionss" , "bool" +  it!!.toString())
 
                                         if (it == false) {
                                               info_viewModel.getInstructionListData()  .observe(this@Info, Observer {
                                                     if (it.isNotEmpty()) {
                                                         Instruction.clear()
-                                                        Log.i("instructionData" , it.toString())
+                                                        Log.i("instructionData" , it.size.toString())
                                                         Instruction.addAll(it )
 
                                                         info_viewModel.getIsWebData().observe(this@Info){
                                                             if(it){
+                                                                Log.i("instructionData" , noOfSteps.toString())
+
                                                                 for (i in 0 until noOfSteps!!.toInt()) {
 
                                                                     if (i == 1) {
@@ -223,6 +222,10 @@ finish()
 
                                                                     }
                                                                 }
+                                                                loadingDialog.dismiss()
+                                                                adapter.updateList(list , Instruction , ClosingInstruction)
+
+
                                                             }else{
                                                                 for (i in 0 until noOfSteps!!.toInt()) {
                                                                     if (i == 0) {
@@ -252,6 +255,9 @@ finish()
 
                                                                     }
                                                                 }
+                                                                loadingDialog.dismiss()
+                                                                adapter.updateList(list , Instruction , ClosingInstruction)
+
                                                             }
                                                         }
 
@@ -259,7 +265,6 @@ finish()
 
 
                                                     }
-                                                    adapter.updateList(list , Instruction , ClosingInstruction)
                                                     binding.offerLinkButtonInfo.visibility =
                                                         View.VISIBLE
 
@@ -314,6 +319,7 @@ finish()
 
                                                             } else {
                                                                 lifecycleScope.launch {
+
                                                                     try {
                                                                         if (isRegistered(
                                                                                 this@Info,
@@ -332,6 +338,8 @@ finish()
                                                                                 ClosingInstruction
                                                                             )
                                                                         }
+                                                                        loadingDialog.dismiss()
+
 
                                                                     } catch (e: ArrayIndexOutOfBoundsException) {
                                                                         Toast.makeText(
@@ -348,7 +356,12 @@ finish()
                                                     }
                                                 })
                                         } else {
+
+
+                                            binding.offerLinkButtonInfo.text = "Completed"
+                                            binding.offerLinkButtonInfo.visibility = View.VISIBLE
                                             Log.i("closingInstructions" , "working")
+                                            loadingDialog.dismiss()
 
 
                                             info_viewModel.getClosingInstrutionList(offerId!!).observe(this@Info){
@@ -373,12 +386,16 @@ finish()
 
                                     }
                             } else {
+                                loadingDialog.dismiss()
+
                                 binding.offerLinkButtonInfo.text = "Not Eligible"
                                 binding.offerLinkButtonInfo.visibility = View.VISIBLE
                             }
                         }
                     }
                 }else{
+                    loadingDialog.dismiss()
+
                     binding.offerLinkButtonInfo.text = "Not Eligible"
                     binding.offerLinkButtonInfo.visibility = View.VISIBLE
                 }
@@ -497,7 +514,7 @@ finish()
     }
 
     @SuppressLint("SetTextI18n")
-    suspend fun isOfferCompleted(appName: String, regSMS: String, offerId: Int, userNumber: Long, appPrice :Int, Name :String){
+     fun isOfferCompleted(appName: String, regSMS: String, offerId: Int, userNumber: Long, appPrice :Int, Name :String , loadingDialog : customLoadingDialog){
 
 
             home_viewModel.getIsCompleted(offerId, userNumber)
@@ -509,6 +526,7 @@ finish()
                             CoroutineScope(Dispatchers.Main).launch {
 
                                 if (it) {
+                                    loadingDialog.dismiss()
 
                                     if (isRegistered(this@Info, appName, regSMS)) {
 
@@ -518,6 +536,8 @@ finish()
 
                                     }
                                 } else {
+                                    loadingDialog.dismiss()
+
                                     if (isAppInstalled(this@Info, appName)) {
                                         if (isRegistered(this@Info, appName, regSMS)) {
                                             if (getTimeSpent(appName) >= 7) {
@@ -537,6 +557,8 @@ finish()
 
                 }
             }else{
+                    loadingDialog.dismiss()
+
                     binding.offerLinkButtonInfo.text = "Completed"
                     binding.offerLinkButtonInfo.visibility = View.VISIBLE
                 }
@@ -597,17 +619,32 @@ finish()
             binding.offerLinkButtonInfo.text = "Completed"
             binding.offerLinkButtonInfo.visibility = View.VISIBLE
             lifecycleScope.launch {
+                alertDialog.dismiss()
                 try {
-                    UserInfo_Airtable_Repo().updateCompletedOffer(
-                        userNumber!!.toLong(), total_bal!!,
-                        userNumber.toInt(),
-                        userData(userNumber.toLong()),
-                        offerId!!.toInt(), price.toString(), "Completed"
-                    )
-                    alertDialog.dismiss()
+                    home_viewModel.getIsCompleted(offerId, userNumber)
+                    home_viewModel.getIsCompletedData().observe(this@Info){
+                        if(!it){
+                            lifecycleScope.launch {
+                                UserInfo_Airtable_Repo().updateCompletedOffer(
+                                    userNumber!!.toLong(), total_bal!!,
+                                    userNumber.toInt(),
+                                    userData(userNumber.toLong()),
+                                    offerId!!.toInt(), price.toString(), "Completed"
+                                )
+                            }
+
+                        }else{
+                            Toast.makeText(
+                                this@Info,
+                                "Offer is Claimed Already",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
 
                 } catch (e: Exception) {
-                    Toast.makeText(this@Info, "Some Error Occurred", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@Info, "Some Error Occurred Contact Customer Service", Toast.LENGTH_LONG)
                         .show()
                 }
             }
@@ -617,7 +654,7 @@ finish()
 }
 
 @SuppressLint("SuspiciousIndentation")
-suspend fun isBeing(
+ fun isBeing(
     infoViewModel: info_viewModel,
     userId: Long,
     appName: String,
@@ -627,8 +664,7 @@ suspend fun isBeing(
     context: Context,
     callback: (Boolean) -> Unit
 
-)
-= withContext(Dispatchers.Main){
+){
 
     var isB : Boolean = false
 
@@ -639,13 +675,25 @@ suspend fun isBeing(
         if (!bool) {
             lifecycleOwner.lifecycleScope.launch {
                 val regSMS = isRegistered(context , appName , appName)
-                val appInstalled: Boolean = isAppInstalled(context, appName)
-                isB = appInstalled
+                infoViewModel.getIsWebData().observe(lifecycleOwner){
+                    if(!it) {
+                        lifecycleOwner.lifecycleScope.launch {
+                            val appInstalled: Boolean = isAppInstalled(context, appName)
+                            isB = appInstalled
 
-                if (appInstalled || regSMS) {
-                    isB = true
-                    infoViewModel.addBlacklist(userData( userNumber), offerId)
+                            if (appInstalled || regSMS) {
+                                isB = true
+                                infoViewModel.addBlacklist(userData(userNumber), offerId)
+                            }
+                        }
+                    }else{
+                        if (regSMS) {
+                            isB = true
+                            infoViewModel.addBlacklist(userData(userNumber), offerId)
+                        }
+                    }
                 }
+
             }
         }
 

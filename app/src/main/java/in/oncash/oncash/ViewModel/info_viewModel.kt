@@ -16,14 +16,14 @@ class info_viewModel : ViewModel() {
     val InstructionsList : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
     val ClosingInstructionsList : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
     val OfferQueries : MutableLiveData<ArrayList<Instruction>> = MutableLiveData()
-    val iscompleted = MutableLiveData<Boolean>(false)
+    val iscompleted = MutableLiveData<Boolean>()
     val Blacklisted : MutableLiveData<Boolean> = MutableLiveData(false)
     val isWebData : MutableLiveData<Boolean> = MutableLiveData()
 
    fun getInstructionListData (): MutableLiveData<ArrayList<Instruction>>{
        return InstructionsList
    }
-    fun getInstrutionList(offerId: String) {
+    suspend  fun getInstrutionList(offerId: String) {
         viewModelScope.launch{
             InstructionsList.value = Info_FirebaseRepo().getInstructionList(offerId)
         }
@@ -59,7 +59,7 @@ class info_viewModel : ViewModel() {
     fun getBlackListData():MutableLiveData<Boolean>{
         return Blacklisted
     }
-    fun getBlacklist(userId : Long , offerId: Int ){
+    suspend   fun getBlacklist(userId : Long , offerId: Int ){
         viewModelScope.launch {
           var Blacklist =   UserInfo_Airtable_Repo().getBlacklist()
             for (offer in Blacklist){
@@ -72,7 +72,7 @@ class info_viewModel : ViewModel() {
     fun getIsCompleted():MutableLiveData<Boolean>{
         return iscompleted;
     }
-    fun isCompleted (userId: Long  , offerId: Int ){
+  suspend  fun isCompleted (userId: Long  , offerId: Int ){
         viewModelScope.launch {
             Log.i("closingInstructions" ," offerHistory.toString()")
 

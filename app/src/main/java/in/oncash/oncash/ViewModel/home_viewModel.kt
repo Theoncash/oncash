@@ -27,7 +27,7 @@ class home_viewModel : ViewModel() {
      val verionInfo : MutableLiveData<Version> = MutableLiveData()
     private val withdrawalTransaction : MutableLiveData<ArrayList<withdrawalTransaction>> = MutableLiveData()
     var checkingCompleted = false
-    val isCompleted : MutableLiveData<Boolean> = MutableLiveData()
+    val isCompleted : MutableLiveData<Boolean> = MutableLiveData(true)
     val minimumPaymentAmount : MutableLiveData<Int> = MutableLiveData(0)
 
     val isWeb : MutableLiveData<Boolean> = MutableLiveData()
